@@ -11,18 +11,6 @@ services:
     volumes:
       - mongo_userservice_data:/data/db
 
-  mongodb-catalogservice:
-    image: mongodb/mongodb-community-server:7.0-ubuntu2204
-    container_name: mongodb-catalogservice
-    ports:
-      - "27018:27017" 
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
-      MONGO_INITDB_DATABASE: CatalogServiceDb
-    volumes:
-      - mongo_catalogservice_data:/data/db
-
   userservice.api:
     image: ${DOCKER_REGISTRY-}userserviceapi
     build:
@@ -40,6 +28,32 @@ services:
       Jwt__ExpirationMinutes: "60"
     depends_on:
       - mongodb-userservice
+
+  mongodb-catalogservice:
+    image: mongodb/mongodb-community-server:7.0-ubuntu2204
+    container_name: mongodb-catalogservice
+    ports:
+      - "27018:27017" 
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: CatalogServiceDb
+    volumes:
+      - mongo_catalogservice_data:/data/db
+
+  catalogservice.api:
+    image: ${DOCKER_REGISTRY-}catalogserviceapi
+    build:
+      context: .
+      dockerfile: services/catalog-service/CatalogService.Api/Dockerfile
+    ports:
+      - "8082:8080"
+      - "8083:8081"
+    environment:
+      MongoSettings__ConnectionString: "mongodb://root:example@mongodb-userservice:27018/CatalogServiceDb?authSource=admin"
+      MongoSettings__DatabaseName: "CatalogServiceDb"
+    depends_on:
+      - mongodb-catalogservice
       
 volumes:
   mongo_userservice_data:
