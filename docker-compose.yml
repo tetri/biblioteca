@@ -14,6 +14,14 @@ services:
       - userservice.api
       - catalogservice.api
 
+  frontend:
+    image: ${DOCKER_REGISTRY-}frontend
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "3000:80"
+
   mongodb-userservice:
     image: mongodb/mongodb-community-server:7.0-ubuntu2204
     container_name: mongodb-userservice
