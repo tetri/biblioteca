@@ -1,4 +1,19 @@
 services:
+  gateway:
+    image: ${DOCKER_REGISTRY-}gatewayapi
+    build:
+      context: .
+      dockerfile: gateway/Gateway.Api/Dockerfile
+    ports:
+      - "80:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Production"
+      ASPNETCORE_URLS: "http://+:8080"
+      ASPNETCORE_HTTP_PORTS: "8080"
+    depends_on:
+      - userservice.api
+      - catalogservice.api
+
   mongodb-userservice:
     image: mongodb/mongodb-community-server:7.0-ubuntu2204
     container_name: mongodb-userservice
@@ -18,8 +33,10 @@ services:
       dockerfile: services/user-service/UserService.Api/Dockerfile
     ports:
       - "8080:8080"
-      - "8081:8081"
     environment:
+      ASPNETCORE_ENVIRONMENT: "Production"
+      ASPNETCORE_URLS: "http://+:8080"
+      ASPNETCORE_HTTP_PORTS: "8080"
       MongoSettings__ConnectionString: "mongodb://root:example@mongodb-userservice:27017/UserServiceDb?authSource=admin"
       MongoSettings__DatabaseName: "UserServiceDb"
       Jwt__Key: "ae55eeaac8de877062ba7c878a31873693ae0f0d9bfb6543abe847cc648e67ac"
@@ -48,9 +65,11 @@ services:
       dockerfile: services/catalog-service/CatalogService.Api/Dockerfile
     ports:
       - "8082:8080"
-      - "8083:8081"
     environment:
-      MongoSettings__ConnectionString: "mongodb://root:example@mongodb-userservice:27018/CatalogServiceDb?authSource=admin"
+      ASPNETCORE_ENVIRONMENT: "Production"
+      ASPNETCORE_URLS: "http://+:8080"
+      ASPNETCORE_HTTP_PORTS: "8080"
+      MongoSettings__ConnectionString: "mongodb://root:example@mongodb-catalogservice:27018/CatalogServiceDb?authSource=admin"
       MongoSettings__DatabaseName: "CatalogServiceDb"
     depends_on:
       - mongodb-catalogservice

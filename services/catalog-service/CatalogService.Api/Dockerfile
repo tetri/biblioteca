@@ -5,7 +5,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
-EXPOSE 8081
+#EXPOSE 8081
 
 
 # This stage is used to build the service project
@@ -13,6 +13,9 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["services/catalog-service/CatalogService.Api/CatalogService.Api.csproj", "services/catalog-service/CatalogService.Api/"]
+COPY ["services/catalog-service/CatalogService.Application/CatalogService.Application.csproj", "services/catalog-service/CatalogService.Application/"]
+COPY ["services/catalog-service/CatalogService.Domain/CatalogService.Domain.csproj", "services/catalog-service/CatalogService.Domain/"]
+COPY ["services/catalog-service/CatalogService.Infrastructure/CatalogService.Infrastructure.csproj", "services/catalog-service/CatalogService.Infrastructure/"]
 RUN dotnet restore "./services/catalog-service/CatalogService.Api/CatalogService.Api.csproj"
 COPY . .
 WORKDIR "/src/services/catalog-service/CatalogService.Api"
