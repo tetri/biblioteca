@@ -2,8 +2,8 @@ import { http, HttpResponse } from 'msw';
 
 export const handlers = [
   http.post('/api/auth/login', async ({ request }) => {
-    const body = await request.json();
-    if (body.email === 'admin@biblioteca.com' && body.password === 'password') {
+    const body = (await request.json()) as { email?: string; password?: string };
+    if (body?.email === 'admin@biblioteca.com' && body?.password === 'password') {
       return HttpResponse.json({ token: 'fake-jwt-token' });
     }
     return new HttpResponse(null, { status: 401 });
