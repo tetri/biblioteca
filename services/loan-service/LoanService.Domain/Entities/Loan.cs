@@ -1,3 +1,5 @@
+using Shared.Contracts;
+
 namespace LoanService.Domain.Entities;
 
 public enum LoanStatus
@@ -9,11 +11,33 @@ public enum LoanStatus
 
 public class Loan
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
-    public Guid UserId { get; set; }
-    public Guid BookId { get; set; }
-    public DateTime LoanDate { get; set; } = DateTime.UtcNow;
-    public DateTime DueDate { get; set; } = DateTime.UtcNow.AddDays(14);
-    public DateTime? ReturnDate { get; set; }
-    public LoanStatus Status { get; set; } = LoanStatus.Active;
+    public Guid Id { get; private set; } = Guid.NewGuid();
+    public Guid UserId { get; private set; }
+    public Guid BookId { get; private set; }
+    public DateTime LoanDate { get; private set; }
+    public DateTime DueDate { get; private set; }
+    public DateTime? ReturnDate { get; private set; }
+    public LoanStatus Status { get; private set; }
+
+    private Loan() { }
+
+    public static Result<Loan> Create(Guid userId, Guid bookId, IEnumerable<Loan> existingLoans)
+    {
+        if (existingLoans.Count(l => l.Status == LoanStatus.Active) >= 3)
+            return Result<Loan>.Failure("Usuário atingiu o limite máximo de empréstimos ativos.");
+
+        if (existingLoans.Any(l => l.Status == LoanStatus.Overdue))
+            return Result<Loan>.Failure("Usuário possui empréstimos em atraso.");
+
+        var loan = new Loan
+        {
+            UserId = userId,
+            BookId = bookId,
+            LoanDate = DateTime.UtcNow,
+            DueDate = DateTime.UtcNow.AddDays(14),
+            Status = LoanStatus.Active
+        };
+
+        return Result<Loan>.Success(loan);
+    }
 }

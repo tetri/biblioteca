@@ -18,7 +18,7 @@ Este documento serve como guia para a arquitetura e futuras implementações no 
 - [ ] **LoanService:** Refatorado para o padrão CQRS "Vanilla" (Remover `LoanService.cs` e criar Handlers).
 - [ ] **CatalogService:** Refatorado para CQRS.
 - [x] **OpenTelemetry:** Configurar telemetria em todos os microsserviços e no Gateway (Base implementada no Shared.Observability).
-- [ ] **Contract Tests:** Implementar verificação de schemas entre `LoanService` -> `CatalogService`.
+- [x] **Contract Tests:** Implementar verificação de schemas entre `LoanService` -> `CatalogService`.
 - [x] **Frontend:**
     - [x] Executar `npm install` para dependências de teste.
     - [x] Implementar testes unitários para componentes da pasta `components/ui` com `Vitest`.

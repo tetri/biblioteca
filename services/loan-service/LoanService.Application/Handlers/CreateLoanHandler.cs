@@ -3,10 +3,11 @@ using LoanService.Application.Commands;
 using LoanService.Application.DTOs;
 using LoanService.Domain.Entities;
 using LoanService.Domain.Repositories;
+using Shared.Contracts;
 
 namespace LoanService.Application.Handlers;
 
-public class CreateLoanHandler : ICommandHandler<CreateLoanCommand, LoanResponseDto>
+public class CreateLoanHandler : ICommandHandler<CreateLoanCommand, Result<LoanResponseDto>>
 {
     private readonly ILoanRepository _loanRepository;
 
@@ -15,31 +16,20 @@ public class CreateLoanHandler : ICommandHandler<CreateLoanCommand, LoanResponse
         _loanRepository = loanRepository;
     }
 
-    public async Task<LoanResponseDto> Handle(CreateLoanCommand command)
+    public async Task<Result<LoanResponseDto>> Handle(CreateLoanCommand command)
     {
-        var existingLoans = (await _loanRepository.GetByUserIdAsync(command.UserId)).ToList();
+        var existingLoans = await _loanRepository.GetByUserIdAsync(command.UserId);
 
-        if (existingLoans.Count(l => l.Status == LoanStatus.Active) >= 3)
+        var result = Loan.Create(command.UserId, command.BookId, existingLoans);
+
+        if (result.IsFailure)
         {
-            throw new InvalidOperationException("Usuário atingiu o limite máximo de empréstimos ativos.");
+            return Result<LoanResponseDto>.Failure(result.Error!);
         }
 
-        if (existingLoans.Any(l => l.Status == LoanStatus.Overdue))
-        {
-            throw new InvalidOperationException("Usuário possui empréstimos em atraso.");
-        }
-
-        var loan = new Loan
-        {
-            UserId = command.UserId,
-            BookId = command.BookId,
-            LoanDate = DateTime.UtcNow,
-            DueDate = DateTime.UtcNow.AddDays(14),
-            Status = LoanStatus.Active
-        };
-
+        var loan = result.Value!;
         await _loanRepository.AddAsync(loan);
 
-        return new LoanResponseDto(loan.Id, loan.UserId, loan.BookId, loan.LoanDate, loan.DueDate, loan.Status.ToString());
+        return Result<LoanResponseDto>.Success(new LoanResponseDto(loan.Id, loan.UserId, loan.BookId, loan.LoanDate, loan.DueDate, loan.Status.ToString()));
     }
 }
