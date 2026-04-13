@@ -7,6 +7,7 @@ using CatalogService.Domain.Entities;
 using CatalogService.Domain.Repositories;
 using CatalogService.Infrastructure;
 using CatalogService.Infrastructure.Repositories;
+using Shared.Observability;
 
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
@@ -14,6 +15,8 @@ using MongoDB.Bson.Serialization.Serializers;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSharedObservability("CatalogService");
 
 builder.Services.Configure<MongoSettings>(
     builder.Configuration.GetSection("MongoSettings"));
