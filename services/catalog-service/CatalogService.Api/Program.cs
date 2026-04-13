@@ -8,6 +8,7 @@ using CatalogService.Domain.Repositories;
 using CatalogService.Infrastructure;
 using CatalogService.Infrastructure.Repositories;
 using Shared.Observability;
+using Shared.Contracts;
 
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
@@ -33,6 +34,8 @@ builder.Services.AddScoped<IBookRepository, BookRepository>();
 
 // CQRS Handlers
 builder.Services.AddScoped<ICommandHandler<CreateBookCommand, BookResponseDto>, CreateBookHandler>();
+builder.Services.AddScoped<ICommandHandler<UpdateBookCommand, Result<BookResponseDto>>, UpdateBookHandler>();
+builder.Services.AddScoped<ICommandHandler<DeleteBookCommand, Result<bool>>, DeleteBookHandler>();
 builder.Services.AddScoped<IQueryHandler<GetAllBooksQuery, IEnumerable<BookResponseDto>>, BookQueryHandler>();
 builder.Services.AddScoped<IQueryHandler<GetBookByIdQuery, BookResponseDto?>, BookQueryHandler>();
 builder.Services.AddScoped<IQueryHandler<SearchBooksQuery, IEnumerable<BookResponseDto>>, BookQueryHandler>();

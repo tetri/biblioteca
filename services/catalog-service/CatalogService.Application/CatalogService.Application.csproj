@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CatalogService.Domain\CatalogService.Domain.csproj" />
+    <ProjectReference Include="..\..\..\shared\Shared.Contracts\Shared.Contracts.csproj" />
   </ItemGroup>
 
 </Project>
