@@ -15,12 +15,16 @@ Este documento serve como guia para a arquitetura e futuras implementações no 
 - **Traces:** Manter o `TraceId` trafegando entre os microsserviços via headers HTTP.
 
 ## 3. Checklist de Implementação Pendente
-- [ ] **LoanService:** Refatorar para o padrão CQRS "Vanilla" (Remover `LoanService.cs` e criar Handlers).
-- [ ] **CatalogService:** Implementar CQRS para as operações de leitura e escrita.
+- [ ] **LoanService:** Refatorado para o padrão CQRS "Vanilla" (Remover `LoanService.cs` e criar Handlers).
+- [ ] **CatalogService:** Refatorado para CQRS.
 - [ ] **OpenTelemetry:** Configurar telemetria em todos os microsserviços e no Gateway.
 - [ ] **Contract Tests:** Implementar verificação de schemas entre `LoanService` -> `CatalogService`.
-- [ ] **Frontend:** Adicionar Vitest e implementar testes de componentes (conforme plano original).
-- [ ] **CI/CD:** Configurar GitHub Actions para execução de testes unitários seletivos e build Docker.
+- [x] **Frontend:**
+    - [ ] Executar `npm install` para dependências de teste.
+    - [x] Implementar testes unitários para componentes da pasta `components/ui` com `Vitest`.
+    - [x] Criar testes de integração para fluxos de `login` e `catalog`.
+    - [x] Adicionar e configurar `MSW (Mock Service Worker)` para isolar testes de frontend.
+- [x] **CI/CD:** Configurar GitHub Actions para execução de testes unitários (backend e frontend) e build Docker.
 
 ## 4. Notas para Agentes
 - **Não use MediatR** (Licenciamento comercial). Use sempre `Microsoft.Extensions.DependencyInjection`.
