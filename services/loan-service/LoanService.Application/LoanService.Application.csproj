@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LoanService.Domain\LoanService.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

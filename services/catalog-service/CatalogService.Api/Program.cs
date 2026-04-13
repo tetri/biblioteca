@@ -1,5 +1,8 @@
-using CatalogService.Application.Interfaces;
-using CatalogService.Application.Services;
+using CatalogService.Application.Abstractions;
+using CatalogService.Application.Commands;
+using CatalogService.Application.DTOs;
+using CatalogService.Application.Handlers;
+using CatalogService.Application.Queries;
 using CatalogService.Domain.Entities;
 using CatalogService.Domain.Repositories;
 using CatalogService.Infrastructure;
@@ -24,7 +27,12 @@ BsonClassMap.RegisterClassMap<Book>(cm =>
 });
 
 builder.Services.AddScoped<IBookRepository, BookRepository>();
-builder.Services.AddScoped<IBookService, BookService>();
+
+// CQRS Handlers
+builder.Services.AddScoped<ICommandHandler<CreateBookCommand, BookResponseDto>, CreateBookHandler>();
+builder.Services.AddScoped<IQueryHandler<GetAllBooksQuery, IEnumerable<BookResponseDto>>, BookQueryHandler>();
+builder.Services.AddScoped<IQueryHandler<GetBookByIdQuery, BookResponseDto?>, BookQueryHandler>();
+builder.Services.AddScoped<IQueryHandler<SearchBooksQuery, IEnumerable<BookResponseDto>>, BookQueryHandler>();
 
 builder.Services.AddControllers();
 
@@ -38,7 +46,6 @@ app.MapScalarApiReference();
 
 //app.UseHttpsRedirection();
 
-app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
