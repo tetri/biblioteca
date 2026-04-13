@@ -5,7 +5,7 @@ using CatalogService.Domain.Repositories;
 
 namespace CatalogService.Application.Handlers;
 
-public class BookQueryHandler : 
+public class BookQueryHandler :
     IQueryHandler<GetAllBooksQuery, IEnumerable<BookResponseDto>>,
     IQueryHandler<GetBookByIdQuery, BookResponseDto?>,
     IQueryHandler<SearchBooksQuery, IEnumerable<BookResponseDto>>
@@ -32,9 +32,16 @@ public class BookQueryHandler :
         return books.Select(ToDto);
     }
 
-    private static BookResponseDto ToDto(Domain.Entities.Book b) => new() {
-        Id = b.Id, Title = b.Title, Author = b.Author, Isbn = b.Isbn, 
-        Category = b.Category, AvailableCopies = b.AvailableCopies, 
-        TotalCopies = b.TotalCopies, CreatedAt = b.CreatedAt, UpdatedAt = b.UpdatedAt
+    private static BookResponseDto ToDto(Domain.Entities.Book b) => new()
+    {
+        Id = b.Id,
+        Title = b.Title,
+        Author = b.Author,
+        Isbn = b.Isbn,
+        Category = b.Category,
+        AvailableCopies = b.AvailableCopies,
+        TotalCopies = b.TotalCopies,
+        CreatedAt = b.CreatedAt,
+        UpdatedAt = b.UpdatedAt
     };
 }

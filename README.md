@@ -17,17 +17,21 @@ O sistema utiliza microsserviços desacoplados com comunicação síncrona (REST
 - **LoanService:** Gestão de empréstimos, devoluções e multas.
 - **NotificationService:** Placeholder para notificações.
 
-## 🛠️ Desenvolvimento
+## 🛠️ Como rodar este sistema
+Este projeto foi orquestrado para rodar nativamente em ambientes **Linux/WSL2** para máxima performance.
+
 ### Pré-requisitos
 - .NET 9 SDK
 - Node.js 22+
-- Docker Desktop
+- Docker Engine (rodando no WSL2)
 
-### Configuração
-1. Rode `docker-compose up -d` para subir a infraestrutura (MongoDB).
-2. Para rodar os testes:
-   - **Backend:** `dotnet test Biblioteca.sln`
-   - **Frontend:** `cd frontend && npm install && npx vitest run`
+### Orquestração
+1. Dê permissão de execução ao script:
+   `chmod +x up.sh`
+2. Suba todo o ambiente:
+   `./up.sh`
+
+O `docker-compose.yml` utiliza `healthcheck` para garantir que os microsserviços só iniciem após a prontidão dos bancos de dados, evitando falhas de inicialização.
 
 ## 🧪 Qualidade e Testes
 O projeto conta com uma suíte de testes robusta:

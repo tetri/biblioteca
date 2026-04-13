@@ -31,9 +31,16 @@ public class UpdateBookHandler : ICommandHandler<UpdateBookCommand, Result<BookR
         return Result<BookResponseDto>.Success(ToDto(existing));
     }
 
-    private static BookResponseDto ToDto(Book b) => new() {
-        Id = b.Id, Title = b.Title, Author = b.Author, Isbn = b.Isbn, 
-        Category = b.Category, AvailableCopies = b.AvailableCopies, 
-        TotalCopies = b.TotalCopies, CreatedAt = b.CreatedAt, UpdatedAt = b.UpdatedAt
+    private static BookResponseDto ToDto(Book b) => new()
+    {
+        Id = b.Id,
+        Title = b.Title,
+        Author = b.Author,
+        Isbn = b.Isbn,
+        Category = b.Category,
+        AvailableCopies = b.AvailableCopies,
+        TotalCopies = b.TotalCopies,
+        CreatedAt = b.CreatedAt,
+        UpdatedAt = b.UpdatedAt
     };
 }

@@ -28,7 +28,8 @@ namespace UserService.Application.Services
             if (existing != null)
                 throw new Exception("Email already registered.");
 
-            var user = new User(name, email, _passwordHasher.HashPassword(password));
+            // Novo usuário registrado é criado como não aprovado por padrão
+            var user = new User(name, email, _passwordHasher.HashPassword(password), "Member");
             await _userRepository.AddAsync(user);
 
             return new UserProfileDto { Id = user.Id, Name = user.Name, Email = user.Email };
@@ -39,6 +40,9 @@ namespace UserService.Application.Services
             var user = await _userRepository.GetByEmailAsync(email);
             if (user == null || !_passwordHasher.VerifyPassword(password, user.PasswordHash))
                 throw new Exception("Invalid credentials.");
+
+            if (!user.IsApproved)
+                throw new Exception("Conta pendente de aprovação administrativa.");
 
             var token = _jwtProvider.GenerateToken(user);
 

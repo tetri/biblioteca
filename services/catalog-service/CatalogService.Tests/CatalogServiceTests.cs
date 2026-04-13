@@ -1,7 +1,7 @@
 using CatalogService.Application.Services;
 using CatalogService.Domain.Repositories;
-using Moq;
 using FluentAssertions;
+using Moq;
 
 namespace CatalogService.Tests;
 
@@ -20,9 +20,9 @@ public class CatalogServiceTests
     public async Task GetAllBooksAsync_ShouldReturnAllBooks()
     {
         _repositoryMock.Setup(r => r.GetAllAsync(It.IsAny<CancellationToken>())).ReturnsAsync(new List<Domain.Entities.Book>());
-        
+
         var result = await _service.GetAllAsync();
-        
+
         result.Should().NotBeNull();
     }
 }

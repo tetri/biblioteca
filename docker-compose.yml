@@ -13,6 +13,7 @@ services:
     depends_on:
       - userservice.api
       - catalogservice.api
+      - loanservice.api
 
   frontend:
     image: ${DOCKER_REGISTRY-}frontend
@@ -33,6 +34,11 @@ services:
       MONGO_INITDB_DATABASE: UserServiceDb
     volumes:
       - mongo_userservice_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   userservice.api:
     image: ${DOCKER_REGISTRY-}userserviceapi
@@ -52,7 +58,8 @@ services:
       Jwt__Audience: "BibliotecaServices"
       Jwt__ExpirationMinutes: "60"
     depends_on:
-      - mongodb-userservice
+      mongodb-userservice:
+        condition: service_healthy
 
   mongodb-catalogservice:
     image: mongodb/mongodb-community-server:7.0-ubuntu2204
@@ -65,6 +72,11 @@ services:
       MONGO_INITDB_DATABASE: CatalogServiceDb
     volumes:
       - mongo_catalogservice_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   catalogservice.api:
     image: ${DOCKER_REGISTRY-}catalogserviceapi
@@ -77,11 +89,40 @@ services:
       ASPNETCORE_ENVIRONMENT: "Production"
       ASPNETCORE_URLS: "http://+:8080"
       ASPNETCORE_HTTP_PORTS: "8080"
-      MongoSettings__ConnectionString: "mongodb://root:example@mongodb-catalogservice:27018/CatalogServiceDb?authSource=admin"
+      MongoSettings__ConnectionString: "mongodb://root:example@mongodb-catalogservice:27017/CatalogServiceDb?authSource=admin"
       MongoSettings__DatabaseName: "CatalogServiceDb"
     depends_on:
-      - mongodb-catalogservice
-      
+      mongodb-catalogservice:
+        condition: service_healthy
+
+  loanservice.api:
+    image: ${DOCKER_REGISTRY-}loanserviceapi
+    build:
+      context: .
+      dockerfile: services/loan-service/LoanService.Api/Dockerfile
+    ports:
+      - "8083:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Production"
+      ASPNETCORE_URLS: "http://+:8080"
+      ASPNETCORE_HTTP_PORTS: "8080"
+      MongoSettings__ConnectionString: "mongodb://root:example@mongodb-userservice:27017/LoanServiceDb?authSource=admin"
+      MongoSettings__DatabaseName: "LoanServiceDb"
+    depends_on:
+      - mongodb-userservice
+
+  notificationservice.api:
+    image: ${DOCKER_REGISTRY-}notificationserviceapi
+    build:
+      context: .
+      dockerfile: services/notification-service/NotificationService.Api/Dockerfile
+    ports:
+      - "8084:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Production"
+      ASPNETCORE_URLS: "http://+:8080"
+      ASPNETCORE_HTTP_PORTS: "8080"
+
 volumes:
   mongo_userservice_data:
   mongo_catalogservice_data:

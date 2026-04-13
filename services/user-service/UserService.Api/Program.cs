@@ -1,14 +1,10 @@
-using System.Text;
-
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
-
 using Scalar.AspNetCore;
-
 using Shared.Observability;
+using System.Text;
 using UserService.Application.Interfaces;
 using UserService.Domain.Entities;
 using UserService.Domain.Repositories;

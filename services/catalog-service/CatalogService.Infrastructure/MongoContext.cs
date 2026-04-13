@@ -1,8 +1,6 @@
-﻿using Microsoft.Extensions.Options;
-
+﻿using CatalogService.Domain.Entities;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-
-using CatalogService.Domain.Entities;
 
 namespace CatalogService.Infrastructure;
 
