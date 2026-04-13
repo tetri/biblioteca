@@ -1,6 +1,7 @@
-﻿using CatalogService.Application.DTOs;
-using CatalogService.Application.Interfaces;
-
+﻿using CatalogService.Application.Abstractions;
+using CatalogService.Application.Commands;
+using CatalogService.Application.DTOs;
+using CatalogService.Application.Queries;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CatalogService.Api.Controllers;
@@ -9,82 +10,43 @@ namespace CatalogService.Api.Controllers;
 [Route("api/catalog/[controller]")]
 public class BooksController : ControllerBase
 {
-    private readonly IBookService _bookService;
+    private readonly ICommandHandler<CreateBookCommand, BookResponseDto> _createHandler;
+    private readonly IQueryHandler<GetAllBooksQuery, IEnumerable<BookResponseDto>> _getAllHandler;
+    private readonly IQueryHandler<GetBookByIdQuery, BookResponseDto?> _getByIdHandler;
+    private readonly IQueryHandler<SearchBooksQuery, IEnumerable<BookResponseDto>> _searchHandler;
 
-    public BooksController(IBookService bookService)
+    public BooksController(
+        ICommandHandler<CreateBookCommand, BookResponseDto> createHandler,
+        IQueryHandler<GetAllBooksQuery, IEnumerable<BookResponseDto>> getAllHandler,
+        IQueryHandler<GetBookByIdQuery, BookResponseDto?> getByIdHandler,
+        IQueryHandler<SearchBooksQuery, IEnumerable<BookResponseDto>> searchHandler)
     {
-        _bookService = bookService;
+        _createHandler = createHandler;
+        _getAllHandler = getAllHandler;
+        _getByIdHandler = getByIdHandler;
+        _searchHandler = searchHandler;
     }
 
-    // POST /api/catalog/books
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateBookDto dto)
+    public async Task<IActionResult> Create([FromBody] CreateBookCommand command, CancellationToken ct)
     {
-        var created = await _bookService.CreateAsync(dto);
-        return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+        var result = await _createHandler.Handle(command, ct);
+        return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
     }
 
-    // PUT /api/catalog/books/{id}
-    [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateBookDto dto)
-    {
-        var updated = await _bookService.UpdateAsync(id, dto);
-        return updated == null ? NotFound() : Ok(updated);
-    }
-
-    // DELETE /api/catalog/books/{id}
-    [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> Delete(Guid id)
-    {
-        var deleted = await _bookService.DeleteAsync(id);
-        return deleted ? NoContent() : NotFound();
-    }
-
-    // GET /api/catalog/books
     [HttpGet]
-    public async Task<IActionResult> GetAll()
-    {
-        var books = await _bookService.GetAllAsync();
-        return Ok(books);
-    }
+    public async Task<IActionResult> GetAll(CancellationToken ct) => Ok(await _getAllHandler.Handle(new(), ct));
 
-    // GET /api/catalog/books/{id}
     [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetById(Guid id)
+    public async Task<IActionResult> GetById(Guid id, CancellationToken ct)
     {
-        var book = await _bookService.GetByIdAsync(id);
-        return book == null ? NotFound() : Ok(book);
+        var result = await _getByIdHandler.Handle(new(id), ct);
+        return result is null ? NotFound() : Ok(result);
     }
 
-    // GET /api/catalog/books/search?query=...
     [HttpGet("search")]
-    public async Task<IActionResult> Search([FromQuery] string query)
+    public async Task<IActionResult> Search([FromQuery] string query, CancellationToken ct)
     {
-        var results = await _bookService.SearchAsync(query);
-        return Ok(results);
-    }
-
-    // GET /api/catalog/books/{id}/availability
-    [HttpGet("{id:guid}/availability")]
-    public async Task<IActionResult> Availability(Guid id)
-    {
-        var available = await _bookService.GetAvailabilityAsync(id);
-        return available == null ? NotFound() : Ok(available);
-    }
-
-    // PUT /api/catalog/books/{id}/decrement
-    [HttpPut("{id:guid}/decrement")]
-    public async Task<IActionResult> Decrement(Guid id)
-    {
-        var success = await _bookService.DecrementCopiesAsync(id);
-        return success ? Ok() : BadRequest("No available copies to decrement.");
-    }
-
-    // PUT /api/catalog/books/{id}/increment
-    [HttpPut("{id:guid}/increment")]
-    public async Task<IActionResult> Increment(Guid id)
-    {
-        var success = await _bookService.IncrementCopiesAsync(id);
-        return success ? Ok() : NotFound();
+        return Ok(await _searchHandler.Handle(new(query), ct));
     }
 }

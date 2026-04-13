@@ -1,0 +1,48 @@
+{
+  "title": "Documentação do Projeto Biblioteca",
+  "name": "root",
+  "prompt": "Visão geral da arquitetura de microsserviços em .NET 9 e React 19.",
+  "children": [
+    {
+      "title": "Onboarding",
+      "name": "onboarding",
+      "prompt": "Guias de integração para novos desenvolvedores e guias arquiteturais para principais.",
+      "children": [
+        {
+          "title": "Principal-Level Guide",
+          "name": "principal-guide",
+          "prompt": "Arquitetura de microsserviços baseada em Clean Architecture e DDD, usando YARP como gateway central (cite gateway/Gateway.Api/Program.cs:1). O core é o desacoplamento síncrono via API e assíncrono planejado via Bus."
+        },
+        {
+          "title": "Zero-to-Hero Learning Path",
+          "name": "zero-to-hero",
+          "prompt": "Caminho de aprendizado progressivo: I. Fundamentos .NET/C# e React/Vite. II. Estrutura do projeto Biblioteca. III. Configuração de ambiente e execução local via docker-compose (cite docker-compose.yml:1)."
+        }
+      ]
+    },
+    {
+      "title": "Getting Started",
+      "name": "getting-started",
+      "prompt": "Como configurar o ambiente, rodar o projeto e explorar a documentação API.",
+      "children": [
+        {
+          "title": "Configuração Local",
+          "name": "setup",
+          "prompt": "Pré-requisitos: .NET 9 SDK, Node.js 22+, Docker Desktop. Uso do docker-compose para infra de suporte (MongoDB)."
+        }
+      ]
+    },
+    {
+      "title": "Deep Dive",
+      "name": "deep-dive",
+      "prompt": "Exploração detalhada dos microsserviços.",
+      "children": [
+        {
+          "title": "Domain Layer",
+          "name": "domain-layer",
+          "prompt": "Exploração das entidades do UserService e CatalogService (cite services/user-service/UserService.Domain/Entities/User.cs:1). Explicação da camada de domínio pura."
+        }
+      ]
+    }
+  ]
+}

@@ -2,8 +2,8 @@
 {
     public class UserProfileResponse
     {
-        public object Id { get; internal set; }
-        public object Name { get; internal set; }
-        public object Email { get; internal set; }
+        public Guid Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
     }
 }
