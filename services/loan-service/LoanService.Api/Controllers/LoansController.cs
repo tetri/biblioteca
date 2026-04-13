@@ -10,30 +10,39 @@ namespace LoanService.Api.Controllers;
 public class LoansController : ControllerBase
 {
     private readonly ICommandHandler<CreateLoanCommand, Shared.Contracts.Result<LoanResponseDto>> _createLoanHandler;
+    private readonly ICommandHandler<ReserveLoanCommand, Shared.Contracts.Result<LoanResponseDto>> _reserveHandler;
 
-    public LoansController(ICommandHandler<CreateLoanCommand, Shared.Contracts.Result<LoanResponseDto>> createLoanHandler)
+    public LoansController(
+        ICommandHandler<CreateLoanCommand, Shared.Contracts.Result<LoanResponseDto>> createLoanHandler,
+        ICommandHandler<ReserveLoanCommand, Shared.Contracts.Result<LoanResponseDto>> reserveHandler)
     {
         _createLoanHandler = createLoanHandler;
+        _reserveHandler = reserveHandler;
     }
 
     [HttpPost]
     public async Task<ActionResult<LoanResponseDto>> Create([FromBody] CreateLoanCommand command)
     {
         var result = await _createLoanHandler.Handle(command);
+
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
+
+    [HttpPost("reserve")]
+    public async Task<ActionResult<LoanResponseDto>> Reserve([FromBody] ReserveLoanCommand command)
+    {
+        var result = await _reserveHandler.Handle(command);
         
         if (result.IsFailure)
         {
             return BadRequest(result.Error);
         }
 
-        return CreatedAtAction(nameof(Get), new { id = result.Value!.Id }, result.Value);
-    }
-
-    [HttpGet("{id}")]
-    public async Task<ActionResult<LoanResponseDto>> Get(Guid id)
-    {
-        // Para consultas, implementaremos o padrão de Query posteriormente.
-        // Por ora, mantemos a leitura direta ou simplificada.
-        return Ok("Implementar QueryHandler em breve.");
+        return Ok(result.Value);
     }
 }

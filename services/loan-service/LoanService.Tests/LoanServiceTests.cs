@@ -1,10 +1,8 @@
+using FluentAssertions;
 using LoanService.Application.Commands;
-using LoanService.Application.DTOs;
 using LoanService.Domain.Entities;
 using LoanService.Domain.Repositories;
 using Moq;
-using FluentAssertions;
-using Shared.Contracts;
 
 namespace LoanService.Tests;
 
@@ -24,7 +22,7 @@ public class LoanServiceTests
     {
         _repositoryMock.Setup(r => r.GetByUserIdAsync(It.IsAny<Guid>())).ReturnsAsync(new List<Loan>());
         var command = new CreateLoanCommand(Guid.NewGuid(), Guid.NewGuid());
-        
+
         var result = await _service.Handle(command);
 
         result.IsSuccess.Should().BeTrue();
@@ -42,9 +40,9 @@ public class LoanServiceTests
         _repositoryMock.Setup(r => r.GetByUserIdAsync(userId)).ReturnsAsync(existingLoans);
 
         var command = new CreateLoanCommand(userId, Guid.NewGuid());
-        
+
         var result = await _service.Handle(command);
-        
+
         result.IsFailure.Should().BeTrue();
         result.Error.Should().Be("Usuário atingiu o limite máximo de empréstimos ativos.");
     }

@@ -7,13 +7,11 @@ using CatalogService.Domain.Entities;
 using CatalogService.Domain.Repositories;
 using CatalogService.Infrastructure;
 using CatalogService.Infrastructure.Repositories;
-using Shared.Observability;
-using Shared.Contracts;
-
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
-
 using Scalar.AspNetCore;
+using Shared.Contracts;
+using Shared.Observability;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,7 +1,5 @@
-using NotificationService.Application.Services;
-using NotificationService.Domain.Interfaces;
 using Moq;
-using FluentAssertions;
+using NotificationService.Domain.Interfaces;
 
 namespace NotificationService.Tests;
 

@@ -27,6 +27,15 @@ Este documento serve como guia para a arquitetura e futuras implementações no 
 
 
 - [x] **CI/CD:** Configurar GitHub Actions para execução de testes unitários (backend e frontend) e build Docker.
+- [x] **Orquestração:** Script de subida `up.sh` e otimização para ambiente WSL2/Linux.
+
+## 5. Roadmap Frontend
+- [x] **Configuração Base:** Instalar `TanStack Query` e `React Router`.
+- [x] **Página Pública:** Listagem de livros com busca (usando `CatalogService`).
+- [x] **Cadastro de Usuários:** Formulário de registro com validação (usando `UserService`).
+- [ ] **Cadastro de Livros (Admin):** CRUD de livros protegido (usando `CatalogService`).
+- [ ] **Gestão de Empréstimos:** Fluxo de criação de empréstimo e listagem (usando `LoanService`).
+- [x] **Autenticação:** Integração de JWT na camada de API do frontend.
 
 ## 4. Notas para Agentes
 - **Não use MediatR** (Licenciamento comercial). Use sempre `Microsoft.Extensions.DependencyInjection`.

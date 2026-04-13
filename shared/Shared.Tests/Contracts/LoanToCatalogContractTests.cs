@@ -1,5 +1,4 @@
 using CatalogService.Application.DTOs;
-using LoanService.Application.DTOs;
 using FluentAssertions;
 using System.Text.Json;
 
@@ -12,8 +11,9 @@ public class LoanToCatalogContractTests
     {
         // O LoanService espera que o CatalogService retorne uma estrutura de Book,
         // mas aqui vamos validar o schema do que o LoanService consome do Catalog.
-        
-        var bookSchema = new {
+
+        var bookSchema = new
+        {
             Id = Guid.NewGuid(),
             Title = "Test Book",
             Author = "Author Name",
@@ -21,11 +21,11 @@ public class LoanToCatalogContractTests
         };
 
         var json = JsonSerializer.Serialize(bookSchema);
-        
+
         // Simula deserialização no LoanService
-        var deserialized = JsonSerializer.Deserialize<BookResponseDto>(json, new JsonSerializerOptions 
-        { 
-            PropertyNameCaseInsensitive = true 
+        var deserialized = JsonSerializer.Deserialize<BookResponseDto>(json, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
         });
 
         deserialized.Should().NotBeNull();

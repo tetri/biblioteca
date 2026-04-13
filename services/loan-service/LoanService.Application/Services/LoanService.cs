@@ -36,7 +36,7 @@ public class LoanService : ILoanService
     // Mantendo a interface para compatibilidade, embora o Handler deva ser o padrão
     public async Task<LoanResponseDto> CreateLoanAsync(CreateLoanDto createLoanDto)
     {
-         throw new NotImplementedException("Use o Command Handler.");
+        throw new NotImplementedException("Use o Command Handler.");
     }
 
     public async Task<LoanResponseDto?> GetLoanAsync(Guid id)

@@ -4,6 +4,7 @@ namespace LoanService.Domain.Entities;
 
 public enum LoanStatus
 {
+    Reserved,
     Active,
     Returned,
     Overdue
@@ -36,6 +37,21 @@ public class Loan
             LoanDate = DateTime.UtcNow,
             DueDate = DateTime.UtcNow.AddDays(14),
             Status = LoanStatus.Active
+        };
+
+        return Result<Loan>.Success(loan);
+    }
+
+    public static Result<Loan> Reserve(Guid userId, Guid bookId, IEnumerable<Loan> existingLoans)
+    {
+        if (existingLoans.Any(l => l.Status == LoanStatus.Overdue))
+            return Result<Loan>.Failure("Usuário possui empréstimos em atraso.");
+
+        var loan = new Loan
+        {
+            UserId = userId,
+            BookId = bookId,
+            Status = LoanStatus.Reserved
         };
 
         return Result<Loan>.Success(loan);

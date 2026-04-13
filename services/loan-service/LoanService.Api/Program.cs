@@ -5,8 +5,8 @@ using LoanService.Application.Handlers;
 using LoanService.Domain.Repositories;
 using LoanService.Infrastructure;
 using LoanService.Infrastructure.Repositories;
-using Shared.Observability;
 using Shared.Contracts;
+using Shared.Observability;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +23,7 @@ builder.Services.AddSingleton(new MongoContext(
 
 builder.Services.AddScoped<ILoanRepository, LoanRepository>();
 builder.Services.AddScoped<ICommandHandler<CreateLoanCommand, Result<LoanResponseDto>>, CreateLoanHandler>();
+builder.Services.AddScoped<ICommandHandler<ReserveLoanCommand, Result<LoanResponseDto>>, ReserveLoanHandler>();
 
 var app = builder.Build();
 

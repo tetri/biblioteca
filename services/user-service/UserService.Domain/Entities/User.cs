@@ -6,22 +6,29 @@ public sealed class User
     public string Name { get; private set; } = string.Empty;
     public string Email { get; private set; } = string.Empty;
     public string PasswordHash { get; private set; } = string.Empty;
+    public bool IsApproved { get; private set; } = false;
+    public string Role { get; private set; } = "Member";
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 
-    // Construtor privado para ORMs, não protegido para tipos selados
     private User() { }
 
-    public User(string name, string email, string passwordHash)
+    public User(string name, string email, string passwordHash, string role = "Member")
     {
         Id = Guid.NewGuid();
         Name = name;
         Email = email;
         PasswordHash = passwordHash;
+        Role = role;
         CreatedAt = DateTime.UtcNow;
         UpdatedAt = DateTime.UtcNow;
     }
-    // ... resto da classe
+
+    public void Approve()
+    {
+        IsApproved = true;
+        UpdatedAt = DateTime.UtcNow;
+    }
 
     public void UpdateName(string name)
     {

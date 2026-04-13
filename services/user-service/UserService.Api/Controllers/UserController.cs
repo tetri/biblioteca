@@ -1,8 +1,6 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-
+using System.IdentityModel.Tokens.Jwt;
 using UserService.Api.DTOs;
 using UserService.Application.Interfaces;
 using UserService.Infrastructure.Security;

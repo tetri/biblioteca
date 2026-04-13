@@ -1,8 +1,7 @@
-using UserService.Application.Services;
+using FluentAssertions;
+using Moq;
 using UserService.Domain.Repositories;
 using UserService.Domain.Services;
-using Moq;
-using FluentAssertions;
 
 namespace UserService.Tests;
 
@@ -25,9 +24,9 @@ public class UserServiceTests
     public async Task GetProfileAsync_ShouldReturnNull_WhenUserDoesNotExist()
     {
         _repositoryMock.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync((UserService.Domain.Entities.User?)null);
-        
+
         var result = await _service.GetProfileAsync(Guid.NewGuid());
-        
+
         result.Should().BeNull();
     }
 }
