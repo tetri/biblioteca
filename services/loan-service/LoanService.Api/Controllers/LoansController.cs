@@ -9,9 +9,9 @@ namespace LoanService.Api.Controllers;
 [Route("api/[controller]")]
 public class LoansController : ControllerBase
 {
-    private readonly ICommandHandler<CreateLoanCommand, LoanResponseDto> _createLoanHandler;
+    private readonly ICommandHandler<CreateLoanCommand, Shared.Contracts.Result<LoanResponseDto>> _createLoanHandler;
 
-    public LoansController(ICommandHandler<CreateLoanCommand, LoanResponseDto> createLoanHandler)
+    public LoansController(ICommandHandler<CreateLoanCommand, Shared.Contracts.Result<LoanResponseDto>> createLoanHandler)
     {
         _createLoanHandler = createLoanHandler;
     }
@@ -20,7 +20,13 @@ public class LoansController : ControllerBase
     public async Task<ActionResult<LoanResponseDto>> Create([FromBody] CreateLoanCommand command)
     {
         var result = await _createLoanHandler.Handle(command);
-        return CreatedAtAction(nameof(Get), new { id = result.Id }, result);
+        
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return CreatedAtAction(nameof(Get), new { id = result.Value!.Id }, result.Value);
     }
 
     [HttpGet("{id}")]

@@ -1,7 +1,9 @@
+using LoanService.Application.Commands;
 using LoanService.Application.DTOs;
 using LoanService.Application.Interfaces;
 using LoanService.Domain.Entities;
 using LoanService.Domain.Repositories;
+using Shared.Contracts;
 
 namespace LoanService.Application.Services;
 
@@ -14,34 +16,27 @@ public class LoanService : ILoanService
         _loanRepository = loanRepository;
     }
 
-    public async Task<LoanResponseDto> CreateLoanAsync(CreateLoanDto createLoanDto)
+    public async Task<Result<LoanResponseDto>> Handle(CreateLoanCommand command)
     {
-        var existingLoans = (await _loanRepository.GetByUserIdAsync(createLoanDto.UserId)).ToList();
+        var existingLoans = await _loanRepository.GetByUserIdAsync(command.UserId);
 
-        // Regra: Limite de 3 empréstimos ativos
-        if (existingLoans.Count(l => l.Status == LoanStatus.Active) >= 3)
+        var result = Loan.Create(command.UserId, command.BookId, existingLoans);
+
+        if (result.IsFailure)
         {
-            throw new InvalidOperationException("Usuário atingiu o limite máximo de empréstimos ativos.");
+            return Result<LoanResponseDto>.Failure(result.Error!);
         }
 
-        // Regra: Usuários com Overdue não podem pegar novos livros
-        if (existingLoans.Any(l => l.Status == LoanStatus.Overdue))
-        {
-            throw new InvalidOperationException("Usuário possui empréstimos em atraso.");
-        }
-
-        var loan = new Loan
-        {
-            UserId = createLoanDto.UserId,
-            BookId = createLoanDto.BookId,
-            LoanDate = DateTime.UtcNow,
-            DueDate = DateTime.UtcNow.AddDays(14),
-            Status = LoanStatus.Active
-        };
-
+        var loan = result.Value!;
         await _loanRepository.AddAsync(loan);
 
-        return new LoanResponseDto(loan.Id, loan.UserId, loan.BookId, loan.LoanDate, loan.DueDate, loan.Status.ToString());
+        return Result<LoanResponseDto>.Success(new LoanResponseDto(loan.Id, loan.UserId, loan.BookId, loan.LoanDate, loan.DueDate, loan.Status.ToString()));
+    }
+
+    // Mantendo a interface para compatibilidade, embora o Handler deva ser o padrão
+    public async Task<LoanResponseDto> CreateLoanAsync(CreateLoanDto createLoanDto)
+    {
+         throw new NotImplementedException("Use o Command Handler.");
     }
 
     public async Task<LoanResponseDto?> GetLoanAsync(Guid id)

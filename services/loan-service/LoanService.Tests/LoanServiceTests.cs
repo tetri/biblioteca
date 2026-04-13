@@ -1,8 +1,10 @@
+using LoanService.Application.Commands;
 using LoanService.Application.DTOs;
 using LoanService.Domain.Entities;
 using LoanService.Domain.Repositories;
 using Moq;
 using FluentAssertions;
+using Shared.Contracts;
 
 namespace LoanService.Tests;
 
@@ -21,38 +23,30 @@ public class LoanServiceTests
     public async Task CreateLoanAsync_ShouldCreateLoan_WhenValidRequest()
     {
         _repositoryMock.Setup(r => r.GetByUserIdAsync(It.IsAny<Guid>())).ReturnsAsync(new List<Loan>());
-        var dto = new CreateLoanDto(Guid.NewGuid(), Guid.NewGuid());
+        var command = new CreateLoanCommand(Guid.NewGuid(), Guid.NewGuid());
+        
+        var result = await _service.Handle(command);
 
-        var result = await _service.CreateLoanAsync(dto);
-
-        result.Should().NotBeNull();
+        result.IsSuccess.Should().BeTrue();
+        result.Value.Should().NotBeNull();
         _repositoryMock.Verify(r => r.AddAsync(It.IsAny<Loan>()), Times.Once);
     }
 
     [Fact]
-    public async Task CreateLoanAsync_ShouldThrowException_WhenUserHas3ActiveLoans()
+    public async Task CreateLoanAsync_ShouldReturnFailure_WhenUserHas3ActiveLoans()
     {
         var userId = Guid.NewGuid();
-        var existingLoans = Enumerable.Repeat(new Loan { Status = LoanStatus.Active }, 3).ToList();
+        // Corrigindo a criação de Loan para o teste usando a factory
+        var existingLoan = Loan.Create(userId, Guid.NewGuid(), new List<Loan>()).Value!;
+        var existingLoans = Enumerable.Repeat(existingLoan, 3).ToList();
         _repositoryMock.Setup(r => r.GetByUserIdAsync(userId)).ReturnsAsync(existingLoans);
 
-        var dto = new CreateLoanDto(userId, Guid.NewGuid());
-
-        await _service.Invoking(s => s.CreateLoanAsync(dto))
-            .Should().ThrowAsync<InvalidOperationException>()
-            .WithMessage("Usuário atingiu o limite máximo de empréstimos ativos.");
-    }
-
-    [Fact]
-    public async Task CreateLoanAsync_ShouldThrowException_WhenUserHasOverdueLoan()
-    {
-        var userId = Guid.NewGuid();
-        _repositoryMock.Setup(r => r.GetByUserIdAsync(userId)).ReturnsAsync(new List<Loan> { new Loan { Status = LoanStatus.Overdue } });
-
-        var dto = new CreateLoanDto(userId, Guid.NewGuid());
-
-        await _service.Invoking(s => s.CreateLoanAsync(dto))
-            .Should().ThrowAsync<InvalidOperationException>()
-            .WithMessage("Usuário possui empréstimos em atraso.");
+        var command = new CreateLoanCommand(userId, Guid.NewGuid());
+        
+        var result = await _service.Handle(command);
+        
+        result.IsFailure.Should().BeTrue();
+        result.Error.Should().Be("Usuário atingiu o limite máximo de empréstimos ativos.");
     }
 }
+

@@ -15,6 +15,7 @@
     <ProjectReference Include="..\LoanService.Domain\LoanService.Domain.csproj" />
     <ProjectReference Include="..\LoanService.Infrastructure\LoanService.Infrastructure.csproj" />
     <ProjectReference Include="..\..\..\shared\Shared.Observability\Shared.Observability.csproj" />
+    <ProjectReference Include="..\..\..\shared\Shared.Contracts\Shared.Contracts.csproj" />
   </ItemGroup>
 
 </Project>
