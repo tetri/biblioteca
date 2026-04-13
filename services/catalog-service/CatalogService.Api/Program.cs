@@ -45,6 +45,13 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
+// Inicializar banco de dados
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<MongoContext>();
+    await MongoInitializer.InitializeAsync(context);
+}
+
 app.MapOpenApi();
 app.MapScalarApiReference();
 

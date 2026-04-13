@@ -34,7 +34,7 @@ export function BooksPage() {
     <div className="p-8">
       <h1 className="text-3xl font-bold mb-6">Catálogo de Livros</h1>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {books?.map((book) => (
+        {books?.map((book: Book) => (
           <div key={book.id} className="border p-4 rounded shadow">
             <h2 className="text-xl font-semibold">{book.title}</h2>
             <p className="text-gray-600">{book.author}</p>
