@@ -5,8 +5,11 @@ using LoanService.Application.Handlers;
 using LoanService.Domain.Repositories;
 using LoanService.Infrastructure;
 using LoanService.Infrastructure.Repositories;
+using Shared.Observability;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSharedObservability("LoanService");
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

@@ -8,6 +8,7 @@ using MongoDB.Bson.Serialization.Serializers;
 
 using Scalar.AspNetCore;
 
+using Shared.Observability;
 using UserService.Application.Interfaces;
 using UserService.Domain.Entities;
 using UserService.Domain.Repositories;
@@ -17,6 +18,8 @@ using UserService.Infrastructure.Repositories;
 using UserService.Infrastructure.Security;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSharedObservability("UserService");
 
 builder.Services.Configure<MongoSettings>(
     builder.Configuration.GetSection("MongoSettings"));

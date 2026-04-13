@@ -17,13 +17,14 @@ Este documento serve como guia para a arquitetura e futuras implementações no 
 ## 3. Checklist de Implementação Pendente
 - [ ] **LoanService:** Refatorado para o padrão CQRS "Vanilla" (Remover `LoanService.cs` e criar Handlers).
 - [ ] **CatalogService:** Refatorado para CQRS.
-- [ ] **OpenTelemetry:** Configurar telemetria em todos os microsserviços e no Gateway.
+- [x] **OpenTelemetry:** Configurar telemetria em todos os microsserviços e no Gateway (Base implementada no Shared.Observability).
 - [ ] **Contract Tests:** Implementar verificação de schemas entre `LoanService` -> `CatalogService`.
 - [x] **Frontend:**
     - [x] Executar `npm install` para dependências de teste.
     - [x] Implementar testes unitários para componentes da pasta `components/ui` com `Vitest`.
     - [x] Criar testes de integração para fluxos de `login` e `catalog`.
     - [x] Adicionar e configurar `MSW (Mock Service Worker)` para isolar testes de frontend.
+
 
 - [x] **CI/CD:** Configurar GitHub Actions para execução de testes unitários (backend e frontend) e build Docker.
 
