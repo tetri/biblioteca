@@ -1,43 +1,20 @@
 # Sistema de Biblioteca (Open Source)
 
-Este é um projeto open source de sistema de biblioteca baseado em arquitetura de microsserviços.
+Este é um sistema de biblioteca completo, desenvolvido com uma arquitetura de microsserviços moderna e focada em alta manutenibilidade.
 
-## 🏗️ Arquitetura
-O sistema utiliza microsserviços desacoplados com comunicação síncrona (REST/Gateway) e assíncrona planejada.
+## 🏗️ Sobre o Projeto
+O projeto foi desenvolvido para servir como uma referência de arquitetura em microsserviços utilizando .NET 9 e React. O objetivo é fornecer uma base sólida para estudos e extensões.
 
-- **Backend:** .NET 9.0 com Clean Architecture e DDD.
-- **Frontend:** React 19 com Vite, Tailwind CSS 4 e Radix UI.
-- **Padrões:** CQRS Nativo (via `Microsoft.Extensions.DependencyInjection`), Observabilidade com OpenTelemetry.
-- **Infraestrutura:** Docker, MongoDB.
+## 🛠️ Como Contribuir
+Agradecemos o interesse em contribuir! Para manter o projeto organizado:
 
-## 🚀 Microsserviços
-- **Gateway:** Proxy centralizado (YARP).
-- **UserService:** Autenticação e gestão de usuários.
-- **CatalogService:** Gestão de acervo de livros.
-- **LoanService:** Gestão de empréstimos, devoluções e multas.
-- **NotificationService:** Placeholder para notificações.
+1. **Abra uma Issue:** Antes de grandes mudanças, descreva o problema ou funcionalidade.
+2. **Branch:** Crie uma branch para sua contribuição (`git checkout -b feature/sua-funcionalidade`).
+3. **Commit:** Siga as convenções de [Conventional Commits](https://www.conventionalcommits.org/).
+4. **Pull Request:** Envie para a branch `main` e aguarde a revisão.
 
-## 🛠️ Como rodar este sistema
-Este projeto foi orquestrado para rodar nativamente em ambientes **Linux/WSL2** para máxima performance.
+## 📜 Licença
+Este projeto está sob a licença [MIT](LICENSE).
 
-### Pré-requisitos
-- .NET 9 SDK
-- Node.js 22+
-- Docker Engine (rodando no WSL2)
-
-### Orquestração
-1. Dê permissão de execução ao script:
-   `chmod +x up.sh`
-2. Suba todo o ambiente:
-   `./up.sh`
-
-O `docker-compose.yml` utiliza `healthcheck` para garantir que os microsserviços só iniciem após a prontidão dos bancos de dados, evitando falhas de inicialização.
-
-## 🧪 Qualidade e Testes
-O projeto conta com uma suíte de testes robusta:
-- **Unitários:** XUnit (Backend) e Vitest (Frontend).
-- **Mocks:** MSW (Mock Service Worker) no Frontend.
-- **CI/CD:** GitHub Actions configurado para CI completo (Build e Test).
-
-## 📝 Documentação Adicional
-Consulte o arquivo `GEMINI.md` para ver o roadmap de implementação e protocolos para novos agentes.
+---
+*(O restante da documentação técnica permanece como definido no plano de implementação.)*
