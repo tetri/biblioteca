@@ -10,7 +10,7 @@ export default function PoliticaDePrivacidade() {
             <Shield className="h-10 w-10" />
           </div>
           <h1 className="text-4xl font-bold tracking-tight text-slate-900 mb-4">Política de Privacidade</h1>
-          <p className="text-lg text-slate-600">Última atualização: {new Date().toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}</p>
+          <p className="text-lg text-slate-600">Última atualização: Fevereiro de 2024</p>
         </header>
 
         <article className="prose prose-slate max-w-none">
