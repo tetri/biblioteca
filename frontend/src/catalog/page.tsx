@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '../lib/api';
+import { decodeJwtPayload } from '../lib/utils';
 import { ErrorMessage } from '../components/error-message';
 import { PublicLayout } from '../components/shared/public-layout';
 import { Button } from "@/components/ui/button";
-import { BookOpen, CheckCircle2, AlertCircle } from "lucide-react";
+import { BookOpen, CheckCircle2 } from "lucide-react";
 
 interface Book {
   id: string;
@@ -22,7 +23,7 @@ export function BooksPage() {
   const queryClient = useQueryClient();
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [pendingBookId, setPendingBookId] = useState<string | null>(null);
+  const [pendingBookIds, setPendingBookIds] = useState<Set<string>>(new Set());
 
   const { data: books, isLoading, error } = useQuery({
     queryKey: ['books'],
@@ -31,25 +32,22 @@ export function BooksPage() {
 
   const reserveMutation = useMutation({
     mutationFn: async (bookId: string) => {
-        setPendingBookId(bookId);
         // Obter o UserId do token se possível
         const token = localStorage.getItem('token');
         if (!token) throw new Error("Você precisa estar logado para reservar um livro.");
 
-        let userId;
-        try {
-            const payload = JSON.parse(atob(token.split('.')[1]));
-            userId = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid"];
-            if (!userId) throw new Error("Token inválido: SID não encontrado.");
-        } catch (e) {
-            throw new Error("Erro ao processar login. Por favor, entre novamente.");
-        }
+        const payload = decodeJwtPayload(token);
+        const userId = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid"];
+        if (!userId) throw new Error("Token inválido: SID não encontrado.");
 
         return api.post('/loan/api/loans/reserve', {
             bookId,
             userId,
             reservationDate: new Date().toISOString()
         });
+    },
+    onMutate: (bookId: string) => {
+        setPendingBookIds(prev => new Set(prev).add(bookId));
     },
     onSuccess: () => {
         setSuccessMessage("Livro reservado com sucesso!");
@@ -65,8 +63,12 @@ export function BooksPage() {
         setErrorMessage(message);
         setTimeout(() => setErrorMessage(null), 5000);
     },
-    onSettled: () => {
-        setPendingBookId(null);
+    onSettled: (_, __, bookId) => {
+        setPendingBookIds(prev => {
+            const next = new Set(prev);
+            next.delete(bookId);
+            return next;
+        });
     }
   });
 
@@ -105,9 +107,8 @@ export function BooksPage() {
       )}
 
       {errorMessage && (
-        <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl flex items-center gap-3 animate-in fade-in slide-in-from-top-4">
-          <AlertCircle className="h-5 w-5" />
-          <p className="font-medium">{errorMessage}</p>
+        <div className="mb-6 animate-in fade-in slide-in-from-top-4">
+          <ErrorMessage title="Erro de Reserva" message={errorMessage} />
         </div>
       )}
 
@@ -137,10 +138,10 @@ export function BooksPage() {
                 ? 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-200'
                 : 'bg-slate-100 text-slate-400 cursor-not-allowed'
               }`}
-              disabled={book.availableCopies === 0 || (pendingBookId === book.id)}
+              disabled={book.availableCopies === 0 || pendingBookIds.has(book.id)}
               onClick={() => reserveMutation.mutate(book.id)}
             >
-              {pendingBookId === book.id ? 'Processando...' : 'Reservar agora'}
+              {pendingBookIds.has(book.id) ? 'Processando...' : 'Reservar agora'}
             </Button>
           </div>
         ))}

@@ -1,10 +1,13 @@
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Shield, Users, BookOpen, Settings, ArrowLeft } from "lucide-react";
+import { ErrorMessage } from '../components/error-message';
 
 export default function AdminPage() {
   const navigate = useNavigate();
+  const [notice, setNotice] = useState<string | null>(null);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -12,12 +15,19 @@ export default function AdminPage() {
   };
 
   const handlePlaceholderClick = (feature: string) => {
-    alert(`${feature} será implementado em breve.`);
+    setNotice(`${feature} será implementado em breve.`);
+    setTimeout(() => setNotice(null), 5000);
   };
 
   return (
     <div className="min-h-screen bg-slate-50 p-8">
       <div className="max-w-6xl mx-auto">
+        {notice && (
+          <div className="mb-6 animate-in fade-in slide-in-from-top-4">
+            <ErrorMessage title="Aviso" message={notice} />
+          </div>
+        )}
+
         <div className="flex justify-between items-center mb-8">
           <div>
             <Link to="/" className="inline-flex items-center text-sm text-slate-500 hover:text-slate-900 mb-4 transition-colors">

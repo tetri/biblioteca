@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../lib/api';
+import { decodeJwtPayload } from '../lib/utils';
 import { ErrorMessage } from '../components/error-message';
 import { PublicLayout } from '../components/shared/public-layout';
 import { Button } from "@/components/ui/button";
@@ -24,14 +25,17 @@ export default function LoginPage() {
       const { data } = await api.post('/user/api/auth/login', { email, password });
 
       // Decodificar o payload do token JWT para obter a Role antes de persistir
-      // O token está no formato header.payload.signature
-      let role;
-      try {
-        const payload = JSON.parse(atob(data.token.split('.')[1]));
-        role = payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
-        if (!role) throw new Error("A role do usuário não foi encontrada no token.");
-      } catch (decodeErr) {
-        throw new Error("Falha ao processar o token de autenticação. Por favor, tente novamente.");
+      const payload = decodeJwtPayload(data.token);
+
+      // Verificar expiração
+      if (payload.exp && payload.exp < Math.floor(Date.now() / 1000)) {
+        throw new Error("O token de autenticação recebido já está expirado.");
+      }
+
+      const role = payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+
+      if (!role) {
+        throw new Error("A role do usuário não foi encontrada no token.");
       }
 
       localStorage.setItem('token', data.token);
