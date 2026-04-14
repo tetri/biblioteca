@@ -15,9 +15,9 @@ Este documento serve como guia para a arquitetura e futuras implementações no 
 - **Traces:** Manter o `TraceId` trafegando entre os microsserviços via headers HTTP.
 
 ## 3. Checklist de Implementação Pendente
-- [ ] **LoanService:** Refatorado para o padrão CQRS "Vanilla" (Remover `LoanService.cs` e criar Handlers).
+- [x] **LoanService:** Adicionado suporte a Queries CQRS e endpoint de Meus Empréstimos.
 - [ ] **CatalogService:** Refatorado para CQRS.
-- [x] **Design:** Recriado layout das páginas públicas com design premium minimalista.
+- [x] **Design:** Implementadas todas as páginas públicas (Busca, Detalhes, Perfil) com design premium minimalista.
 - [x] **Documentação:** Corrigida rota do Scalar para `/docs` no Gateway.
 - [x] **Conteúdo:** Atualizado Política de Privacidade e Termos de Uso com tom profissional.
 - [x] **OpenTelemetry:** Configurar telemetria em todos os microsserviços e no Gateway (Base implementada no Shared.Observability).
