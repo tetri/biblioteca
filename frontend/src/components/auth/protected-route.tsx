@@ -1,4 +1,5 @@
 import { Navigate, useLocation } from 'react-router-dom';
+import { decodeJwtPayload } from '../../lib/utils';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -14,7 +15,7 @@ export const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) 
   }
 
   try {
-    const payload = JSON.parse(atob(token.split('.')[1]));
+    const payload = decodeJwtPayload(token);
 
     // Verificar expiração
     if (payload.exp && payload.exp < Math.floor(Date.now() / 1000)) {
