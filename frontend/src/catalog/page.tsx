@@ -5,7 +5,7 @@ import { decodeJwtPayload } from '../lib/utils';
 import { ErrorMessage } from '../components/error-message';
 import { PublicLayout } from '../components/shared/public-layout';
 import { Button } from "@/components/ui/button";
-import { BookOpen, CheckCircle2, AlertCircle } from "lucide-react";
+import { BookOpen, CheckCircle2 } from "lucide-react";
 
 interface Book {
   id: string;
