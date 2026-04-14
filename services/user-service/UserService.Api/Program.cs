@@ -4,7 +4,12 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using Scalar.AspNetCore;
 using Shared.Observability;
+using Shared.Contracts;
 using System.Text;
+using UserService.Application.Abstractions;
+using UserService.Application.Commands;
+using UserService.Application.DTOs;
+using UserService.Application.Handlers;
 using UserService.Application.Interfaces;
 using UserService.Domain.Entities;
 using UserService.Domain.Repositories;
@@ -32,6 +37,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService.Application.Services.UserService>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
+builder.Services.AddScoped<ICommandHandler<SetupPasswordCommand, Result<bool>>, SetupPasswordHandler>();
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 
@@ -86,5 +92,13 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Seed users
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<MongoContext>();
+    var hasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher>();
+    await UserSeeder.SeedAsync(context.Users, hasher);
+}
 
 app.Run();

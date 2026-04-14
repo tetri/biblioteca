@@ -39,7 +39,11 @@ Este documento serve como guia para a arquitetura e futuras implementações no 
 - **Padrão de Interface:** Componentes devem ser reutilizáveis (Atomic Design).
 - **Resiliência:** Uso obrigatório de `ErrorMessage` em fluxos de erro e `Loading` states para todas as chamadas de API.
 
-## 4. Notas para Agentes
-- **Não use MediatR** (Licenciamento comercial). Use sempre `Microsoft.Extensions.DependencyInjection`.
-- Priorize a manutenibilidade e padrões sólidos (SOLID).
-- Ao alterar APIs, mantenha a compatibilidade ou versione via Header/URL.
+## 8. Segurança e Acesso
+- **Admin Padrão:** Criado automaticamente pelo `UserSeeder` no primeiro boot.
+    - **Email:** `admin@biblioteca.com`
+    - **Senha:** `temp123`
+- **Usuário Demo:** Criado para testes.
+    - **Email:** `demo@biblioteca.com`
+    - **Senha:** `demo123`
+- **Setup Obrigatório:** O Admin possui a flag `IsSetupRequired = true`, exigindo alteração de senha no primeiro acesso.
