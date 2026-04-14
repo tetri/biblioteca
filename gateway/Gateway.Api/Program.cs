@@ -1,7 +1,10 @@
 using Scalar.AspNetCore;
 using Microsoft.AspNetCore.OpenApi;
+using Shared.Observability;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSharedObservability("Gateway.Api");
 
 builder.Services.AddReverseProxy()
     .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));

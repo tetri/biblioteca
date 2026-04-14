@@ -15,6 +15,13 @@ export const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) 
 
   try {
     const payload = JSON.parse(atob(token.split('.')[1]));
+
+    // Verificar expiração
+    if (payload.exp && payload.exp < Math.floor(Date.now() / 1000)) {
+      localStorage.removeItem('token');
+      return <Navigate to="/entrar" state={{ from: location }} replace />;
+    }
+
     const userRole = payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
 
     if (allowedRoles && !allowedRoles.includes(userRole)) {
