@@ -55,7 +55,7 @@ public class LoansController : ControllerBase
     [HttpGet("my-loans")]
     public async Task<ActionResult<IEnumerable<LoanResponseDto>>> GetMyLoans()
     {
-        var sid = User.FindFirst(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Sid)?.Value;
+        var sid = User.FindFirst("sid")?.Value;
         if (sid == null)
         {
             _logger.LogWarning("Unauthorized access attempt to GetMyLoans: SID claim missing.");

@@ -7,8 +7,8 @@ import { ErrorMessage } from '../components/error-message';
 import { PublicLayout } from '../components/shared/public-layout';
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { BookOpen, CheckCircle2, ArrowLeft, Info, Calendar, User, Tag, Hash } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { BookOpen, CheckCircle2, ArrowLeft, Info, Tag, Hash } from "lucide-react";
 
 interface Book {
   id: string;
