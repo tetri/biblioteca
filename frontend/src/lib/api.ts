@@ -13,4 +13,22 @@ api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   return config;
 });
 
+// Interceptor para telemetria e logs de erro
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const status = error.response?.status;
+    const message = error.response?.data?.message || error.message;
+    const path = error.config?.url;
+
+    console.error(`[API Error] ${status || 'Network'} on ${path}: ${message}`, {
+      status,
+      data: error.response?.data,
+      config: error.config
+    });
+
+    return Promise.reject(error);
+  }
+);
+
 export default api;
