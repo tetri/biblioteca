@@ -38,4 +38,4 @@ Este documento define as diretrizes visuais e de componentes para o sistema Bibl
 ## 4. Estrutura de Pastas
 - `src/components/ui/` -> Componentes primitivos (Radix + Tailwind).
 - `src/components/shared/` -> Componentes compostos (Layouts, Navbar).
-- `src/pages/` -> Views específicas.
+- Estrutura de Rotas -> Crie páginas como pastas de rota contendo um arquivo `page.tsx` (ex: `frontend/src/home/page.tsx` e `frontend/src/login/page.tsx`).
