@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '../lib/api';
 import { decodeJwtPayload } from '../lib/utils';
@@ -24,6 +24,15 @@ export function BooksPage() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [pendingBookIds, setPendingBookIds] = useState<Set<string>>(new Set());
+  const successTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const errorTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (successTimeoutRef.current) clearTimeout(successTimeoutRef.current);
+      if (errorTimeoutRef.current) clearTimeout(errorTimeoutRef.current);
+    };
+  }, []);
 
   const { data: books, isLoading, error } = useQuery({
     queryKey: ['books'],
@@ -50,18 +59,26 @@ export function BooksPage() {
         setPendingBookIds(prev => new Set(prev).add(bookId));
     },
     onSuccess: () => {
+        if (successTimeoutRef.current) clearTimeout(successTimeoutRef.current);
         setSuccessMessage("Livro reservado com sucesso!");
         queryClient.invalidateQueries({ queryKey: ['books'] });
-        setTimeout(() => setSuccessMessage(null), 5000);
+        successTimeoutRef.current = setTimeout(() => {
+            setSuccessMessage(null);
+            successTimeoutRef.current = null;
+        }, 5000);
     },
     onError: (err: any) => {
+        if (errorTimeoutRef.current) clearTimeout(errorTimeoutRef.current);
         const errorData = err.response?.data;
         const message = typeof errorData === 'string'
             ? errorData
             : (errorData?.message || err.message || "Erro ao reservar livro.");
 
         setErrorMessage(message);
-        setTimeout(() => setErrorMessage(null), 5000);
+        errorTimeoutRef.current = setTimeout(() => {
+            setErrorMessage(null);
+            errorTimeoutRef.current = null;
+        }, 5000);
     },
     onSettled: (_, __, bookId) => {
         setPendingBookIds(prev => {
