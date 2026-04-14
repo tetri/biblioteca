@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../lib/api';
 import { ErrorMessage } from '../components/error-message';
@@ -17,12 +17,20 @@ export default function RegisterPage() {
   const [isSuccess, setIsSuccess] = useState(false);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (isSuccess) {
+      const timer = setTimeout(() => {
+        navigate('/entrar');
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [isSuccess, navigate]);
+
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await api.post('/api/auth/register', { name, email, password });
       setIsSuccess(true);
-      setTimeout(() => navigate('/entrar'), 3000);
     } catch (err: any) {
       setError(err.response?.data?.message || 'Erro ao realizar cadastro. Tente outro e-mail.');
     }

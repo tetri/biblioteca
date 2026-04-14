@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -6,6 +7,18 @@ import { Search, BookOpen, ArrowRight, Star, Shield, Zap } from "lucide-react";
 import { PublicLayout } from '../components/shared/public-layout';
 
 export default function HomePage() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      navigate(`/catalogo?query=${encodeURIComponent(searchTerm.trim())}`);
+    } else {
+      navigate('/catalogo');
+    }
+  };
+
   return (
     <PublicLayout>
       <section className="relative overflow-hidden py-20 px-6 sm:py-32 lg:px-8 text-center">
@@ -17,15 +30,18 @@ export default function HomePage() {
             Explore milhares de títulos, gerencie seus empréstimos e descubra sua próxima leitura em uma plataforma minimalista e intuitiva.
           </p>
           <div className="mt-10 flex items-center justify-center gap-x-6">
-            <div className="flex w-full max-w-lg items-center space-x-2 bg-white p-2 rounded-full border border-slate-200 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500/20 transition-all">
+            <form onSubmit={handleSearch} className="flex w-full max-w-lg items-center space-x-2 bg-white p-2 rounded-full border border-slate-200 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500/20 transition-all">
               <Search className="ml-3 h-5 w-5 text-slate-400" />
               <Input
                 type="text"
                 placeholder="Título, autor ou ISBN..."
                 className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                aria-label="Buscar livros no catálogo"
               />
-              <Button className="rounded-full bg-indigo-600 hover:bg-indigo-700">Buscar</Button>
-            </div>
+              <Button type="submit" className="rounded-full bg-indigo-600 hover:bg-indigo-700">Buscar</Button>
+            </form>
           </div>
         </div>
       </section>
