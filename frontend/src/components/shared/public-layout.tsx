@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { LogIn, UserPlus, Book } from "lucide-react";
+import { Book } from "lucide-react";
 import React from 'react';
 
 export const PublicLayout = React.memo(({ children }: { children: React.ReactNode }) => {
