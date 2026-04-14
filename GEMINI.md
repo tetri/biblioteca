@@ -29,13 +29,15 @@ Este documento serve como guia para a arquitetura e futuras implementações no 
 - [x] **CI/CD:** Configurar GitHub Actions para execução de testes unitários (backend e frontend) e build Docker.
 - [x] **Orquestração:** Script de subida `up.sh` e otimização para ambiente WSL2/Linux.
 
-## 5. Roadmap Frontend
-- [x] **Configuração Base:** Instalar `TanStack Query` e `React Router`.
-- [x] **Página Pública:** Listagem de livros com busca (usando `CatalogService`).
-- [x] **Cadastro de Usuários:** Formulário de registro com validação (usando `UserService`).
-- [ ] **Cadastro de Livros (Admin):** CRUD de livros protegido (usando `CatalogService`).
-- [ ] **Gestão de Empréstimos:** Fluxo de criação de empréstimo e listagem (usando `LoanService`).
-- [x] **Autenticação:** Integração de JWT na camada de API do frontend.
+## 6. Escalabilidade e Melhorias Futuras
+- **Escalabilidade:** O sistema suporta escalabilidade horizontal via Docker Compose/Kubernetes. O estado é centralizado nos bancos MongoDB.
+- **Mensageria:** A introdução de um Message Broker (RabbitMQ) está mapeada como melhoria futura para comunicação assíncrona entre `LoanService` e `NotificationService`.
+- **Testes de Estresse:** Recomenda-se o uso de k6 para testes de exaustão e validação de latência sob carga alta.
+
+## 7. Diretrizes de Design e Interface (Frontend)
+- **Design System:** Baseado em Radix UI + Tailwind CSS para garantir acessibilidade e consistência visual.
+- **Padrão de Interface:** Componentes devem ser reutilizáveis (Atomic Design).
+- **Resiliência:** Uso obrigatório de `ErrorMessage` em fluxos de erro e `Loading` states para todas as chamadas de API.
 
 ## 4. Notas para Agentes
 - **Não use MediatR** (Licenciamento comercial). Use sempre `Microsoft.Extensions.DependencyInjection`.
