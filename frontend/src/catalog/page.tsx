@@ -24,11 +24,11 @@ export function BooksPage() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [pendingBookIds, setPendingBookIds] = useState<Set<string>>(new Set());
-  const successTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const messageTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     return () => {
-      if (successTimeoutRef.current) clearTimeout(successTimeoutRef.current);
+      if (messageTimeoutRef.current) clearTimeout(messageTimeoutRef.current);
     };
   }, []);
 
@@ -37,7 +37,7 @@ export function BooksPage() {
     message: string | null,
     shouldInvalidate: boolean = false
   ) => {
-    if (successTimeoutRef.current) clearTimeout(successTimeoutRef.current);
+    if (messageTimeoutRef.current) clearTimeout(messageTimeoutRef.current);
     setSuccessMessage(null);
     setErrorMessage(null);
     setter(message);
@@ -46,9 +46,9 @@ export function BooksPage() {
       queryClient.invalidateQueries({ queryKey: ['books'] });
     }
 
-    successTimeoutRef.current = setTimeout(() => {
+    messageTimeoutRef.current = setTimeout(() => {
       setter(null);
-      successTimeoutRef.current = null;
+      messageTimeoutRef.current = null;
     }, 5000);
   };
 
