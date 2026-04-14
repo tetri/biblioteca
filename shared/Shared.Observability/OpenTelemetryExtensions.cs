@@ -16,12 +16,14 @@ public static class OpenTelemetryExtensions
                     .AddSource(serviceName)
                     .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(serviceName))
                     .AddAspNetCoreInstrumentation()
+                    .AddHttpClientInstrumentation()
                     .AddConsoleExporter();
             })
             .WithMetrics(metricsProviderBuilder =>
             {
                 metricsProviderBuilder
                     .AddAspNetCoreInstrumentation()
+                    .AddHttpClientInstrumentation()
                     .AddConsoleExporter();
             });
 
