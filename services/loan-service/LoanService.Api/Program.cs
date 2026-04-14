@@ -7,6 +7,7 @@ using LoanService.Infrastructure;
 using LoanService.Infrastructure.Repositories;
 using Shared.Contracts;
 using Shared.Observability;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +15,7 @@ builder.Services.AddSharedObservability("LoanService");
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddOpenApi();
 
 var mongoSettings = builder.Configuration.GetSection("MongoSettings");
 builder.Services.AddSingleton(new MongoContext(
@@ -27,11 +28,11 @@ builder.Services.AddScoped<ICommandHandler<ReserveLoanCommand, Result<LoanRespon
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.MapOpenApi();
+app.MapScalarApiReference(options => {
+    options.WithTitle("Biblioteca API - LoanService");
+    options.WithTheme(ScalarTheme.DeepSpace);
+});
 
 app.UseAuthorization();
 app.MapControllers();

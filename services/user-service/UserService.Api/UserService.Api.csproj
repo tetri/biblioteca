@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
 		<TargetFramework>net9.0</TargetFramework>
@@ -21,6 +21,7 @@
 		<ProjectReference Include="..\UserService.Application\UserService.Application.csproj" />
 		<ProjectReference Include="..\UserService.Infrastructure\UserService.Infrastructure.csproj" />
 		<ProjectReference Include="..\..\..\shared\Shared.Observability\Shared.Observability.csproj" />
+		<ProjectReference Include="..\..\..\shared\Shared.Contracts\Shared.Contracts.csproj" />
 	</ItemGroup>
 
 </Project>

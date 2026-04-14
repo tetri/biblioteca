@@ -8,18 +8,21 @@ public sealed class User
     public string PasswordHash { get; private set; } = string.Empty;
     public bool IsApproved { get; private set; } = false;
     public string Role { get; private set; } = "Member";
+    public bool IsSetupRequired { get; private set; } = false;
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 
     private User() { }
 
-    public User(string name, string email, string passwordHash, string role = "Member")
+    public User(string name, string email, string passwordHash, string role = "Member", bool isApproved = false, bool isSetupRequired = false)
     {
         Id = Guid.NewGuid();
         Name = name;
         Email = email;
         PasswordHash = passwordHash;
         Role = role;
+        IsApproved = isApproved;
+        IsSetupRequired = isSetupRequired;
         CreatedAt = DateTime.UtcNow;
         UpdatedAt = DateTime.UtcNow;
     }

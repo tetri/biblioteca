@@ -33,11 +33,11 @@ export default function LoginPage() {
         <form onSubmit={handleLogin} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="email">E-mail</Label>
-            <Input id="email" type="email" placeholder="nome@biblioteca.com" onChange={(e) => setEmail(e.target.value)} required />
+            <Input id="email" type="email" autoComplete="email" placeholder="nome@biblioteca.com" onChange={(e) => setEmail(e.target.value)} required />
           </div>
           <div className="space-y-2">
             <Label htmlFor="password">Senha</Label>
-            <Input id="password" type="password" onChange={(e) => setPassword(e.target.value)} required />
+            <Input id="password" type="password" autoComplete="current-password" onChange={(e) => setPassword(e.target.value)} required />
           </div>
           <Button type="submit" className="w-full">Entrar</Button>
         </form>
