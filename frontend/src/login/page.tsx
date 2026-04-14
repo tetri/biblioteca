@@ -13,18 +13,28 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
+    setError(null);
     try {
       const { data } = await api.post('/user/api/auth/login', { email, password });
-      localStorage.setItem('token', data.token);
 
-      // Decodificar o payload do token JWT para obter a Role
+      // Decodificar o payload do token JWT para obter a Role antes de persistir
       // O token está no formato header.payload.signature
-      const payload = JSON.parse(atob(data.token.split('.')[1]));
-      const role = payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+      let role;
+      try {
+        const payload = JSON.parse(atob(data.token.split('.')[1]));
+        role = payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+        if (!role) throw new Error("A role do usuário não foi encontrada no token.");
+      } catch (decodeErr) {
+        throw new Error("Falha ao processar o token de autenticação. Por favor, tente novamente.");
+      }
+
+      localStorage.setItem('token', data.token);
 
       if (role === 'Admin') {
         navigate('/admin');
@@ -32,7 +42,9 @@ export default function LoginPage() {
         navigate('/');
       }
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Credenciais inválidas. Por favor, tente novamente.');
+      setError(err.response?.data?.message || err.message || 'Credenciais inválidas. Por favor, tente novamente.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -64,6 +76,7 @@ export default function LoginPage() {
                   className="rounded-lg border-slate-200 focus:ring-indigo-500/20"
                   onChange={(e) => setEmail(e.target.value)}
                   required
+                  disabled={isLoading}
                 />
               </div>
               <div className="space-y-2">
@@ -75,10 +88,15 @@ export default function LoginPage() {
                   className="rounded-lg border-slate-200 focus:ring-indigo-500/20"
                   onChange={(e) => setPassword(e.target.value)}
                   required
+                  disabled={isLoading}
                 />
               </div>
-              <Button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-6 rounded-lg text-base font-semibold transition-all">
-                Entrar
+              <Button
+                type="submit"
+                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-6 rounded-lg text-base font-semibold transition-all"
+                disabled={isLoading}
+              >
+                {isLoading ? 'Entrando...' : 'Entrar'}
               </Button>
             </form>
 
