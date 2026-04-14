@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -8,6 +8,15 @@ import { ErrorMessage } from '../components/error-message';
 export default function AdminPage() {
   const navigate = useNavigate();
   const [notice, setNotice] = useState<string | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -15,8 +24,14 @@ export default function AdminPage() {
   };
 
   const handlePlaceholderClick = (feature: string) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
     setNotice(`${feature} será implementado em breve.`);
-    setTimeout(() => setNotice(null), 5000);
+    timeoutRef.current = setTimeout(() => {
+      setNotice(null);
+      timeoutRef.current = null;
+    }, 5000);
   };
 
   return (
