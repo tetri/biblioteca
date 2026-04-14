@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import api from '../lib/api';
 import { ErrorMessage } from '../components/error-message';
+import { PublicLayout } from '../components/shared/public-layout';
 
 interface Book {
   id: string;
@@ -30,11 +31,13 @@ export function BooksPage() {
     </div>
   );
 
+  const bookList = Array.isArray(books) ? books : [];
+
   return (
-    <div className="p-8">
+    <PublicLayout>
       <h1 className="text-3xl font-bold mb-6">Catálogo de Livros</h1>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {books?.map((book: Book) => (
+        {bookList.map((book: Book) => (
           <div key={book.id} className="border p-4 rounded shadow">
             <h2 className="text-xl font-semibold">{book.title}</h2>
             <p className="text-gray-600">{book.author}</p>
@@ -42,6 +45,7 @@ export function BooksPage() {
           </div>
         ))}
       </div>
-    </div>
+    </PublicLayout>
   );
 }
+
