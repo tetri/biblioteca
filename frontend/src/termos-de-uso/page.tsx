@@ -33,20 +33,17 @@ export default function TermosDeUso() {
               <p className="text-slate-600 leading-relaxed">
                 Como usuário da biblioteca, você se compromete a:
               </p>
-              <ul className="list-none pl-0 space-y-4 text-slate-600 mt-4">
-                <li className="flex gap-3">
-                  <div className="h-5 w-5 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center text-[10px] mt-1 shrink-0">1</div>
+              <ol className="list-decimal pl-6 space-y-4 text-slate-600 mt-4">
+                <li>
                   <span>Zelar pela integridade física dos livros físicos retirados.</span>
                 </li>
-                <li className="flex gap-3">
-                  <div className="h-5 w-5 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center text-[10px] mt-1 shrink-0">2</div>
+                <li>
                   <span>Respeitar rigorosamente os prazos de devolução estabelecidos.</span>
                 </li>
-                <li className="flex gap-3">
-                  <div className="h-5 w-5 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center text-[10px] mt-1 shrink-0">3</div>
+                <li>
                   <span>Não compartilhar suas credenciais de acesso com terceiros.</span>
                 </li>
-              </ul>
+              </ol>
             </section>
 
             <section className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm">
