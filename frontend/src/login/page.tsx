@@ -18,9 +18,19 @@ export default function LoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const { data } = await api.post('/api/auth/login', { email, password });
+      const { data } = await api.post('/user/api/auth/login', { email, password });
       localStorage.setItem('token', data.token);
-      navigate('/');
+
+      // Decodificar o payload do token JWT para obter a Role
+      // O token está no formato header.payload.signature
+      const payload = JSON.parse(atob(data.token.split('.')[1]));
+      const role = payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+
+      if (role === 'Admin') {
+        navigate('/admin');
+      } else {
+        navigate('/');
+      }
     } catch (err: any) {
       setError(err.response?.data?.message || 'Credenciais inválidas. Por favor, tente novamente.');
     }
