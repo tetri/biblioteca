@@ -1,10 +1,9 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Book, User, LogOut, ChevronDown } from "lucide-react";
 import React, { useState } from 'react';
 
 export const PublicLayout = React.memo(({ children }: { children: React.ReactNode }) => {
-  const navigate = useNavigate();
   const token = localStorage.getItem('token');
   const isAuthenticated = !!token;
   const [showUserMenu, setShowUserMenu] = useState(false);
