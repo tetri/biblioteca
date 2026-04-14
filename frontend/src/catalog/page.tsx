@@ -25,14 +25,32 @@ export function BooksPage() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [pendingBookIds, setPendingBookIds] = useState<Set<string>>(new Set());
   const successTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const errorTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     return () => {
       if (successTimeoutRef.current) clearTimeout(successTimeoutRef.current);
-      if (errorTimeoutRef.current) clearTimeout(errorTimeoutRef.current);
     };
   }, []);
+
+  const scheduleClearMessage = (
+    setter: (msg: string | null) => void,
+    message: string | null,
+    shouldInvalidate: boolean = false
+  ) => {
+    if (successTimeoutRef.current) clearTimeout(successTimeoutRef.current);
+    setSuccessMessage(null);
+    setErrorMessage(null);
+    setter(message);
+
+    if (shouldInvalidate) {
+      queryClient.invalidateQueries({ queryKey: ['books'] });
+    }
+
+    successTimeoutRef.current = setTimeout(() => {
+      setter(null);
+      successTimeoutRef.current = null;
+    }, 5000);
+  };
 
   const { data: books, isLoading, error } = useQuery({
     queryKey: ['books'],
@@ -59,26 +77,15 @@ export function BooksPage() {
         setPendingBookIds(prev => new Set(prev).add(bookId));
     },
     onSuccess: () => {
-        if (successTimeoutRef.current) clearTimeout(successTimeoutRef.current);
-        setSuccessMessage("Livro reservado com sucesso!");
-        queryClient.invalidateQueries({ queryKey: ['books'] });
-        successTimeoutRef.current = setTimeout(() => {
-            setSuccessMessage(null);
-            successTimeoutRef.current = null;
-        }, 5000);
+        scheduleClearMessage(setSuccessMessage, "Livro reservado com sucesso!", true);
     },
     onError: (err: any) => {
-        if (errorTimeoutRef.current) clearTimeout(errorTimeoutRef.current);
         const errorData = err.response?.data;
         const message = typeof errorData === 'string'
             ? errorData
             : (errorData?.message || err.message || "Erro ao reservar livro.");
 
-        setErrorMessage(message);
-        errorTimeoutRef.current = setTimeout(() => {
-            setErrorMessage(null);
-            errorTimeoutRef.current = null;
-        }, 5000);
+        scheduleClearMessage(setErrorMessage, message);
     },
     onSettled: (_, __, bookId) => {
         setPendingBookIds(prev => {
