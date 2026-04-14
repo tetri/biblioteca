@@ -22,6 +22,7 @@ export function BooksPage() {
   const queryClient = useQueryClient();
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [pendingBookId, setPendingBookId] = useState<string | null>(null);
 
   const { data: books, isLoading, error } = useQuery({
     queryKey: ['books'],
@@ -30,12 +31,19 @@ export function BooksPage() {
 
   const reserveMutation = useMutation({
     mutationFn: async (bookId: string) => {
+        setPendingBookId(bookId);
         // Obter o UserId do token se possível
         const token = localStorage.getItem('token');
         if (!token) throw new Error("Você precisa estar logado para reservar um livro.");
 
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        const userId = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid"];
+        let userId;
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            userId = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid"];
+            if (!userId) throw new Error("Token inválido: SID não encontrado.");
+        } catch (e) {
+            throw new Error("Erro ao processar login. Por favor, entre novamente.");
+        }
 
         return api.post('/loan/api/loans/reserve', {
             bookId,
@@ -49,8 +57,16 @@ export function BooksPage() {
         setTimeout(() => setSuccessMessage(null), 5000);
     },
     onError: (err: any) => {
-        setErrorMessage(err.response?.data?.message || err.message || "Erro ao reservar livro.");
+        const errorData = err.response?.data;
+        const message = typeof errorData === 'string'
+            ? errorData
+            : (errorData?.message || err.message || "Erro ao reservar livro.");
+
+        setErrorMessage(message);
         setTimeout(() => setErrorMessage(null), 5000);
+    },
+    onSettled: () => {
+        setPendingBookId(null);
     }
   });
 
@@ -121,10 +137,10 @@ export function BooksPage() {
                 ? 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-200'
                 : 'bg-slate-100 text-slate-400 cursor-not-allowed'
               }`}
-              disabled={book.availableCopies === 0 || reserveMutation.isPending}
+              disabled={book.availableCopies === 0 || (pendingBookId === book.id)}
               onClick={() => reserveMutation.mutate(book.id)}
             >
-              {reserveMutation.isPending ? 'Processando...' : 'Reservar agora'}
+              {pendingBookId === book.id ? 'Processando...' : 'Reservar agora'}
             </Button>
           </div>
         ))}
