@@ -1,9 +1,20 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Shield, Users, BookOpen, Settings, ArrowLeft } from "lucide-react";
 
 export default function AdminPage() {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/');
+  };
+
+  const handlePlaceholderClick = (feature: string) => {
+    alert(`${feature} será implementado em breve.`);
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 p-8">
       <div className="max-w-6xl mx-auto">
@@ -17,7 +28,13 @@ export default function AdminPage() {
               Painel Administrativo
             </h1>
           </div>
-          <Button variant="outline" className="rounded-full">Sair do Painel</Button>
+          <Button
+            variant="outline"
+            className="rounded-full"
+            onClick={handleLogout}
+          >
+            Sair do Painel
+          </Button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -28,7 +45,13 @@ export default function AdminPage() {
               <CardDescription>Gerenciar membros e permissões.</CardDescription>
             </CardHeader>
             <CardContent>
-              <Button className="w-full justify-start" variant="ghost">Ver todos os usuários</Button>
+              <Button
+                className="w-full justify-start"
+                variant="ghost"
+                onClick={() => handlePlaceholderClick('Gerenciamento de usuários')}
+              >
+                Ver todos os usuários
+              </Button>
             </CardContent>
           </Card>
 
@@ -39,7 +62,13 @@ export default function AdminPage() {
               <CardDescription>Adicionar ou editar livros no sistema.</CardDescription>
             </CardHeader>
             <CardContent>
-              <Button className="w-full justify-start" variant="ghost">Gerenciar livros</Button>
+              <Button
+                className="w-full justify-start"
+                variant="ghost"
+                onClick={() => navigate('/catalogo')}
+              >
+                Gerenciar livros
+              </Button>
             </CardContent>
           </Card>
 
@@ -50,7 +79,13 @@ export default function AdminPage() {
               <CardDescription>Ajustes globais do sistema de biblioteca.</CardDescription>
             </CardHeader>
             <CardContent>
-              <Button className="w-full justify-start" variant="ghost">Preferências do sistema</Button>
+              <Button
+                className="w-full justify-start"
+                variant="ghost"
+                onClick={() => handlePlaceholderClick('Configurações do sistema')}
+              >
+                Preferências do sistema
+              </Button>
             </CardContent>
           </Card>
         </div>
@@ -59,8 +94,20 @@ export default function AdminPage() {
           <h2 className="text-2xl font-bold mb-2">Bem-vindo, Administrador!</h2>
           <p className="opacity-90 mb-6">Este é o seu centro de comando. Aqui você pode supervisionar toda a operação da biblioteca.</p>
           <div className="flex gap-4">
-            <Button variant="secondary" className="bg-white text-indigo-600 hover:bg-slate-100">Relatórios Mensais</Button>
-            <Button variant="ghost" className="text-white hover:bg-indigo-500 border border-indigo-400">Ver Atividade Recente</Button>
+            <Button
+              variant="secondary"
+              className="bg-white text-indigo-600 hover:bg-slate-100"
+              onClick={() => handlePlaceholderClick('Relatórios')}
+            >
+              Relatórios Mensais
+            </Button>
+            <Button
+              variant="ghost"
+              className="text-white hover:bg-indigo-500 border border-indigo-400"
+              onClick={() => handlePlaceholderClick('Atividade Recente')}
+            >
+              Ver Atividade Recente
+            </Button>
           </div>
         </div>
       </div>
