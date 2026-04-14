@@ -11,7 +11,7 @@ builder.Services.AddOpenApi();
 var app = builder.Build();
 
 app.MapOpenApi();
-app.MapScalarApiReference(options => {
+app.MapScalarApiReference("/docs", options => {
     options.WithTitle("Biblioteca API - Gateway Central");
     options.WithTheme(ScalarTheme.DeepSpace);
 });
