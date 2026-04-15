@@ -11,7 +11,9 @@ public class LoanReserveTests
         // Arrange
         var userId = Guid.NewGuid();
         var bookId = Guid.NewGuid();
-        var activeLoan = Loan.Create(userId, bookId, new List<Loan>()).Value!;
+        var activeLoanResult = Loan.Create(userId, bookId, new List<Loan>());
+        activeLoanResult.IsSuccess.Should().BeTrue(activeLoanResult.Error);
+        var activeLoan = activeLoanResult.Value!;
         var existingLoans = new List<Loan> { activeLoan };
 
         // Act
@@ -28,7 +30,9 @@ public class LoanReserveTests
         // Arrange
         var userId = Guid.NewGuid();
         var bookId = Guid.NewGuid();
-        var reservedLoan = Loan.Reserve(userId, bookId, new List<Loan>()).Value!;
+        var reservedLoanResult = Loan.Reserve(userId, bookId, new List<Loan>());
+        reservedLoanResult.IsSuccess.Should().BeTrue(reservedLoanResult.Error);
+        var reservedLoan = reservedLoanResult.Value!;
         var existingLoans = new List<Loan> { reservedLoan };
 
         // Act
