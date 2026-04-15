@@ -93,11 +93,11 @@ export default function ProfilePage() {
     mutationFn: async () => {
       return api.put('/user/api/users/me', { name, password: password || undefined });
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       scheduleClearMessage(setSuccessMessage, "Perfil atualizado com sucesso!");
       setPassword('');
+      await queryClient.invalidateQueries({ queryKey: ['profile'] });
       setIsNameDirty(false);
-      queryClient.invalidateQueries({ queryKey: ['profile'] });
     },
     onError: (err: any) => {
       const errorData = err.response?.data;
