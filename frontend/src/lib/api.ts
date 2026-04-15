@@ -24,7 +24,11 @@ api.interceptors.response.use(
     console.error(`[API Error] ${status || 'Network'} on ${path}: ${message}`, {
       status,
       data: error.response?.data,
-      config: error.config
+      config: {
+        method: error.config?.method,
+        url: error.config?.url,
+        timeout: error.config?.timeout
+      }
     });
 
     return Promise.reject(error);

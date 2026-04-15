@@ -1,6 +1,7 @@
 using LoanService.Application.Abstractions;
 using LoanService.Application.Commands;
 using LoanService.Application.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LoanService.Api.Controllers;
@@ -27,9 +28,9 @@ public class LoansController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<LoanResponseDto>> Create([FromBody] CreateLoanCommand command)
+    public async Task<ActionResult<LoanResponseDto>> Create([FromBody] CreateLoanCommand command, CancellationToken cancellationToken)
     {
-        var result = await _createLoanHandler.Handle(command);
+        var result = await _createLoanHandler.Handle(command, cancellationToken);
 
         if (result.IsFailure)
         {
@@ -40,9 +41,9 @@ public class LoansController : ControllerBase
     }
 
     [HttpPost("reserve")]
-    public async Task<ActionResult<LoanResponseDto>> Reserve([FromBody] ReserveLoanCommand command)
+    public async Task<ActionResult<LoanResponseDto>> Reserve([FromBody] ReserveLoanCommand command, CancellationToken cancellationToken)
     {
-        var result = await _reserveHandler.Handle(command);
+        var result = await _reserveHandler.Handle(command, cancellationToken);
         
         if (result.IsFailure)
         {
@@ -52,8 +53,9 @@ public class LoansController : ControllerBase
         return Ok(result.Value);
     }
 
+    [Authorize]
     [HttpGet("my-loans")]
-    public async Task<ActionResult<IEnumerable<LoanResponseDto>>> GetMyLoans()
+    public async Task<ActionResult<IEnumerable<LoanResponseDto>>> GetMyLoans(CancellationToken cancellationToken)
     {
         var sid = User.FindFirst("sid")?.Value;
         if (sid == null)
@@ -68,7 +70,7 @@ public class LoansController : ControllerBase
             return BadRequest("Invalid user ID in token.");
         }
 
-        var loans = await _getLoansHandler.Handle(new(userId));
+        var loans = await _getLoansHandler.Handle(new(userId), cancellationToken);
         return Ok(loans);
     }
 }
