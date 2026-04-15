@@ -103,14 +103,13 @@ export function BooksPage() {
         setPendingBookIds(prev => new Set(prev).add(bookId));
     },
     onSuccess: (_, bookId) => {
-        queryClient.invalidateQueries({ queryKey: ['books'] }).then(() => {
-          setPendingBookIds(prev => {
-              const next = new Set(prev);
-              next.delete(bookId);
-              return next;
-          });
-          scheduleClearMessage(setSuccessMessage, "Livro reservado com sucesso!");
+        queryClient.invalidateQueries({ queryKey: ['books'] });
+        setPendingBookIds(prev => {
+            const next = new Set(prev);
+            next.delete(bookId);
+            return next;
         });
+        scheduleClearMessage(setSuccessMessage, "Livro reservado com sucesso!");
     },
     onError: (err: any, bookId) => {
         setPendingBookIds(prev => {
