@@ -70,10 +70,15 @@ export default function ProfilePage() {
     queryKey: ['profile'],
     queryFn: async () => {
       const { data } = await api.get<UserProfile>('/user/api/users/me');
-      setName(data.name);
       return data;
     }
   });
+
+  useEffect(() => {
+    if (profile && name === '') {
+      setName(profile.name);
+    }
+  }, [profile, name]);
 
   const { data: loans, isLoading: isLoansLoading } = useQuery({
     queryKey: ['my-loans'],
@@ -157,10 +162,11 @@ export default function ProfilePage() {
               <CardContent className="pt-6 space-y-6">
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Nome Completo</label>
+                    <label htmlFor="name-input" className="text-xs font-bold text-slate-500 uppercase tracking-wider">Nome Completo</label>
                     <div className="relative">
                       <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                       <Input
+                        id="name-input"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         className="pl-10 bg-slate-50/50 border-slate-200"
@@ -168,10 +174,11 @@ export default function ProfilePage() {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">E-mail</label>
+                    <label htmlFor="email-input" className="text-xs font-bold text-slate-500 uppercase tracking-wider">E-mail</label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                       <Input
+                        id="email-input"
                         value={profile?.email}
                         disabled
                         className="pl-10 bg-slate-100 border-slate-200 cursor-not-allowed text-slate-500"
@@ -179,10 +186,11 @@ export default function ProfilePage() {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Nova Senha</label>
+                    <label htmlFor="password-input" className="text-xs font-bold text-slate-500 uppercase tracking-wider">Nova Senha</label>
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                       <Input
+                        id="password-input"
                         type="password"
                         placeholder="Deixe em branco para manter"
                         value={password}
@@ -242,6 +250,7 @@ export default function ProfilePage() {
                           <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
                             loan.status === 'Active' ? 'bg-indigo-100 text-indigo-700' :
                             loan.status === 'Reserved' ? 'bg-amber-100 text-amber-700' :
+                            loan.status === 'Overdue' ? 'bg-red-100 text-red-700' :
                             'bg-emerald-100 text-emerald-700'
                           }`}>
                             {loan.status}

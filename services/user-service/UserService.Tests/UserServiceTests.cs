@@ -23,7 +23,7 @@ public class UserServiceTests
     [Fact]
     public async Task GetProfileAsync_ShouldReturnNull_WhenUserDoesNotExist()
     {
-        _repositoryMock.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync((UserService.Domain.Entities.User?)null);
+        _repositoryMock.Setup(r => r.GetByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).ReturnsAsync((UserService.Domain.Entities.User?)null);
 
         var result = await _service.GetProfileAsync(Guid.NewGuid());
 

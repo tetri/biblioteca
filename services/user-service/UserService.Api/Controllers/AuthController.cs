@@ -34,9 +34,9 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("setup-password")]
-    public async Task<IActionResult> SetupPassword([FromBody] SetupPasswordCommand command)
+    public async Task<IActionResult> SetupPassword([FromBody] SetupPasswordCommand command, CancellationToken cancellationToken)
     {
-        var result = await _setupPasswordHandler.Handle(command);
+        var result = await _setupPasswordHandler.Handle(command, cancellationToken);
         return result.IsFailure ? BadRequest(result.Error) : Ok(result.Value);
     }
 }

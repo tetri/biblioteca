@@ -102,23 +102,28 @@ export function BooksPage() {
     onMutate: (bookId: string) => {
         setPendingBookIds(prev => new Set(prev).add(bookId));
     },
-    onSuccess: () => {
-        scheduleClearMessage(setSuccessMessage, "Livro reservado com sucesso!", true);
+    onSuccess: (_, bookId) => {
+        queryClient.invalidateQueries({ queryKey: ['books'] }).then(() => {
+          setPendingBookIds(prev => {
+              const next = new Set(prev);
+              next.delete(bookId);
+              return next;
+          });
+          scheduleClearMessage(setSuccessMessage, "Livro reservado com sucesso!");
+        });
     },
-    onError: (err: any) => {
+    onError: (err: any, bookId) => {
+        setPendingBookIds(prev => {
+            const next = new Set(prev);
+            next.delete(bookId);
+            return next;
+        });
         const errorData = err.response?.data;
         const message = typeof errorData === 'string'
             ? errorData
             : (errorData?.message || err.message || "Erro ao reservar livro.");
 
         scheduleClearMessage(setErrorMessage, message);
-    },
-    onSettled: (_, __, bookId) => {
-        setPendingBookIds(prev => {
-            const next = new Set(prev);
-            next.delete(bookId);
-            return next;
-        });
     }
   });
 
@@ -133,6 +138,8 @@ export function BooksPage() {
 
   const clearSearch = () => {
     setSearchTerm('');
+    setFilterCategory('');
+    setFilterAuthor('');
     setSearchParams({});
   };
 

@@ -16,9 +16,9 @@ public class CreateLoanHandler : ICommandHandler<CreateLoanCommand, Result<LoanR
         _loanRepository = loanRepository;
     }
 
-    public async Task<Result<LoanResponseDto>> Handle(CreateLoanCommand command)
+    public async Task<Result<LoanResponseDto>> Handle(CreateLoanCommand command, CancellationToken cancellationToken = default)
     {
-        var existingLoans = await _loanRepository.GetByUserIdAsync(command.UserId);
+        var existingLoans = await _loanRepository.GetByUserIdAsync(command.UserId, cancellationToken);
 
         var result = Loan.Create(command.UserId, command.BookId, existingLoans);
 
@@ -28,7 +28,7 @@ public class CreateLoanHandler : ICommandHandler<CreateLoanCommand, Result<LoanR
         }
 
         var loan = result.Value!;
-        await _loanRepository.AddAsync(loan);
+        await _loanRepository.AddAsync(loan, cancellationToken);
 
         return Result<LoanResponseDto>.Success(new LoanResponseDto(loan.Id, loan.UserId, loan.BookId, loan.LoanDate, loan.DueDate, loan.Status.ToString()));
     }

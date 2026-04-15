@@ -20,14 +20,14 @@ public class LoanServiceTests
     [Fact]
     public async Task CreateLoanAsync_ShouldCreateLoan_WhenValidRequest()
     {
-        _repositoryMock.Setup(r => r.GetByUserIdAsync(It.IsAny<Guid>())).ReturnsAsync(new List<Loan>());
+        _repositoryMock.Setup(r => r.GetByUserIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).ReturnsAsync(new List<Loan>());
         var command = new CreateLoanCommand(Guid.NewGuid(), Guid.NewGuid());
 
         var result = await _service.Handle(command);
 
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeNull();
-        _repositoryMock.Verify(r => r.AddAsync(It.IsAny<Loan>()), Times.Once);
+        _repositoryMock.Verify(r => r.AddAsync(It.IsAny<Loan>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -37,7 +37,7 @@ public class LoanServiceTests
         // Corrigindo a criação de Loan para o teste usando a factory
         var existingLoan = Loan.Create(userId, Guid.NewGuid(), new List<Loan>()).Value!;
         var existingLoans = Enumerable.Repeat(existingLoan, 3).ToList();
-        _repositoryMock.Setup(r => r.GetByUserIdAsync(userId)).ReturnsAsync(existingLoans);
+        _repositoryMock.Setup(r => r.GetByUserIdAsync(userId, It.IsAny<CancellationToken>())).ReturnsAsync(existingLoans);
 
         var command = new CreateLoanCommand(userId, Guid.NewGuid());
 
