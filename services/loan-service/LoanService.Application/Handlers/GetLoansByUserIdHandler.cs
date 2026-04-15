@@ -17,10 +17,10 @@ public class GetLoansByUserIdHandler : IQueryHandler<GetLoansByUserIdQuery, IEnu
         _logger = logger;
     }
 
-    public async Task<IEnumerable<LoanResponseDto>> Handle(GetLoansByUserIdQuery query)
+    public async Task<IEnumerable<LoanResponseDto>> Handle(GetLoansByUserIdQuery query, CancellationToken cancellationToken = default)
     {
         _logger.LogInformation("Fetching loans for user {UserId}", query.UserId);
-        var loans = await _loanRepository.GetByUserIdAsync(query.UserId);
+        var loans = await _loanRepository.GetByUserIdAsync(query.UserId, cancellationToken);
         return loans.Select(l => new LoanResponseDto(
             l.Id,
             l.UserId,

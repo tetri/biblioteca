@@ -17,15 +17,15 @@ public class SetupPasswordHandler : ICommandHandler<SetupPasswordCommand, Result
         _hasher = hasher;
     }
 
-    public async Task<Result<bool>> Handle(SetupPasswordCommand command)
+    public async Task<Result<bool>> Handle(SetupPasswordCommand command, CancellationToken cancellationToken = default)
     {
-        var user = await _repo.GetByEmailAsync(command.Email);
+        var user = await _repo.GetByEmailAsync(command.Email, cancellationToken);
         
         if (user == null || !_hasher.VerifyPassword(command.CurrentPassword, user.PasswordHash))
             return Result<bool>.Failure("Credenciais inválidas.");
 
         user.UpdatePassword(_hasher.HashPassword(command.NewPassword));
-        await _repo.UpdateAsync(user);
+        await _repo.UpdateAsync(user, cancellationToken);
 
         return Result<bool>.Success(true);
     }

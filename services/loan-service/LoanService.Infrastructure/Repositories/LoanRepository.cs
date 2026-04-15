@@ -13,14 +13,15 @@ public class LoanRepository : ILoanRepository
         _loans = context.Loans;
     }
 
-    public async Task<Loan?> GetByIdAsync(Guid id) =>
-        await _loans.Find(l => l.Id == id).FirstOrDefaultAsync();
+    public async Task<Loan?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default) =>
+        await _loans.Find(l => l.Id == id).FirstOrDefaultAsync(cancellationToken);
 
-    public async Task<IEnumerable<Loan>> GetByUserIdAsync(Guid userId) =>
-        await _loans.Find(l => l.UserId == userId).ToListAsync();
+    public async Task<IEnumerable<Loan>> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken = default) =>
+        await _loans.Find(l => l.UserId == userId).ToListAsync(cancellationToken);
 
-    public async Task AddAsync(Loan loan) => await _loans.InsertOneAsync(loan);
+    public async Task AddAsync(Loan loan, CancellationToken cancellationToken = default) =>
+        await _loans.InsertOneAsync(loan, cancellationToken: cancellationToken);
 
-    public async Task UpdateAsync(Loan loan) =>
-        await _loans.ReplaceOneAsync(l => l.Id == loan.Id, loan);
+    public async Task UpdateAsync(Loan loan, CancellationToken cancellationToken = default) =>
+        await _loans.ReplaceOneAsync(l => l.Id == loan.Id, loan, cancellationToken: cancellationToken);
 }
