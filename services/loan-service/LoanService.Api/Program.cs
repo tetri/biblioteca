@@ -57,6 +57,12 @@ builder.Services
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var mongoContext = scope.ServiceProvider.GetRequiredService<MongoContext>();
+    await mongoContext.ConfigureIndexesAsync();
+}
+
 app.MapOpenApi();
 app.MapScalarApiReference(options => {
     options.WithTitle("Biblioteca API - LoanService");
