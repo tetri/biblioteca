@@ -21,9 +21,16 @@ api.interceptors.response.use(
     const message = error.response?.data?.message || error.message;
     const path = error.config?.url;
 
+    const responseBodyPreview = error.response?.data
+      ? (typeof error.response.data === 'string'
+          ? error.response.data.slice(0, 100)
+          : JSON.stringify(error.response.data).slice(0, 100))
+      : undefined;
+
     console.error(`[API Error] ${status || 'Network'} on ${path}: ${message}`, {
-      status,
-      data: error.response?.data,
+      responseStatus: status,
+      responseHeaders: error.response?.headers,
+      responseBodyPreview: responseBodyPreview || (error.response?.data ? "<redacted>" : undefined),
       config: {
         method: error.config?.method,
         url: error.config?.url,
