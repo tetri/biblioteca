@@ -50,6 +50,9 @@ public class Loan
         if (existingLoans.Any(l => l.Status == LoanStatus.Overdue))
             return Result<Loan>.Failure("Usuário possui empréstimos em atraso.");
 
+        if (existingLoans.Any(l => l.BookId == bookId && (l.Status == LoanStatus.Reserved || l.Status == LoanStatus.Active)))
+            return Result<Loan>.Failure("Usuário já possui uma reserva ou empréstimo ativo para este livro.");
+
         var loan = new Loan
         {
             UserId = userId,
