@@ -102,8 +102,8 @@ export function BooksPage() {
     onMutate: (bookId: string) => {
         setPendingBookIds(prev => new Set(prev).add(bookId));
     },
-    onSuccess: (_, bookId) => {
-        queryClient.invalidateQueries({ queryKey: ['books'] });
+    onSuccess: async (_, bookId) => {
+        await queryClient.invalidateQueries({ queryKey: ['books'] });
         setPendingBookIds(prev => {
             const next = new Set(prev);
             next.delete(bookId);
