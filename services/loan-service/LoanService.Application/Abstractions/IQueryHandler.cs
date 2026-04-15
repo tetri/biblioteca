@@ -2,5 +2,5 @@ namespace LoanService.Application.Abstractions;
 
 public interface IQueryHandler<TQuery, TResult>
 {
-    Task<TResult> Handle(TQuery query);
+    Task<TResult> Handle(TQuery query, CancellationToken cancellationToken = default);
 }

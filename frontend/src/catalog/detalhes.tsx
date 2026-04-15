@@ -153,7 +153,7 @@ export default function BookDetailsPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {/* Cover Placeholder */}
           <div className="md:col-span-1">
-            <div className="aspect-[2/3] bg-slate-50 border border-slate-100 rounded-2xl flex flex-col items-center justify-center text-slate-300 shadow-sm overflow-hidden group">
+            <div className="aspect-[2/3] bg-slate-50 border border-slate-100 rounded-2xl flex flex-col items-center justify-center text-slate-300 shadow-sm overflow-hidden group relative">
               <BookOpen className="h-20 w-20 group-hover:text-indigo-400 transition-colors" />
               <p className="mt-4 font-medium text-sm">Sem capa disponível</p>
               <div className="absolute inset-0 bg-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -176,7 +176,7 @@ export default function BookDetailsPage() {
                 <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
                   <div
                     className={`h-full transition-all duration-1000 ${book.availableCopies > 0 ? 'bg-emerald-500' : 'bg-red-500'}`}
-                    style={{ width: `${(book.availableCopies / book.totalCopies) * 100}%` }}
+                    style={{ width: `${book.totalCopies > 0 ? Math.min(Math.max((book.availableCopies / book.totalCopies) * 100, 0), 100) : 0}%` }}
                   />
                 </div>
                 <p className="text-xs text-slate-400 mt-2 text-center">
