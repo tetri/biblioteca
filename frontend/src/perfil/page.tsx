@@ -43,6 +43,7 @@ export default function ProfilePage() {
 
   // Form states
   const [name, setName] = useState('');
+  const [isNameDirty, setIsNameDirty] = useState(false);
   const [password, setPassword] = useState('');
 
   useEffect(() => {
@@ -75,10 +76,10 @@ export default function ProfilePage() {
   });
 
   useEffect(() => {
-    if (profile && name === '') {
+    if (profile && !isNameDirty) {
       setName(profile.name);
     }
-  }, [profile, name]);
+  }, [profile, isNameDirty]);
 
   const { data: loans, isLoading: isLoansLoading } = useQuery({
     queryKey: ['my-loans'],
@@ -95,6 +96,7 @@ export default function ProfilePage() {
     onSuccess: () => {
       scheduleClearMessage(setSuccessMessage, "Perfil atualizado com sucesso!");
       setPassword('');
+      setIsNameDirty(false);
       queryClient.invalidateQueries({ queryKey: ['profile'] });
     },
     onError: (err: any) => {
@@ -168,7 +170,10 @@ export default function ProfilePage() {
                       <Input
                         id="name-input"
                         value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        onChange={(e) => {
+                          setName(e.target.value);
+                          setIsNameDirty(true);
+                        }}
                         className="pl-10 bg-slate-50/50 border-slate-200"
                       />
                     </div>
