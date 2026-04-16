@@ -35,7 +35,9 @@ public class LoanServiceTests
     {
         var userId = Guid.NewGuid();
         // Corrigindo a criação de Loan para o teste usando a factory
-        var existingLoan = Loan.Create(userId, Guid.NewGuid(), new List<Loan>()).Value!;
+        var existingLoanResult = Loan.Create(userId, Guid.NewGuid(), new List<Loan>());
+        existingLoanResult.IsSuccess.Should().BeTrue(existingLoanResult.Error);
+        var existingLoan = existingLoanResult.Value!;
         var existingLoans = Enumerable.Repeat(existingLoan, 3).ToList();
         _repositoryMock.Setup(r => r.GetByUserIdAsync(userId, It.IsAny<CancellationToken>())).ReturnsAsync(existingLoans);
 
