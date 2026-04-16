@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import api from '../lib/api';
+import api, { getApiErrorMessage } from '../lib/api';
 import { ErrorMessage } from '../components/error-message';
 import { PublicLayout } from '../components/shared/public-layout';
 import { Button } from "@/components/ui/button";
@@ -100,11 +100,7 @@ export default function ProfilePage() {
       setIsNameDirty(false);
     },
     onError: (err: any) => {
-      const errorData = err.response?.data;
-      const message = typeof errorData === 'string'
-          ? errorData
-          : (errorData?.message || err.message || "Erro ao atualizar perfil.");
-      scheduleClearMessage(setErrorMessage, message);
+      scheduleClearMessage(setErrorMessage, getApiErrorMessage(err, "Erro ao atualizar perfil."));
     }
   });
 

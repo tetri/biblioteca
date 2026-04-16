@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
@@ -8,7 +9,7 @@ using Shared.Contracts;
 using System.Text;
 using UserService.Application.Abstractions;
 using UserService.Application.Commands;
-using UserService.Application.DTOs;
+using UserService.Application.Exceptions;
 using UserService.Application.Handlers;
 using UserService.Application.Interfaces;
 using UserService.Domain.Entities;
@@ -82,6 +83,33 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+
+app.UseExceptionHandler(errorApp =>
+{
+    errorApp.Run(async context =>
+    {
+        var exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
+        var traceId = context.TraceIdentifier;
+
+        if (exception is AppException appException)
+        {
+            context.Response.StatusCode = appException.StatusCode;
+            await context.Response.WriteAsJsonAsync(new
+            {
+                message = appException.Message,
+                traceId
+            });
+            return;
+        }
+
+        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+        await context.Response.WriteAsJsonAsync(new
+        {
+            message = "Erro interno inesperado. Tente novamente em instantes.",
+            traceId
+        });
+    });
+});
 
 app.MapOpenApi();
 app.MapScalarApiReference();

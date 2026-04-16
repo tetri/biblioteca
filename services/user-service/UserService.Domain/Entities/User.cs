@@ -33,6 +33,15 @@ public sealed class User
         UpdatedAt = DateTime.UtcNow;
     }
 
+    public void UpdateRole(string role)
+    {
+        if (string.IsNullOrWhiteSpace(role))
+            throw new ArgumentException("Role cannot be empty", nameof(role));
+
+        Role = role;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
     public void UpdateName(string name)
     {
         if (string.IsNullOrWhiteSpace(name))

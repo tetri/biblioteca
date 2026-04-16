@@ -54,6 +54,15 @@ Usuários criados automaticamente no primeiro boot:
   - Email: `demo@biblioteca.com`
   - Senha: `demo123`
 
+Observação sobre cadastro e login:
+- Novos cadastros entram como `Member` com aprovação pendente (`IsApproved = false`).
+- Usuários pendentes não conseguem logar até aprovação administrativa.
+- A aprovação e o gerenciamento de perfil de acesso são feitos no painel `/admin`.
+- A área administrativa possui dashboard inicial e navegação para:
+  - `/admin/usuarios`
+  - `/admin/livros`
+  - `/admin/emprestimos`
+
 ## Documentação Detalhada
 - [Roadmap de Implementação (GEMINI.md)](GEMINI.md)
 - [Design System (DESIGN.md)](DESIGN.md)

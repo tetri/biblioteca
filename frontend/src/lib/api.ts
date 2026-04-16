@@ -43,3 +43,22 @@ api.interceptors.response.use(
 );
 
 export default api;
+
+export function getApiErrorMessage(error: unknown, fallbackMessage: string): string {
+  const err = error as any;
+  const payload = err?.response?.data;
+
+  if (typeof payload === 'string' && payload.trim().length > 0) {
+    return payload;
+  }
+
+  if (payload?.message && typeof payload.message === 'string') {
+    return payload.message;
+  }
+
+  if (err?.message && typeof err.message === 'string') {
+    return err.message;
+  }
+
+  return fallbackMessage;
+}

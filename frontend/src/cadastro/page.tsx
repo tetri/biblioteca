@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import api from '../lib/api';
+import api, { getApiErrorMessage } from '../lib/api';
 import { ErrorMessage } from '../components/error-message';
 import { PublicLayout } from '../components/shared/public-layout';
 import { Button } from "@/components/ui/button";
@@ -29,10 +29,10 @@ export default function RegisterPage() {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await api.post('/api/auth/register', { name, email, password });
+      await api.post('/user/api/auth/register', { name, email, password });
       setIsSuccess(true);
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao realizar cadastro. Tente outro e-mail.');
+      setError(getApiErrorMessage(err, 'Nao foi possivel concluir o cadastro. Tente novamente.'));
     }
   };
 

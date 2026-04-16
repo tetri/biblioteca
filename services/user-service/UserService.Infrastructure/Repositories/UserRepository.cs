@@ -26,6 +26,14 @@ public class UserRepository : IUserRepository
         return await _context.Users.Find(filter).FirstOrDefaultAsync(cancellationToken);
     }
 
+    public async Task<IReadOnlyList<User>> GetAllAsync(CancellationToken cancellationToken = default)
+    {
+        return await _context.Users
+            .Find(Builders<User>.Filter.Empty)
+            .SortByDescending(u => u.CreatedAt)
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task AddAsync(User user, CancellationToken cancellationToken = default)
     {
         await _context.Users.InsertOneAsync(user, cancellationToken: cancellationToken);

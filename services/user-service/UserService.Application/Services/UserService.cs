@@ -1,4 +1,5 @@
-﻿using UserService.Application.DTOs;
+using UserService.Application.DTOs;
+using UserService.Application.Exceptions;
 using UserService.Application.Interfaces;
 using UserService.Domain.Entities;
 using UserService.Domain.Repositories;
@@ -26,9 +27,8 @@ namespace UserService.Application.Services
         {
             var existing = await _userRepository.GetByEmailAsync(email);
             if (existing != null)
-                throw new Exception("Email already registered.");
+                throw new DuplicateEmailException(email);
 
-            // Novo usuário registrado é criado como não aprovado por padrão
             var user = new User(name, email, _passwordHasher.HashPassword(password), "Member");
             await _userRepository.AddAsync(user);
 
@@ -39,14 +39,12 @@ namespace UserService.Application.Services
         {
             var user = await _userRepository.GetByEmailAsync(email);
             if (user == null || !_passwordHasher.VerifyPassword(password, user.PasswordHash))
-                throw new Exception("Invalid credentials.");
+                throw new InvalidCredentialsException();
 
             if (!user.IsApproved)
-                throw new Exception("Conta pendente de aprovação administrativa.");
+                throw new UserNotApprovedException();
 
-            var token = _jwtProvider.GenerateToken(user);
-
-            return token;
+            return _jwtProvider.GenerateToken(user);
         }
 
         public async Task<UserProfileDto?> GetProfileAsync(Guid userId)
@@ -69,10 +67,10 @@ namespace UserService.Application.Services
             if (user == null)
                 return null;
 
-            if (!string.IsNullOrEmpty(name))
+            if (!string.IsNullOrWhiteSpace(name))
                 user.UpdateName(name);
 
-            if (!string.IsNullOrEmpty(password))
+            if (!string.IsNullOrWhiteSpace(password))
                 user.UpdatePassword(_passwordHasher.HashPassword(password));
 
             await _userRepository.UpdateAsync(user);
@@ -82,6 +80,84 @@ namespace UserService.Application.Services
                 Id = user.Id,
                 Name = user.Name,
                 Email = user.Email
+            };
+        }
+
+        public async Task<IReadOnlyList<AdminUserDto>> GetUsersForAdminAsync(string? search, bool? isApproved, string? role)
+        {
+            var users = await _userRepository.GetAllAsync();
+            var query = users.AsEnumerable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                var normalizedSearch = search.Trim().ToLowerInvariant();
+                query = query.Where(u =>
+                    (u.Name ?? string.Empty).ToLowerInvariant().Contains(normalizedSearch) ||
+                    (u.Email ?? string.Empty).ToLowerInvariant().Contains(normalizedSearch));
+            }
+
+            if (isApproved.HasValue)
+                query = query.Where(u => u.IsApproved == isApproved.Value);
+
+            if (!string.IsNullOrWhiteSpace(role))
+                query = query.Where(u => string.Equals(u.Role, role.Trim(), StringComparison.OrdinalIgnoreCase));
+
+            return query.Select(MapToAdminUserDto).ToList();
+        }
+
+        public async Task<AdminUserDto> ApproveUserAsync(Guid userId)
+        {
+            var user = await _userRepository.GetByIdAsync(userId);
+            if (user == null)
+                throw new UserNotFoundException(userId);
+
+            if (!user.IsApproved)
+            {
+                user.Approve();
+                await _userRepository.UpdateAsync(user);
+            }
+
+            return MapToAdminUserDto(user);
+        }
+
+        public async Task<AdminUserDto> UpdateUserRoleAsync(Guid userId, string role)
+        {
+            if (!IsSupportedRole(role))
+                throw new InvalidUserRoleException(role);
+
+            var user = await _userRepository.GetByIdAsync(userId);
+            if (user == null)
+                throw new UserNotFoundException(userId);
+
+            user.UpdateRole(NormalizeRole(role));
+            await _userRepository.UpdateAsync(user);
+
+            return MapToAdminUserDto(user);
+        }
+
+        private static bool IsSupportedRole(string role)
+        {
+            return string.Equals(role, "Admin", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(role, "Member", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static string NormalizeRole(string role)
+        {
+            return string.Equals(role, "Admin", StringComparison.OrdinalIgnoreCase) ? "Admin" : "Member";
+        }
+
+        private static AdminUserDto MapToAdminUserDto(User user)
+        {
+            return new AdminUserDto
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Email = user.Email,
+                Role = user.Role,
+                IsApproved = user.IsApproved,
+                IsSetupRequired = user.IsSetupRequired,
+                CreatedAt = user.CreatedAt,
+                UpdatedAt = user.UpdatedAt
             };
         }
     }

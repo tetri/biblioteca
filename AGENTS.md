@@ -30,6 +30,11 @@ Config em `gateway/Gateway.Api/appsettings.json`:
 - `/notification/{**catch-all}` -> `notificationservice.api:8080`
 - `/{**catch-all}` -> frontend (`frontend:80`)
 
+Convencao de consumo no frontend:
+- chamadas ao UserService devem usar prefixo `/user` (ex.: `/user/api/auth/register`, `/user/api/auth/login`).
+- chamadas ao CatalogService devem usar prefixo `/catalog`.
+- chamadas ao LoanService devem usar prefixo `/loan`.
+
 Docs agregadas em `gateway/Gateway.Api/Program.cs`:
 - `/docs/user`
 - `/docs/catalog`
@@ -85,14 +90,29 @@ Fonte: `services/loan-service/DOCS.md`.
 - Politica de seguranca: `SECURITY.md`.
 - Nao expor segredos reais em repositorio.
 
-## 12) Fonte de Verdade
+## 12) Area Administrativa
+- Endpoints administrativos no UserService (requer role `Admin`):
+  - `GET /user/api/users/admin` (filtros: `search`, `isApproved`, `role`)
+  - `PATCH /user/api/users/admin/{userId}/approve`
+  - `PATCH /user/api/users/admin/{userId}/role` (body: `{ \"role\": \"Admin\" | \"Member\" }`)
+- Endpoint administrativo no LoanService (requer role `Admin`):
+  - `GET /loan/api/loans/admin`
+- Rotas frontend administrativas:
+  - `/admin` (dashboard inicial)
+  - `/admin/usuarios`
+  - `/admin/livros`
+  - `/admin/emprestimos`
+- A area admin usa layout com sidebar (desktop) e navegacao horizontal (mobile).
+- Usuarios novos entram como `Member` e `IsApproved = false`; sem aprovacao, o login retorna erro amigavel `403`.
+
+## 13) Fonte de Verdade
 Em caso de conflito, priorizar:
 1. Codigo atual (`Program.cs`, controllers/handlers, `docker-compose.yml`, workflow CI).
 2. `README.md` (operacao e execucao).
 3. Documentos de diretriz (`GEMINI.md`, `DESIGN.md`, `DEPLOY.md`, `DOCS.md`).
 4. `WIKI.json` como mapa de onboarding.
 
-## 13) Checklist de Inicio Rapido para Agentes
+## 14) Checklist de Inicio Rapido para Agentes
 1. Ler este `AGENTS.md`.
 2. Subir ambiente (`./up.sh`).
 3. Validar docs via gateway em `/docs/*`.
@@ -100,7 +120,7 @@ Em caso de conflito, priorizar:
 5. Em alteracoes de emprestimo, revisar `services/loan-service/DOCS.md`.
 6. Em alteracoes de UI, seguir `DESIGN.md`.
 
-## 14) Fontes utilizadas nesta consolidacao
+## 15) Fontes utilizadas nesta consolidacao
 - `README.md`
 - `frontend/README.md`
 - `services/loan-service/DOCS.md`

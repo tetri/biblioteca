@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import api from '../lib/api';
+import api, { getApiErrorMessage } from '../lib/api';
 import { decodeJwtPayload } from '../lib/utils';
 import { ErrorMessage } from '../components/error-message';
 import { PublicLayout } from '../components/shared/public-layout';
@@ -46,7 +46,7 @@ export default function LoginPage() {
         navigate('/');
       }
     } catch (err: any) {
-      setError(err.response?.data?.message || err.message || 'Credenciais inválidas. Por favor, tente novamente.');
+      setError(getApiErrorMessage(err, 'Nao foi possivel realizar login. Verifique suas credenciais e tente novamente.'));
     } finally {
       setIsLoading(false);
     }

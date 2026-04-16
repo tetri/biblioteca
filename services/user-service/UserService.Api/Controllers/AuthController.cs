@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Contracts;
+using UserService.Api.DTOs;
 using UserService.Application.Abstractions;
 using UserService.Application.Commands;
 using UserService.Application.Interfaces;
-using Shared.Contracts;
 
 namespace UserService.Api.Controllers;
 
@@ -19,27 +21,27 @@ public class AuthController : ControllerBase
         _setupPasswordHandler = setupPasswordHandler;
     }
 
+    [AllowAnonymous]
     [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] RegisterRequest request)
+    public async Task<IActionResult> Register([FromBody] RegisterUserRequest request)
     {
         var result = await _userService.RegisterAsync(request.Name, request.Email, request.Password);
         return Ok(result);
     }
 
+    [AllowAnonymous]
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
         var token = await _userService.LoginAsync(request.Email, request.Password);
-        return Ok(new { Token = token });
+        return Ok(new { token });
     }
 
+    [AllowAnonymous]
     [HttpPost("setup-password")]
     public async Task<IActionResult> SetupPassword([FromBody] SetupPasswordCommand command, CancellationToken cancellationToken)
     {
         var result = await _setupPasswordHandler.Handle(command, cancellationToken);
-        return result.IsFailure ? BadRequest(result.Error) : Ok(result.Value);
+        return result.IsFailure ? BadRequest(new { message = result.Error }) : Ok(result.Value);
     }
 }
-
-public record RegisterRequest(string Name, string Email, string Password);
-public record LoginRequest(string Email, string Password);
