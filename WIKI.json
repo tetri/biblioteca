@@ -1,46 +1,56 @@
 {
-  "title": "Documentação do Projeto Biblioteca",
+  "title": "Documentacao do Projeto Biblioteca",
   "name": "root",
-  "prompt": "Visão geral da arquitetura de microsserviços em .NET 9 e React 19.",
+  "prompt": "Visao geral da arquitetura de microsservicos em .NET 9 e React 19, com roteamento YARP e documentacao centralizada no Gateway.",
   "children": [
     {
       "title": "Onboarding",
       "name": "onboarding",
-      "prompt": "Guias de integração para novos desenvolvedores e guias arquiteturais para principais.",
+      "prompt": "Guias de integracao para novos desenvolvedores e trilha arquitetural.",
       "children": [
         {
           "title": "Principal-Level Guide",
           "name": "principal-guide",
-          "prompt": "Arquitetura de microsserviços baseada em Clean Architecture e DDD, usando YARP como gateway central (cite gateway/Gateway.Api/Program.cs:1). O core é o desacoplamento síncrono via API e assíncrono planejado via Bus."
+          "prompt": "Arquitetura de microsservicos com camadas Domain/Application/Infrastructure/Api, gateway central em YARP (cite gateway/Gateway.Api/Program.cs:1 e gateway/Gateway.Api/appsettings.json:1)."
         },
         {
           "title": "Zero-to-Hero Learning Path",
           "name": "zero-to-hero",
-          "prompt": "Caminho de aprendizado progressivo: I. Fundamentos .NET/C# e React/Vite. II. Estrutura do projeto Biblioteca. III. Configuração de ambiente e execução local via docker-compose (cite docker-compose.yml:1)."
+          "prompt": "Trilha progressiva: I. Fundamentos .NET/C# e React/Vite. II. Estrutura do monorepo Biblioteca. III. Execucao local via docker compose e leitura de docs no gateway (cite docker-compose.yml:1)."
         }
       ]
     },
     {
       "title": "Getting Started",
       "name": "getting-started",
-      "prompt": "Como configurar o ambiente, rodar o projeto e explorar a documentação API.",
+      "prompt": "Como configurar ambiente, rodar o projeto e acessar docs de API.",
       "children": [
         {
-          "title": "Configuração Local",
+          "title": "Configuracao Local",
           "name": "setup",
-          "prompt": "Pré-requisitos: .NET 9 SDK, Node.js 22+, Docker Desktop. Uso do docker-compose para infra de suporte (MongoDB)."
+          "prompt": "Pre-requisitos: .NET 9 SDK, Node.js 22+, Docker Desktop. Subida local via ./up.sh e docker-compose para servicos e MongoDB."
+        },
+        {
+          "title": "API Docs",
+          "name": "api-docs",
+          "prompt": "Documentacao via Gateway: /docs/user, /docs/catalog, /docs/loan, /docs/notification."
         }
       ]
     },
     {
       "title": "Deep Dive",
       "name": "deep-dive",
-      "prompt": "Exploração detalhada dos microsserviços.",
+      "prompt": "Exploracao detalhada dos microsservicos.",
       "children": [
         {
           "title": "Domain Layer",
           "name": "domain-layer",
-          "prompt": "Exploração das entidades do UserService e CatalogService (cite services/user-service/UserService.Domain/Entities/User.cs:1). Explicação da camada de domínio pura."
+          "prompt": "Entidades de dominio em UserService e CatalogService (cite services/user-service/UserService.Domain/Entities/User.cs:1)."
+        },
+        {
+          "title": "Loan Rules",
+          "name": "loan-rules",
+          "prompt": "Regras de negocio de emprestimos: limite de ativos, vencimento, overdue e bloqueios (cite services/loan-service/DOCS.md:1)."
         }
       ]
     }
