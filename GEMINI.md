@@ -25,6 +25,7 @@ Este documento guia arquitetura, qualidade e evolução do monorepo Biblioteca.
 - [x] **CI/CD:** GitHub Actions para build e testes (backend + frontend).
 - [x] **Orquestração:** `up.sh` + Docker Compose com contexto na raiz.
 - [x] **NotificationService:** endpoint funcional de disponibilidade (`/health` e `/api/notifications/ping`) e OpenAPI.
+- [x] **Admin:** área administrativa com dashboard inicial e sidebar (`/admin`, `/admin/usuarios`, `/admin/livros`, `/admin/emprestimos`), incluindo gestão de usuários.
 
 ## 4. Escalabilidade e Melhorias Futuras
 - Escalabilidade horizontal via Docker Compose/Kubernetes.

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.IdentityModel.Tokens.Jwt;
 using UserService.Api.DTOs;
@@ -22,6 +23,7 @@ namespace UserService.Api.Controllers
             _jwtSettings = jwtSettings.Value;
         }
 
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterUserRequest request)
         {
@@ -34,6 +36,7 @@ namespace UserService.Api.Controllers
             });
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
@@ -47,36 +50,67 @@ namespace UserService.Api.Controllers
             });
         }
 
+        [Authorize]
         [HttpGet("me")]
         public async Task<IActionResult> Me()
         {
-            var sid = User.FindFirst(JwtRegisteredClaimNames.Sid)?.Value;
-            if (sid == null)
-                return Unauthorized();
+            var userId = GetAuthenticatedUserId();
+            if (userId == null)
+                return Unauthorized(new { message = "Token de autenticacao invalido." });
 
-            if (!Guid.TryParse(sid, out var userId))
-                return BadRequest("Invalid user ID in token.");
-
-            var profile = await _userService.GetProfileAsync(userId);
-            if (profile == null) return NotFound();
+            var profile = await _userService.GetProfileAsync(userId.Value);
+            if (profile == null)
+                return NotFound(new { message = "Usuario nao encontrado." });
 
             return Ok(profile);
         }
 
+        [Authorize]
         [HttpPut("me")]
         public async Task<IActionResult> UpdateMe(UpdateUserRequest request)
         {
-            var sid = User.FindFirst(JwtRegisteredClaimNames.Sid)?.Value;
-            if (sid == null)
-                return Unauthorized();
+            var userId = GetAuthenticatedUserId();
+            if (userId == null)
+                return Unauthorized(new { message = "Token de autenticacao invalido." });
 
-            if (!Guid.TryParse(sid, out var userId))
-                return BadRequest("Invalid user ID in token.");
-
-            var profile = await _userService.UpdateProfileAsync(userId, request.Name, request.Password);
-            if (profile == null) return NotFound();
+            var profile = await _userService.UpdateProfileAsync(userId.Value, request.Name, request.Password);
+            if (profile == null)
+                return NotFound(new { message = "Usuario nao encontrado." });
 
             return Ok(profile);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("admin")]
+        public async Task<IActionResult> GetUsersForAdmin([FromQuery] string? search, [FromQuery] bool? isApproved, [FromQuery] string? role)
+        {
+            var users = await _userService.GetUsersForAdminAsync(search, isApproved, role);
+            return Ok(users);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPatch("admin/{userId:guid}/approve")]
+        public async Task<IActionResult> ApproveUser(Guid userId)
+        {
+            var user = await _userService.ApproveUserAsync(userId);
+            return Ok(user);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPatch("admin/{userId:guid}/role")]
+        public async Task<IActionResult> UpdateUserRole(Guid userId, [FromBody] UpdateUserRoleRequest request)
+        {
+            var user = await _userService.UpdateUserRoleAsync(userId, request.Role);
+            return Ok(user);
+        }
+
+        private Guid? GetAuthenticatedUserId()
+        {
+            var sid = User.FindFirst(JwtRegisteredClaimNames.Sid)?.Value;
+            if (sid == null)
+                return null;
+
+            return Guid.TryParse(sid, out var userId) ? userId : null;
         }
     }
 }

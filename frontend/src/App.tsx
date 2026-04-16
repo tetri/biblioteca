@@ -6,13 +6,17 @@ import RegisterPage from './cadastro/page';
 import PoliticaDePrivacidade from './politica-de-privacidade/page';
 import TermosDeUso from './termos-de-uso/page';
 import HomePage from './home/page';
-import AdminPage from './admin/page';
+import AdminDashboardPage from './admin/dashboard-page';
+import AdminUsersPage from './admin/users-page';
+import AdminBooksPage from './admin/books-page';
+import AdminLoansPage from './admin/loans-page';
 import { BooksPage } from './catalog/page';
 import BookDetailsPage from './catalog/detalhes';
 import ProfilePage from './perfil/page';
 import { ProtectedRoute } from './components/auth/protected-route';
 import { NotFoundPage } from './components/not-found';
 import { ErrorBoundary } from './components/error-boundary';
+import { AdminLayout } from './components/shared/admin/admin-layout';
 
 function App() {
   return (
@@ -37,10 +41,15 @@ function App() {
           path="/admin"
           element={
             <ProtectedRoute allowedRoles={['Admin']}>
-              <AdminPage />
+              <AdminLayout />
             </ProtectedRoute>
           }
-        />
+        >
+          <Route index element={<AdminDashboardPage />} />
+          <Route path="usuarios" element={<AdminUsersPage />} />
+          <Route path="livros" element={<AdminBooksPage />} />
+          <Route path="emprestimos" element={<AdminLoansPage />} />
+        </Route>
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </ErrorBoundary>

@@ -8,5 +8,8 @@ namespace UserService.Application.Interfaces
         Task<string> LoginAsync(string email, string password);
         Task<UserProfileDto?> GetProfileAsync(Guid userId);
         Task<UserProfileDto?> UpdateProfileAsync(Guid userId, string? name, string? password);
+        Task<IReadOnlyList<AdminUserDto>> GetUsersForAdminAsync(string? search, bool? isApproved, string? role);
+        Task<AdminUserDto> ApproveUserAsync(Guid userId);
+        Task<AdminUserDto> UpdateUserRoleAsync(Guid userId, string role);
     }
 }

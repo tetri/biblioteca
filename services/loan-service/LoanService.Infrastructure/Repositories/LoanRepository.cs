@@ -19,6 +19,11 @@ public class LoanRepository : ILoanRepository
     public async Task<IEnumerable<Loan>> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken = default) =>
         await _loans.Find(l => l.UserId == userId).ToListAsync(cancellationToken);
 
+    public async Task<IEnumerable<Loan>> GetAllAsync(CancellationToken cancellationToken = default) =>
+        await _loans.Find(_ => true)
+            .SortByDescending(l => l.LoanDate)
+            .ToListAsync(cancellationToken);
+
     public async Task AddAsync(Loan loan, CancellationToken cancellationToken = default) =>
         await _loans.InsertOneAsync(loan, cancellationToken: cancellationToken);
 
