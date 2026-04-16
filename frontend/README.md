@@ -1,69 +1,35 @@
-# React + TypeScript + Vite
+# Frontend - Biblioteca
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicação React 19 + Vite + TypeScript para a interface pública e autenticada do ecossistema Biblioteca.
 
-Currently, two official plugins are available:
+## Stack
+- React 19
+- Vite 7
+- TypeScript 5
+- Tailwind CSS v4
+- Radix UI + shadcn/ui
+- TanStack Query
+- Vitest + Testing Library + MSW
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Pré-requisitos
+- Node.js 22+
+- npm 10+
 
-## Expanding the ESLint configuration
+## Scripts
+- `npm run dev`: inicia ambiente de desenvolvimento.
+- `npm run build`: gera build de produção.
+- `npm run preview`: sobe preview do build.
+- `npm run lint`: executa lint.
+- `npm test`: executa testes (Vitest run).
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Estrutura principal
+- `src/components/ui/`: componentes de base (primitivos).
+- `src/components/shared/`: componentes compostos/layout.
+- `src/lib/`: utilitários e cliente de API.
+- `src/mocks/`: handlers MSW para testes.
+- `src/*/page.tsx`: páginas por rota.
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Padrões obrigatórios
+- Não usar estilos inline; preferir Tailwind + componentes reutilizáveis.
+- Garantir estados de loading e erro em chamadas de API.
+- Seguir diretrizes visuais do arquivo raiz `DESIGN.md`.

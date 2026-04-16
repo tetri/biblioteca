@@ -33,6 +33,12 @@ app.MapScalarApiReference("/docs/loan", options => {
            .WithOpenApiRoutePattern("/loan/openapi/v1.json");
 });
 
+app.MapScalarApiReference("/docs/notification", options => {
+    options.WithTitle("Biblioteca API - Notification Service")
+           .WithTheme(ScalarTheme.DeepSpace)
+           .WithOpenApiRoutePattern("/notification/openapi/v1.json");
+});
+
 app.UseStaticFiles();
 app.MapReverseProxy();
 

@@ -1,52 +1,51 @@
 # Roadmap de Implementação: Sistema de Biblioteca
 
-Este documento serve como guia para a arquitetura e futuras implementações no monorepo Biblioteca.
+Este documento guia arquitetura, qualidade e evolução do monorepo Biblioteca.
 
 ## 1. Arquitetura Padrão (CQRS Nativo)
-- O projeto adota o padrão CQRS utilizando `Microsoft.Extensions.DependencyInjection`.
-- **Regras:**
-    - Commands e Queries devem ser definidos em `Application/Commands` ou `Application/Queries`.
-    - Handlers devem implementar `ICommandHandler<TCommand, TResult>` ou `IQueryHandler<TQuery, TResult>`.
-    - Os Handlers devem ser registrados no `Program.cs` via `AddScoped`.
-- **Exemplo de registro:** `builder.Services.AddScoped<ICommandHandler<CreateLoanCommand, LoanResponseDto>, CreateLoanHandler>();`
+- O projeto adota CQRS usando `Microsoft.Extensions.DependencyInjection`.
+- Regras:
+  - Commands e Queries em `Application/Commands` e `Application/Queries`.
+  - Handlers implementam `ICommandHandler<TCommand, TResult>` e `IQueryHandler<TQuery, TResult>`.
+  - Handlers registrados via `AddScoped` no `Program.cs`.
+- Exemplo: `builder.Services.AddScoped<ICommandHandler<CreateLoanCommand, LoanResponseDto>, CreateLoanHandler>();`
 
 ## 2. Telemetria (OpenTelemetry)
-- **Implementação:** Todos os serviços devem usar `OpenTelemetry.Instrumentation.AspNetCore` e `OpenTelemetry.Exporter.Console` (ou Jaeger em produção).
-- **Traces:** Manter o `TraceId` trafegando entre os microsserviços via headers HTTP.
+- Todos os serviços e o Gateway usam `Shared.Observability`.
+- Traces devem preservar `TraceId` entre microsserviços.
 
-## 3. Checklist de Implementação Pendente
-- [x] **LoanService:** Adicionado suporte a Queries CQRS e endpoint de Meus Empréstimos.
-- [ ] **CatalogService:** Refatorado para CQRS.
-- [x] **Design:** Implementadas todas as páginas públicas (Busca, Detalhes, Perfil) com design premium minimalista.
-- [x] **Documentação:** Corrigida rota do Scalar para `/docs` no Gateway.
-- [x] **Conteúdo:** Atualizado Política de Privacidade e Termos de Uso com tom profissional.
-- [x] **OpenTelemetry:** Configurar telemetria em todos os microsserviços e no Gateway (Base implementada no Shared.Observability).
-- [x] **Contract Tests:** Implementar verificação de schemas entre `LoanService` -> `CatalogService`.
-- [x] **Frontend:**
-    - [x] Executar `npm install` para dependências de teste.
-    - [x] Implementar testes unitários para componentes da pasta `components/ui` com `Vitest`.
-    - [x] Criar testes de integração para fluxos de `login` e `catalog`.
-    - [x] Adicionar e configurar `MSW (Mock Service Worker)` para isolar testes de frontend.
+## 3. Status de Implementação
+- [x] **LoanService:** Queries CQRS e endpoint de "Meus Empréstimos".
+- [x] **CatalogService:** CQRS implementado (commands, queries e handlers).
+- [x] **Design:** páginas públicas (Busca, Detalhes, Perfil) no padrão premium minimalista.
+- [x] **Gateway Docs:** rotas `/docs/user`, `/docs/catalog`, `/docs/loan`, `/docs/notification`.
+- [x] **OpenTelemetry:** configurado em gateway e serviços principais.
+- [x] **Contract Tests:** validação de contratos `LoanService` -> `CatalogService`.
+- [x] **Frontend:** testes unitários/integrados e MSW.
+- [x] **CI/CD:** GitHub Actions para build e testes (backend + frontend).
+- [x] **Orquestração:** `up.sh` + Docker Compose com contexto na raiz.
+- [x] **NotificationService:** endpoint funcional de disponibilidade (`/health` e `/api/notifications/ping`) e OpenAPI.
 
+## 4. Escalabilidade e Melhorias Futuras
+- Escalabilidade horizontal via Docker Compose/Kubernetes.
+- Estado persistido em MongoDB por serviço.
+- Evolução planejada: broker (RabbitMQ) para comunicação assíncrona entre `LoanService` e `NotificationService`.
+- Recomendação: testes de estresse com k6.
 
-- [x] **CI/CD:** Configurar GitHub Actions para execução de testes unitários (backend e frontend) e build Docker.
-- [x] **Orquestração:** Script de subida `up.sh` e otimização para ambiente WSL2/Linux.
+## 5. Diretrizes de Interface (Frontend)
+- Design system baseado em Radix UI + Tailwind CSS.
+- Componentes reutilizáveis e consistentes.
+- Fluxos de API devem sempre tratar erro (`ErrorMessage`) e carregamento (`Loading`/`Skeleton`).
 
-## 6. Escalabilidade e Melhorias Futuras
-- **Escalabilidade:** O sistema suporta escalabilidade horizontal via Docker Compose/Kubernetes. O estado é centralizado nos bancos MongoDB.
-- **Mensageria:** A introdução de um Message Broker (RabbitMQ) está mapeada como melhoria futura para comunicação assíncrona entre `LoanService` e `NotificationService`.
-- **Testes de Estresse:** Recomenda-se o uso de k6 para testes de exaustão e validação de latência sob carga alta.
+## 6. Segurança e Acesso
+- Admin padrão (seed):
+  - Email: `admin@biblioteca.com`
+  - Senha: `temp123`
+- Usuário demo:
+  - Email: `demo@biblioteca.com`
+  - Senha: `demo123`
+- Setup obrigatório de senha do admin no primeiro acesso (`IsSetupRequired = true`).
 
-## 7. Diretrizes de Design e Interface (Frontend)
-- **Design System:** Baseado em Radix UI + Tailwind CSS para garantir acessibilidade e consistência visual.
-- **Padrão de Interface:** Componentes devem ser reutilizáveis (Atomic Design).
-- **Resiliência:** Uso obrigatório de `ErrorMessage` em fluxos de erro e `Loading` states para todas as chamadas de API.
-
-## 8. Segurança e Acesso
-- **Admin Padrão:** Criado automaticamente pelo `UserSeeder` no primeiro boot.
-    - **Email:** `admin@biblioteca.com`
-    - **Senha:** `temp123`
-- **Usuário Demo:** Criado para testes.
-    - **Email:** `demo@biblioteca.com`
-    - **Senha:** `demo123`
-- **Setup Obrigatório:** O Admin possui a flag `IsSetupRequired = true`, exigindo alteração de senha no primeiro acesso.
+## 7. Padrão de Ambiente
+- Node.js padrão do projeto: **22+**.
+- CI usa Node 22; desenvolvimento local deve seguir a mesma versão para evitar divergências.

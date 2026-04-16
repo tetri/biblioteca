@@ -1,15 +1,19 @@
 # Diretrizes de Contribuição
 
 ## Como participar
-Seja bem-vindo(a) ao projeto Biblioteca! Você pode contribuir abrindo Issues ou enviando Pull Requests.
+Você pode contribuir abrindo Issues ou enviando Pull Requests.
 
 ### Issues
-Use as Issues para:
+Use Issues para:
 - Relatar bugs.
-- Sugerir novas funcionalidades.
+- Sugerir funcionalidades.
 - Discutir arquitetura.
 
 ### Pull Requests
-1. Garanta que todos os testes (`dotnet test` e `npm run test`) passem localmente.
-2. Mantenha o código limpo (Clean Code/SOLID).
-3. Atualize a documentação (GEMINI.md) se necessário.
+1. Garanta que os testes passem localmente:
+   - `dotnet test Biblioteca.sln`
+   - `cd frontend && npm ci && npm test`
+2. Use Node.js 22+ no frontend (alinhado ao CI).
+3. Mantenha o código limpo (Clean Code/SOLID).
+4. Atualize documentação afetada (`README.md`, `GEMINI.md`, `AGENTS.md` e demais arquivos pertinentes).
+5. Para mudanças de segurança, siga `SECURITY.md`.
