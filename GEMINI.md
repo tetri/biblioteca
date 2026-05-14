@@ -20,12 +20,12 @@ Este documento guia arquitetura, qualidade e evolução do monorepo Biblioteca.
 - [x] **Roteamento Centralizado:** Gateway YARP configurado para todos os microsserviços.
 - [x] **Service Discovery:** Orquestração via Docker Compose (`up.sh`).
 - [x] **Documentação Unificada:** OpenAPI/Scalar integrada no Gateway (`/docs/*`).
-- [x] **Observabilidade:** OpenTelemetry (traces/metrics) via `Shared.Observability` em todos os serviços.
+- [x] **Observabilidade:** OpenTelemetry (traces/metrics) via `Shared.Observability` — ensure TraceId propagation between microservices.
 - [x] **Persistência:** Instâncias de MongoDB segregadas por serviço.
 
 ### 3.2 User Service (Identidade & Acesso)
 - [x] **Autenticação:** JWT com validação de Issuer, Audience e Key.
-- [x] **Cadastro de Usuários:** Fluxo de auto-registro com aprovação pendente.
+- [x] **Cadastro de Usuários:** Fluxo de autoregistro com aprovação pendente.
 - [x] **Gestão Administrativa:** Aprovação de usuários e alteração de papéis (Admin/Member).
 - [x] **Perfil:** Endpoint `/me` para consulta e atualização de dados pessoais.
 - [x] **Segurança:** Setup de senha obrigatório no primeiro acesso para o Admin seed.
@@ -73,6 +73,11 @@ Este documento guia arquitetura, qualidade e evolução do monorepo Biblioteca.
 - [x] **Testes Frontend:** Vitest + MSW para componentes e chamadas de API.
 - [x] **Testes de Contrato:** Validação de integração entre `LoanService` e `CatalogService`.
 - [x] **Esteira CI:** GitHub Actions validando build e testes a cada PR.
+
+### 3.8 Próximos Passos
+- [ ] **Mensageria:** Integração com RabbitMQ para comunicação assíncrona entre `LoanService` e `NotificationService`.
+- [ ] **Notificações:** Implementação de lógica real de envio (E-mail/Push) no `NotificationService`.
+- [ ] **Performance:** Realização de testes de estresse e carga com k6.
 
 ## 4. Escalabilidade e Melhorias Futuras
 - Escalabilidade horizontal via Docker Compose/Kubernetes.
