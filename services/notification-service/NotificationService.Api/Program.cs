@@ -23,8 +23,7 @@ app.MapGet("/health", () => Results.Ok(new
     timestampUtc = DateTime.UtcNow
 }))
 .WithName("NotificationHealth")
-.WithSummary("Health check do NotificationService")
-.WithOpenApi();
+.WithSummary("Health check do NotificationService");
 
 app.MapGet("/api/notifications/ping", () => Results.Ok(new
 {
@@ -32,7 +31,6 @@ app.MapGet("/api/notifications/ping", () => Results.Ok(new
     mode = "stub"
 }))
 .WithName("NotificationPing")
-.WithSummary("Endpoint de disponibilidade para integracoes futuras")
-.WithOpenApi();
+.WithSummary("Endpoint de disponibilidade para integracoes futuras");
 
 app.Run();

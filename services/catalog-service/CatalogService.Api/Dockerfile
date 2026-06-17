@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
 COPY ["services/catalog-service/CatalogService.Api/CatalogService.Api.csproj", "services/catalog-service/CatalogService.Api/"]
@@ -13,7 +13,7 @@ RUN dotnet restore "services/catalog-service/CatalogService.Api/CatalogService.A
 COPY . .
 RUN dotnet publish "services/catalog-service/CatalogService.Api/CatalogService.Api.csproj" -c Release -o /app/publish
 
-FROM mcr.microsoft.com/dotnet/aspnet:9.0
+FROM mcr.microsoft.com/dotnet/aspnet:10.0
 WORKDIR /app
 COPY --from=build /app/publish .
 ENTRYPOINT ["dotnet", "CatalogService.Api.dll"]

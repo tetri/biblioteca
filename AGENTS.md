@@ -13,7 +13,7 @@ Este arquivo consolida a documentacao do projeto para acelerar onboarding e exec
 - Frontend: React 19, TypeScript, Vite, Tailwind CSS v4, Radix/shadcn/ui.
 - Estado de servidor: TanStack Query.
 - Observabilidade: `shared/Shared.Observability` (OpenTelemetry).
-- Runtime frontend padrao: Node.js 22+.
+- Runtime frontend padrao: Node.js 24+.
 
 ## 3) Servicos
 - Gateway: `gateway/Gateway.Api`.
@@ -81,7 +81,7 @@ Fonte: `services/loan-service/DOCS.md`.
 - Frontend local: `cd frontend && npm ci && npm test`.
 - Workflow CI: `.github/workflows/dotnet-build-test.yml`.
   - Backend: restore/build/test com .NET 9.
-  - Frontend: Node 22, build e Vitest.
+  - Frontend: Node 24, build e Vitest.
 
 ## 11) Seguranca e Acesso
 - Credenciais de seed (dev):

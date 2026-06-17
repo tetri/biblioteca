@@ -12,7 +12,7 @@ Aplicação React 19 + Vite + TypeScript para a interface pública e autenticada
 - Vitest + Testing Library + MSW
 
 ## Pré-requisitos
-- Node.js 22+
+- Node.js 24+
 - npm 10+
 
 ## Scripts

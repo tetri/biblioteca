@@ -14,6 +14,7 @@
   "bugs": {
     "url": "https://github.com/tetri/biblioteca/issues"
   },
+  "engines": { "node": ">=22" },
   "keywords": ["biblioteca", "library", "react", "shadcn", "tailwindcss", "vite"],
   "scripts": {
     "dev": "vite",

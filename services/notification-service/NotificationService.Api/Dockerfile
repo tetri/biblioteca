@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
 COPY ["services/notification-service/NotificationService.Api/NotificationService.Api.csproj", "services/notification-service/NotificationService.Api/"]
@@ -13,7 +13,7 @@ RUN dotnet restore "services/notification-service/NotificationService.Api/Notifi
 COPY . .
 RUN dotnet publish "services/notification-service/NotificationService.Api/NotificationService.Api.csproj" -c Release -o /app/publish
 
-FROM mcr.microsoft.com/dotnet/aspnet:9.0
+FROM mcr.microsoft.com/dotnet/aspnet:10.0
 WORKDIR /app
 COPY --from=build /app/publish .
 ENTRYPOINT ["dotnet", "NotificationService.Api.dll"]
