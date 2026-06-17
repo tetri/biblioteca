@@ -1,0 +1,34 @@
+<Project>
+  <PropertyGroup>
+    <!-- Versioning with MinVer (automatic from git tags) -->
+    <MinVerDefaultPreReleaseIdentifiers>alpha.0</MinVerDefaultPreReleaseIdentifiers>
+    <MinVerTagPrefix>v</MinVerTagPrefix>
+    <MinVerVerbosity>normal</MinVerVerbosity>
+
+    <!-- Assembly metadata -->
+    <Product>Biblioteca</Product>
+    <Authors>Biblioteca Team</Authors>
+    <Company>Centelha</Company>
+    <Copyright>Copyright © $([System.DateTime]::Now.Year) $(Authors)</Copyright>
+    <RepositoryUrl>https://github.com/tetri/biblioteca</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/tetri/biblioteca</PackageProjectUrl>
+    <NeutralLanguage>pt-BR</NeutralLanguage>
+
+    <!-- Deterministic builds -->
+    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(MSBuildProjectExtension)' == '.csproj'">
+    <PackageReference Include="MinVer" Version="6.*">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(MSBuildProjectExtension)' == '.csproj'">
+    <SourceRoot Include="$(MSBuildThisFileDirectory)/" />
+  </ItemGroup>
+</Project>

@@ -1,8 +1,20 @@
 {
-  "name": "frontend",
+  "name": "@biblioteca/frontend",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0-alpha.0",
   "type": "module",
+  "description": "Sistema de Biblioteca - Frontend React",
+  "author": "Biblioteca Team <team@biblioteca.app>",
+  "license": "MIT",
+  "homepage": "https://github.com/tetri/biblioteca#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tetri/biblioteca.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tetri/biblioteca/issues"
+  },
+  "keywords": ["biblioteca", "library", "react", "shadcn", "tailwindcss", "vite"],
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
