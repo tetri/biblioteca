@@ -112,7 +112,16 @@ Em caso de conflito, priorizar:
 3. Documentos de diretriz (`GEMINI.md`, `DESIGN.md`, `DEPLOY.md`, `DOCS.md`).
 4. `WIKI.json` como mapa de onboarding.
 
-## 14) Checklist de Inicio Rapido para Agentes
+## 14) Versionamento Semantico (MinVer)
+
+- Todos os projetos .NET herdam `Directory.Build.props` na raiz.
+- A versao e gerada automaticamente pelo **MinVer** a partir de tags git com prefixo `v`.
+- Sem tags: versao `0.0.0-alpha.0.N` (N = altura de commits).
+- Tag `v1.0.0` produz versao exata `1.0.0`.
+- Frontend (`package.json`) versionado manualmente para espelhar.
+- Politica completa em `VERSIONING.md`.
+
+## 15) Checklist de Inicio Rapido para Agentes
 1. Ler este `AGENTS.md`.
 2. Subir ambiente (`./up.sh`).
 3. Validar docs via gateway em `/docs/*`.
@@ -130,4 +139,4 @@ Em caso de conflito, priorizar:
 - `GEMINI.md`
 - `SECURITY.md`
 - `WIKI.json`
-- Arquivos de codigo/config relevantes: `docker-compose.yml`, `up.sh`, `gateway/Gateway.Api/Program.cs`, `gateway/Gateway.Api/appsettings.json`, `services/*/Program.cs`, `.github/workflows/dotnet-build-test.yml`, `frontend/package.json`.
+- Arquivos de codigo/config relevantes: `Directory.Build.props`, `VERSIONING.md`, `docker-compose.yml`, `up.sh`, `gateway/Gateway.Api/Program.cs`, `gateway/Gateway.Api/appsettings.json`, `services/*/Program.cs`, `.github/workflows/dotnet-build-test.yml`, `frontend/package.json`.
