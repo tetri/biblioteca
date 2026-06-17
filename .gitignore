@@ -482,3 +482,8 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# Frontend build/test artifacts
+frontend/coverage/
+frontend/test-results/
+frontend/dist/
