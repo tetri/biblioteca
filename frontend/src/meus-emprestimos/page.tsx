@@ -8,10 +8,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import {
   BookOpen,
   CheckCircle2,
-  X,
   Clock,
   AlertTriangle,
-  RotateCcw,
   Calendar
 } from "lucide-react";
 
