@@ -1,0 +1,38 @@
+# Editor configuration for consistent development experience across all team members
+# This file defines a standard set of rules for line endings, indentation, quotes, etc.
+
+# Indentation
+indent_style = space
+indent_size = 4
+
+# Line endings
+end_of_line = crlf
+
+# File encoding
+charset = utf-8
+
+# Trim trailing whitespace
+trim_trailing_whitespace = true
+
+# Insert final newline
+insert_final_newline = true
+
+# Case
+indent_case = camelCase
+case_sensitive = true
+
+# Quotes
+quote_type = double
+
+# Imports
+import_separation = none
+
+# Line length
+max_line_length = 120
+
+# Code analysis
+detect_indent_style = true
+detect_end_of_line = true
+
+# Format
+insert_spaces = true

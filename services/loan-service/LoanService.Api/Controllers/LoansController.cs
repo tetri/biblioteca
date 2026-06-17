@@ -13,6 +13,7 @@ public class LoansController : ControllerBase
 {
     private readonly ICommandHandler<CreateLoanCommand, Shared.Contracts.Result<LoanResponseDto>> _createLoanHandler;
     private readonly ICommandHandler<ReserveLoanCommand, Shared.Contracts.Result<LoanResponseDto>> _reserveHandler;
+    private readonly ICommandHandler<ReturnLoanCommand, Shared.Contracts.Result<LoanResponseDto>> _returnLoanHandler;
     private readonly IQueryHandler<LoanService.Application.Queries.GetLoansByUserIdQuery, IEnumerable<LoanResponseDto>> _getLoansHandler;
     private readonly ILoanRepository _loanRepository;
     private readonly ILogger<LoansController> _logger;
@@ -20,12 +21,14 @@ public class LoansController : ControllerBase
     public LoansController(
         ICommandHandler<CreateLoanCommand, Shared.Contracts.Result<LoanResponseDto>> createLoanHandler,
         ICommandHandler<ReserveLoanCommand, Shared.Contracts.Result<LoanResponseDto>> reserveHandler,
+        ICommandHandler<ReturnLoanCommand, Shared.Contracts.Result<LoanResponseDto>> returnLoanHandler,
         IQueryHandler<LoanService.Application.Queries.GetLoansByUserIdQuery, IEnumerable<LoanResponseDto>> getLoansHandler,
         ILoanRepository loanRepository,
         ILogger<LoansController> logger)
     {
         _createLoanHandler = createLoanHandler;
         _reserveHandler = reserveHandler;
+        _returnLoanHandler = returnLoanHandler;
         _getLoansHandler = getLoansHandler;
         _loanRepository = loanRepository;
         _logger = logger;
@@ -83,6 +86,13 @@ public class LoansController : ControllerBase
     public async Task<ActionResult<IEnumerable<LoanResponseDto>>> GetAllLoansForAdmin(CancellationToken cancellationToken)
     {
         var allLoans = await _loanRepository.GetAllAsync(cancellationToken);
+        allLoans = Loan.UpdateOverdueStatus(allLoans);
+
+        foreach (var loan in allLoans)
+        {
+            await _loanRepository.UpdateAsync(loan, cancellationToken);
+        }
+
         var response = allLoans.Select(l => new LoanResponseDto(
             l.Id,
             l.UserId,
@@ -92,5 +102,32 @@ public class LoansController : ControllerBase
             l.Status.ToString()));
 
         return Ok(response);
+    }
+
+    [Authorize]
+    [HttpPost("{id:guid}/return")]
+    public async Task<ActionResult<LoanResponseDto>> ReturnLoan(Guid id, CancellationToken cancellationToken)
+    {
+        var sid = User.FindFirst("sid")?.Value;
+        if (sid == null)
+        {
+            _logger.LogWarning("Unauthorized access attempt to ReturnLoan: SID claim missing.");
+            return Unauthorized();
+        }
+
+        if (!Guid.TryParse(sid, out var userId))
+        {
+            _logger.LogWarning("Invalid user ID format in token: {SID}", sid);
+            return BadRequest("Invalid user ID in token.");
+        }
+
+        var result = await _returnLoanHandler.Handle(new ReturnLoanCommand(id, userId), cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(result.Value);
     }
 }

@@ -28,7 +28,13 @@ builder.Services.AddSingleton(new MongoContext(
 builder.Services.AddScoped<ILoanRepository, LoanRepository>();
 builder.Services.AddScoped<ICommandHandler<CreateLoanCommand, Result<LoanResponseDto>>, CreateLoanHandler>();
 builder.Services.AddScoped<ICommandHandler<ReserveLoanCommand, Result<LoanResponseDto>>, ReserveLoanHandler>();
+builder.Services.AddScoped<ICommandHandler<ReturnLoanCommand, Result<LoanResponseDto>>, ReturnLoanHandler>();
 builder.Services.AddScoped<IQueryHandler<LoanService.Application.Queries.GetLoansByUserIdQuery, IEnumerable<LoanResponseDto>>, GetLoansByUserIdHandler>();
+
+builder.Services.AddHttpClient("CatalogService", client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["CatalogService:BaseUrl"] ?? "http://localhost:8082/");
+});
 
 var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? throw new InvalidOperationException("Jwt:Issuer is missing");
 var jwtAudience = builder.Configuration["Jwt:Audience"] ?? throw new InvalidOperationException("Jwt:Audience is missing");

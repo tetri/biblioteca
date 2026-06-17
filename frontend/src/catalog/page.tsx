@@ -126,6 +126,47 @@ export function BooksPage() {
     }
   });
 
+  const createLoanMutation = useMutation({
+    mutationFn: async (bookId: string) => {
+        const token = localStorage.getItem('token');
+        if (!token) throw new Error("Você precisa estar logado para pegar um livro emprestado.");
+
+        const payload = decodeJwtPayload(token);
+        const userId = payload.sid || payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid"];
+        if (!userId) throw new Error("Token inválido: SID não encontrado.");
+
+        return api.post('/loan/api/loans', {
+            bookId,
+            userId
+        });
+    },
+    onMutate: (bookId: string) => {
+        setPendingBookIds(prev => new Set(prev).add(bookId));
+    },
+    onSuccess: async (_, bookId) => {
+        await queryClient.invalidateQueries({ queryKey: ['books'] });
+        setPendingBookIds(prev => {
+            const next = new Set(prev);
+            next.delete(bookId);
+            return next;
+        });
+        scheduleClearMessage(setSuccessMessage, "Livro emprestado com sucesso!");
+    },
+    onError: (err: any, bookId) => {
+        setPendingBookIds(prev => {
+            const next = new Set(prev);
+            next.delete(bookId);
+            return next;
+        });
+        const errorData = err.response?.data;
+        const message = typeof errorData === 'string'
+            ? errorData
+            : (errorData?.message || err.message || "Erro ao emprestar livro.");
+
+        scheduleClearMessage(setErrorMessage, message);
+    }
+  });
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchTerm.trim()) {
@@ -313,20 +354,33 @@ export function BooksPage() {
                   </div>
 
                   <div className="flex gap-2 relative z-10">
-                    <Button
-                      className={`flex-grow py-6 rounded-xl font-bold transition-all ${
-                        book.availableCopies > 0
-                        ? 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-200'
-                        : 'bg-slate-100 text-slate-400 cursor-not-allowed'
-                      }`}
-                      disabled={book.availableCopies === 0 || pendingBookIds.has(book.id)}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        reserveMutation.mutate(book.id);
-                      }}
-                    >
-                      {pendingBookIds.has(book.id) ? 'Processando...' : 'Reservar'}
-                    </Button>
+                    {book.availableCopies > 0 ? (
+                      <Button
+                        className={`flex-grow py-6 rounded-xl font-bold transition-all ${
+                          'bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-200'
+                        }`}
+                        disabled={pendingBookIds.has(book.id)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          createLoanMutation.mutate(book.id);
+                        }}
+                      >
+                        {pendingBookIds.has(book.id) ? 'Processando...' : 'Pegar Emprestado'}
+                      </Button>
+                    ) : (
+                      <Button
+                        className={`flex-grow py-6 rounded-xl font-bold transition-all ${
+                          'bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-200'
+                        }`}
+                        disabled={pendingBookIds.has(book.id)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          reserveMutation.mutate(book.id);
+                        }}
+                      >
+                        {pendingBookIds.has(book.id) ? 'Processando...' : 'Reservar'}
+                      </Button>
+                    )}
                     <Button
                       variant="outline"
                       className="py-6 px-4 rounded-xl border-slate-200"

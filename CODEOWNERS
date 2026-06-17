@@ -1,0 +1,26 @@
+# Default owners for the entire repository
+* @tetri
+
+# Backend ownership
+services/user-service/ @tetri
+services/catalog-service/ @tetri
+services/loan-service/ @tetri
+services/notification-service/ @tetri
+services/ @tetri
+
+# Shared libraries
+shared/ @tetri
+
+# Gateway
+gateway/ @tetri
+
+# Frontend
+frontend/ @tetri
+
+# Infrastructure
+.github/ @tetri
+docker-compose.yml @tetri
+Dockerfile* @tetri
+
+# Documentation
+*.md @tetri

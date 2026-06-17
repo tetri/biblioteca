@@ -13,6 +13,7 @@ import AdminLoansPage from './admin/loans-page';
 import { BooksPage } from './catalog/page';
 import BookDetailsPage from './catalog/detalhes';
 import ProfilePage from './perfil/page';
+import MyLoansPage from './meus-emprestimos/page';
 import { ProtectedRoute } from './components/auth/protected-route';
 import { NotFoundPage } from './components/not-found';
 import { ErrorBoundary } from './components/error-boundary';
@@ -34,6 +35,14 @@ function App() {
           element={
             <ProtectedRoute>
               <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/meus-emprestimos"
+          element={
+            <ProtectedRoute>
+              <MyLoansPage />
             </ProtectedRoute>
           }
         />

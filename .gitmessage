@@ -1,0 +1,40 @@
+# <type>(<scope>): <subject>
+# │       │             │
+# │       │             └─► Summary in present tense (lowercase, no period)
+# │       │
+# │       └─► Scope: user-service|catalog-service|loan-service|
+# │                    notification-service|gateway|frontend|
+# │                    shared|infra|deps|docs|repo|auth|api|ui|admin|tests
+# │
+# └─► Type: feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert
+#
+# Allowed types:
+#   feat     ✨ A new feature
+#   fix      🐛 A bug fix
+#   docs     📝 Documentation only changes
+#   style    💄 Changes that do not affect the meaning of the code
+#   refactor ♻️  A code change that neither fixes a bug nor adds a feature
+#   perf     ⚡️ A code change that improves performance
+#   test     ✅ Adding missing or correcting existing tests
+#   build    📦 Changes that affect the build system or external dependencies
+#   ci       👷 Changes to CI configuration files and scripts
+#   chore    🔧 Other changes that don't modify src or test files
+#   revert   ⏪️ Reverts a previous commit
+#
+# Examples:
+#   feat(auth): add JWT refresh token endpoint
+#   fix(loan-service): resolve overdue detection race condition
+#   docs(frontend): update component API reference
+#   refactor(catalog-service): extract ISBN validation to domain
+#   test(shared): add unit tests for Result type
+#   ci(infra): add commitlint workflow
+#
+# Body (optional):
+#
+# Explain the motivation for the change, what problem it solves,
+# and any trade-offs made. Wrap at 72 characters.
+#
+# Footer (optional):
+#   Closes #123, #456
+#   BREAKING CHANGE: <description>
+#

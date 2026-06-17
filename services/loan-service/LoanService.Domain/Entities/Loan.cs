@@ -62,4 +62,40 @@ public class Loan
 
         return Result<Loan>.Success(loan);
     }
+
+    public static Result<Loan> Return(Guid id, IEnumerable<Loan> existingLoans)
+    {
+        var loan = existingLoans.FirstOrDefault(l => l.Id == id);
+        if (loan == null)
+            return Result<Loan>.Failure("Empréstimo não encontrado.");
+
+        if (loan.Status != LoanStatus.Active && loan.Status != LoanStatus.Overdue)
+            return Result<Loan>.Failure("Apenas empréstimos ativos ou em atraso podem ser devolvidos.");
+
+        loan.ReturnDate = DateTime.UtcNow;
+        loan.Status = LoanStatus.Returned;
+
+        return Result<Loan>.Success(loan);
+    }
+
+    public static IEnumerable<Loan> UpdateOverdueStatus(IEnumerable<Loan> loans)
+    {
+        var updatedLoans = new List<Loan>();
+        var now = DateTime.UtcNow;
+
+        foreach (var loan in loans)
+        {
+            if (loan.Status == LoanStatus.Active && loan.DueDate < now)
+            {
+                loan.Status = LoanStatus.Overdue;
+                updatedLoans.Add(loan);
+            }
+            else
+            {
+                updatedLoans.Add(loan);
+            }
+        }
+
+        return updatedLoans;
+    }
 }

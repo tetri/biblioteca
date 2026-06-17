@@ -1,6 +1,7 @@
 using LoanService.Application.Abstractions;
 using LoanService.Application.DTOs;
 using LoanService.Application.Queries;
+using LoanService.Domain.Entities;
 using LoanService.Domain.Repositories;
 using Microsoft.Extensions.Logging;
 
@@ -21,6 +22,13 @@ public class GetLoansByUserIdHandler : IQueryHandler<GetLoansByUserIdQuery, IEnu
     {
         _logger.LogInformation("Fetching loans for user {UserId}", query.UserId);
         var loans = await _loanRepository.GetByUserIdAsync(query.UserId, cancellationToken);
+        loans = Loan.UpdateOverdueStatus(loans);
+
+        foreach (var loan in loans)
+        {
+            await _loanRepository.UpdateAsync(loan, cancellationToken);
+        }
+
         return loans.Select(l => new LoanResponseDto(
             l.Id,
             l.UserId,
