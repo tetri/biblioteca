@@ -11,4 +11,12 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  server: {
+    proxy: {
+      "/user": { target: "http://localhost:80", changeOrigin: true },
+      "/catalog": { target: "http://localhost:80", changeOrigin: true },
+      "/loan": { target: "http://localhost:80", changeOrigin: true },
+      "/notification": { target: "http://localhost:80", changeOrigin: true },
+    },
+  },
 })

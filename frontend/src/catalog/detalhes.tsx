@@ -97,7 +97,7 @@ export default function BookDetailsPage() {
 
   if (isLoading) return (
     <PublicLayout>
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto px-6 py-12">
         <Skeleton className="h-8 w-32 mb-8" />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <Skeleton className="h-96 w-full rounded-2xl md:col-span-1" />
@@ -114,7 +114,7 @@ export default function BookDetailsPage() {
 
   if (error || !book) return (
     <PublicLayout>
-      <div className="max-w-4xl mx-auto py-12">
+      <div className="max-w-4xl mx-auto px-6 py-12">
         <ErrorMessage
             title="Erro ao carregar detalhes"
             message="Não foi possível obter as informações do livro. Verifique se o ID está correto."
@@ -128,10 +128,10 @@ export default function BookDetailsPage() {
 
   return (
     <PublicLayout>
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto px-6 py-12">
         <Button
           variant="ghost"
-          className="mb-8 text-slate-500 hover:text-slate-900"
+          className="mb-8 text-muted-foreground hover:text-foreground"
           onClick={() => navigate(-1)}
         >
           <ArrowLeft className="mr-2 h-4 w-4" /> Voltar
@@ -151,70 +151,68 @@ export default function BookDetailsPage() {
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-          {/* Cover Placeholder */}
           <div className="md:col-span-1">
-            <div className="aspect-[2/3] bg-slate-50 border border-slate-100 rounded-2xl flex flex-col items-center justify-center text-slate-300 shadow-sm overflow-hidden group relative">
-              <BookOpen className="h-20 w-20 group-hover:text-indigo-400 transition-colors" />
+            <div className="aspect-[2/3] bg-accent/50 border-border rounded-2xl flex flex-col items-center justify-center text-muted-foreground/50 shadow-sm overflow-hidden group relative">
+              <BookOpen className="h-20 w-20 group-hover:text-primary transition-colors" />
               <p className="mt-4 font-medium text-sm">Sem capa disponível</p>
-              <div className="absolute inset-0 bg-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
 
-            <Card className="mt-8 border-slate-100 shadow-sm overflow-hidden rounded-2xl">
-              <CardHeader className="bg-slate-50/50 pb-4">
+            <Card className="mt-8 border-border shadow-sm overflow-hidden rounded-2xl mesh-card">
+              <CardHeader className="bg-accent/50 pb-4">
                 <CardTitle className="text-sm font-bold flex items-center gap-2">
-                  <Info className="h-4 w-4 text-indigo-600" />
+                  <Info className="h-4 w-4 text-primary" />
                   Status de Disponibilidade
                 </CardTitle>
               </CardHeader>
               <CardContent className="pt-6">
                 <div className="flex justify-between items-center mb-4">
-                  <span className="text-sm text-slate-500">Disponíveis</span>
-                  <span className={`text-lg font-bold ${book.availableCopies > 0 ? 'text-emerald-600' : 'text-red-600'}`}>
+                  <span className="text-sm text-muted-foreground">Disponíveis</span>
+                  <span className={`text-lg font-bold ${book.availableCopies > 0 ? 'text-emerald-600' : 'text-destructive'}`}>
                     {book.availableCopies}
                   </span>
                 </div>
-                <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                <div className="w-full bg-muted h-2 rounded-full overflow-hidden">
                   <div
-                    className={`h-full transition-all duration-1000 ${book.availableCopies > 0 ? 'bg-emerald-500' : 'bg-red-500'}`}
+                    className={`h-full transition-all duration-1000 ${book.availableCopies > 0 ? 'bg-emerald-500' : 'bg-destructive'}`}
                     style={{ width: `${book.totalCopies > 0 ? Math.min(Math.max((book.availableCopies / book.totalCopies) * 100, 0), 100) : 0}%` }}
                   />
                 </div>
-                <p className="text-xs text-slate-400 mt-2 text-center">
+                <p className="text-xs text-muted-foreground/70 mt-2 text-center">
                   Total de {book.totalCopies} exemplares no acervo
                 </p>
               </CardContent>
             </Card>
           </div>
 
-          {/* Details Content */}
           <div className="md:col-span-2">
-            <h1 className="text-4xl font-bold text-slate-900 tracking-tight mb-2">{book.title}</h1>
-            <p className="text-xl text-indigo-600 font-medium mb-8">{book.author}</p>
+            <h1 className="text-4xl font-bold tracking-tight mb-2">{book.title}</h1>
+            <p className="text-xl text-primary font-medium mb-8">{book.author}</p>
 
             <div className="grid grid-cols-2 gap-6 mb-10">
               <div className="flex items-start gap-3">
-                <div className="p-2 bg-slate-50 rounded-lg text-slate-400">
+                <div className="p-2 bg-accent rounded-lg text-muted-foreground">
                   <Hash className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">ISBN</p>
-                  <p className="text-slate-900 font-medium">{book.isbn}</p>
+                  <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">ISBN</p>
+                  <p className="font-medium">{book.isbn}</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="p-2 bg-slate-50 rounded-lg text-slate-400">
+                <div className="p-2 bg-accent rounded-lg text-muted-foreground">
                   <Tag className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Categoria</p>
-                  <p className="text-slate-900 font-medium">{book.category}</p>
+                  <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Categoria</p>
+                  <p className="font-medium">{book.category}</p>
                 </div>
               </div>
             </div>
 
-            <div className="prose prose-slate max-w-none mb-12">
-              <h3 className="text-lg font-bold text-slate-900 mb-4">Sobre este livro</h3>
-              <p className="text-slate-600 leading-relaxed">
+            <div className="max-w-none mb-12">
+              <h3 className="text-lg font-bold mb-4">Sobre este livro</h3>
+              <p className="text-muted-foreground leading-relaxed">
                 Este exemplar faz parte do acervo permanente da nossa biblioteca. Atualmente classificado sob a categoria <strong>{book.category}</strong>,
                 ele é um dos títulos mais procurados pelos nossos leitores. Para garantir a democratização do acesso,
                 o período padrão de empréstimo é de 14 dias após a retirada.
@@ -224,8 +222,8 @@ export default function BookDetailsPage() {
             <Button
               className={`w-full py-8 rounded-2xl font-bold text-lg transition-all shadow-xl ${
                 book.availableCopies > 0
-                ? 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-200'
-                : 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                ? ''
+                : 'bg-muted text-muted-foreground cursor-not-allowed'
               }`}
               disabled={book.availableCopies === 0 || reserveMutation.isPending}
               onClick={() => reserveMutation.mutate(book.id)}
@@ -233,7 +231,7 @@ export default function BookDetailsPage() {
               {reserveMutation.isPending ? 'Processando reserva...' : 'Reservar agora'}
             </Button>
 
-            <p className="text-center text-slate-400 text-sm mt-4">
+            <p className="text-center text-muted-foreground/70 text-sm mt-4">
               A reserva garante sua prioridade na fila por até 24 horas.
             </p>
           </div>

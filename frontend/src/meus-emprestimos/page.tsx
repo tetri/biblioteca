@@ -5,6 +5,7 @@ import { ErrorMessage } from '../components/error-message';
 import { ProtectedRoute } from '../components/auth/protected-route';
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Card } from "@/components/ui/card";
 import {
   BookOpen,
   CheckCircle2,
@@ -148,15 +149,15 @@ export function MyLoansPage() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'Active':
-        return 'bg-blue-100 text-blue-700 border-blue-200';
+        return 'bg-primary/10 text-primary border-primary/20';
       case 'Overdue':
         return 'bg-red-100 text-red-700 border-red-200';
       case 'Reserved':
-        return 'bg-yellow-100 text-yellow-700 border-yellow-200';
+        return 'bg-amber-100 text-amber-700 border-amber-200';
       case 'Returned':
-        return 'bg-green-100 text-green-700 border-green-200';
+        return 'bg-emerald-100 text-emerald-700 border-emerald-200';
       default:
-        return 'bg-slate-100 text-slate-700 border-slate-200';
+        return 'bg-muted text-muted-foreground border-border';
     }
   };
 
@@ -187,8 +188,8 @@ export function MyLoansPage() {
     <ProtectedRoute>
       <div className="flex flex-col gap-8">
         <div>
-          <h1 className="text-4xl font-bold text-slate-900 tracking-tight">Meus Empréstimos</h1>
-          <p className="text-slate-500 mt-2 text-lg">Acompanhe seus empréstimos ativos e reservados.</p>
+          <h1 className="text-4xl font-bold tracking-tight">Meus Empréstimos</h1>
+          <p className="text-muted-foreground mt-2 text-lg">Acompanhe seus empréstimos ativos e reservados.</p>
         </div>
 
         {successMessage && (
@@ -205,12 +206,12 @@ export function MyLoansPage() {
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[1, 2, 3, 4, 5, 6].map(i => (
-              <div key={i} className="bg-white border border-slate-100 rounded-2xl p-6 space-y-4">
+              <Card key={i} className="rounded-2xl p-6 space-y-4 border-border">
                 <Skeleton className="h-48 w-full rounded-xl" />
                 <Skeleton className="h-6 w-3/4" />
                 <Skeleton className="h-4 w-1/2" />
                 <Skeleton className="h-10 w-full mt-4" />
-              </div>
+              </Card>
             ))}
           </div>
         ) : error ? (
@@ -232,29 +233,29 @@ export function MyLoansPage() {
             {loans && loans.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {loans.map((loan: Loan) => (
-                  <div key={loan.id} className="group bg-white border border-slate-100 rounded-2xl p-6 shadow-sm hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-300 flex flex-col h-full relative overflow-hidden">
-                    <div className="bg-slate-50 rounded-xl p-6 mb-6 flex items-center justify-center group-hover:bg-indigo-50 transition-colors relative z-10">
-                      <BookOpen className="h-12 w-12 text-slate-300 group-hover:text-indigo-400 transition-colors" />
+                  <Card key={loan.id} className="group rounded-2xl p-6 border-border shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col h-full relative overflow-hidden mesh-card">
+                    <div className="bg-accent/50 rounded-xl p-6 mb-6 flex items-center justify-center group-hover:bg-primary/10 transition-colors relative z-10">
+                      <BookOpen className="h-12 w-12 text-muted-foreground/50 group-hover:text-primary transition-colors" />
                     </div>
 
                     <div className="flex-grow relative z-10">
                       <div className="flex justify-between items-start gap-2 mb-1">
-                        <h2 className="text-xl font-bold text-slate-900 group-hover:text-indigo-600 transition-colors line-clamp-2">{loan.bookTitle}</h2>
+                        <h2 className="text-xl font-bold group-hover:text-primary transition-colors line-clamp-2">{loan.bookTitle}</h2>
                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${getStatusColor(loan.status)}`}>
                           {getStatusIcon(loan.status)}
                           <span className="ml-1">{loan.status}</span>
                         </span>
                       </div>
-                      <p className="text-slate-500 font-medium mb-4">{loan.bookAuthor}</p>
+                      <p className="text-muted-foreground font-medium mb-4">{loan.bookAuthor}</p>
 
                       <div className="space-y-3 mb-6">
                         <div className="flex items-center gap-2 text-sm">
-                          <Calendar className="h-4 w-4 text-slate-400" />
-                          <span className="text-slate-600">Emprestado em: {formatDate(loan.loanDate)}</span>
+                          <Calendar className="h-4 w-4 text-muted-foreground" />
+                          <span className="text-muted-foreground">Emprestado em: {formatDate(loan.loanDate)}</span>
                         </div>
                         <div className="flex items-center gap-2 text-sm">
-                          <Clock className="h-4 w-4 text-slate-400" />
-                          <span className={`font-medium ${isOverdue(loan.dueDate) ? 'text-red-600' : 'text-slate-600'}`}>Vencimento: {formatDate(loan.dueDate)}</span>
+                          <Clock className="h-4 w-4 text-muted-foreground" />
+                          <span className={`font-medium ${isOverdue(loan.dueDate) ? 'text-destructive' : 'text-muted-foreground'}`}>Vencimento: {formatDate(loan.dueDate)}</span>
                         </div>
                         {isOverdue(loan.dueDate) && loan.status === 'Active' && (
                           <div className="flex items-center gap-2 text-sm bg-red-50 text-red-700 px-3 py-2 rounded-lg">
@@ -263,7 +264,7 @@ export function MyLoansPage() {
                           </div>
                         )}
                         {loan.returnDate && (
-                          <div className="flex items-center gap-2 text-sm text-green-600">
+                          <div className="flex items-center gap-2 text-sm text-emerald-600">
                             <CheckCircle2 className="h-4 w-4" />
                             <span>Devolvido em: {formatDate(loan.returnDate)}</span>
                           </div>
@@ -271,7 +272,7 @@ export function MyLoansPage() {
                       </div>
 
                       <div className="flex items-center gap-2 mb-6">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-muted text-muted-foreground">
                           {loan.bookCategory}
                         </span>
                       </div>
@@ -280,7 +281,7 @@ export function MyLoansPage() {
                     <div className="flex gap-2 relative z-10">
                       {(loan.status === 'Active' || loan.status === 'Overdue') && (
                         <Button
-                          className="flex-grow py-6 rounded-xl font-bold bg-red-600 hover:bg-red-700 text-white shadow-lg shadow-red-200"
+                          className="flex-grow py-6 rounded-xl font-bold"
                           disabled={pendingLoanIds.has(loan.id)}
                           onClick={() => handleReturnLoan(loan.id)}
                         >
@@ -289,7 +290,7 @@ export function MyLoansPage() {
                       )}
                       {loan.status === 'Reserved' && (
                         <Button
-                          className="flex-grow py-6 rounded-xl font-bold bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-200"
+                          className="flex-grow py-6 rounded-xl font-bold"
                           disabled={pendingLoanIds.has(loan.id)}
                           onClick={() => handleReturnLoan(loan.id)}
                         >
@@ -297,14 +298,14 @@ export function MyLoansPage() {
                         </Button>
                       )}
                     </div>
-                  </div>
+                  </Card>
                 ))}
               </div>
             ) : (
-              <div className="text-center py-20 bg-slate-50 rounded-3xl border border-dashed border-slate-200">
-                <BookOpen className="h-12 w-12 text-slate-300 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-slate-900">Você não tem empréstimos ativos</h3>
-                <p className="text-slate-500 mt-2">Comece reservando ou pegando livros emprestados!</p>
+              <div className="text-center py-20 mesh-card rounded-3xl border border-dashed border-border">
+                <BookOpen className="h-12 w-12 text-muted-foreground/50 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold">Você não tem empréstimos ativos</h3>
+                <p className="text-muted-foreground mt-2">Comece reservando ou pegando livros emprestados!</p>
                 <Button 
                   onClick={() => window.location.href = '/catalogo'} 
                   className="mt-6"

@@ -8,6 +8,7 @@ import { PublicLayout } from '../components/shared/public-layout';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Card } from "@/components/ui/card";
 import {
   BookOpen,
   CheckCircle2,
@@ -209,19 +210,18 @@ export function BooksPage() {
 
   return (
     <PublicLayout>
-      <div className="flex flex-col gap-8">
+      <div className="max-w-7xl mx-auto px-6 py-12 flex flex-col gap-8">
         <div>
-          <h1 className="text-4xl font-bold text-slate-900 tracking-tight">Catálogo de Livros</h1>
-          <p className="text-slate-500 mt-2 text-lg">Explore nossa coleção e reserve suas próximas leituras.</p>
+          <h1 className="text-4xl font-bold tracking-tight">Catálogo de Livros</h1>
+          <p className="text-muted-foreground mt-2 text-lg">Explore nossa coleção e reserve suas próximas leituras.</p>
         </div>
 
-        {/* Search Bar & Filter Toggle */}
         <div className="flex flex-col md:flex-row gap-4">
           <form onSubmit={handleSearch} className="relative flex-grow group">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 group-focus-within:text-indigo-500 transition-colors" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
             <Input
               placeholder="Pesquisar por título, autor, ISBN ou categoria..."
-              className="pl-12 py-6 rounded-2xl border-slate-200 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-sm"
+              className="pl-12 py-6 rounded-2xl transition-all shadow-sm"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -229,7 +229,7 @@ export function BooksPage() {
               <button
                 type="button"
                 onClick={clearSearch}
-                className="absolute right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-slate-100 rounded-full text-slate-400 transition-colors"
+                className="absolute right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-accent rounded-full text-muted-foreground transition-colors"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -237,7 +237,7 @@ export function BooksPage() {
           </form>
           <Button
             variant="outline"
-            className={`py-6 px-6 rounded-2xl border-slate-200 font-bold flex gap-2 ${showFilters ? 'bg-slate-100' : ''}`}
+            className={`py-6 px-6 rounded-2xl flex gap-2 ${showFilters ? 'bg-accent' : ''}`}
             onClick={() => setShowFilters(!showFilters)}
           >
             <SlidersHorizontal className="h-5 w-5" />
@@ -245,19 +245,18 @@ export function BooksPage() {
           </Button>
         </div>
 
-        {/* Advanced Filters */}
         {showFilters && (
-          <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 animate-in fade-in slide-in-from-top-4">
-            <div className="flex items-center gap-2 mb-4 text-slate-900 font-bold">
+          <div className="mesh-card p-6 rounded-2xl border-border animate-in fade-in slide-in-from-top-4">
+            <div className="flex items-center gap-2 mb-4 font-bold">
               <Filter className="h-4 w-4" />
               <span>Filtros Detalhados</span>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <div className="space-y-2">
-                <label htmlFor="filter-category" className="text-xs font-bold text-slate-500 uppercase tracking-wider">Categoria</label>
+                <label htmlFor="filter-category" className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Categoria</label>
                 <select
                   id="filter-category"
-                  className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-indigo-500/20 outline-none"
+                  className="w-full bg-card border-border rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-primary/20 outline-none"
                   value={filterCategory}
                   onChange={(e) => setFilterCategory(e.target.value)}
                 >
@@ -268,10 +267,10 @@ export function BooksPage() {
                 </select>
               </div>
               <div className="space-y-2">
-                <label htmlFor="filter-author" className="text-xs font-bold text-slate-500 uppercase tracking-wider">Autor</label>
+                <label htmlFor="filter-author" className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Autor</label>
                 <select
                   id="filter-author"
-                  className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-indigo-500/20 outline-none"
+                  className="w-full bg-card border-border rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-primary/20 outline-none"
                   value={filterAuthor}
                   onChange={(e) => setFilterAuthor(e.target.value)}
                 >
@@ -286,7 +285,7 @@ export function BooksPage() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="mt-6 text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50"
+                className="mt-6 text-primary hover:text-primary/80 hover:bg-primary/10"
                 onClick={() => { setFilterCategory(''); setFilterAuthor(''); }}
               >
                 Limpar filtros
@@ -309,12 +308,12 @@ export function BooksPage() {
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[1, 2, 3, 4, 5, 6].map(i => (
-              <div key={i} className="bg-white border border-slate-100 rounded-2xl p-6 space-y-4">
+              <Card key={i} className="rounded-2xl p-6 space-y-4 border-border">
                 <Skeleton className="h-48 w-full rounded-xl" />
                 <Skeleton className="h-6 w-3/4" />
                 <Skeleton className="h-4 w-1/2" />
                 <Skeleton className="h-10 w-full mt-4" />
-              </div>
+              </Card>
             ))}
           </div>
         ) : error ? (
@@ -328,18 +327,18 @@ export function BooksPage() {
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredBooks.map((book: Book) => (
-                <div key={book.id} className="group bg-white border border-slate-100 rounded-2xl p-6 shadow-sm hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-300 flex flex-col h-full relative overflow-hidden">
+                <Card key={book.id} className="group rounded-2xl p-6 border-border shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col h-full relative overflow-hidden mesh-card">
                   <Link to={`/catalogo/${book.id}`} className="absolute inset-0 z-0" aria-label={`Ver detalhes de ${book.title}`} />
 
-                  <div className="bg-slate-50 rounded-xl p-6 mb-6 flex items-center justify-center group-hover:bg-indigo-50 transition-colors relative z-10">
-                    <BookOpen className="h-12 w-12 text-slate-300 group-hover:text-indigo-400 transition-colors" />
+                  <div className="bg-accent/50 rounded-xl p-6 mb-6 flex items-center justify-center group-hover:bg-primary/10 transition-colors relative z-10">
+                    <BookOpen className="h-12 w-12 text-muted-foreground/50 group-hover:text-primary transition-colors" />
                   </div>
 
                   <div className="flex-grow relative z-10">
                     <div className="flex justify-between items-start gap-2 mb-1">
-                      <h2 className="text-xl font-bold text-slate-900 group-hover:text-indigo-600 transition-colors line-clamp-2">{book.title}</h2>
+                      <h2 className="text-xl font-bold group-hover:text-primary transition-colors line-clamp-2">{book.title}</h2>
                     </div>
-                    <p className="text-slate-500 font-medium mb-4">{book.author}</p>
+                    <p className="text-muted-foreground font-medium mb-4">{book.author}</p>
 
                     <div className="flex items-center gap-2 mb-6">
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${
@@ -347,7 +346,7 @@ export function BooksPage() {
                       }`}>
                         {book.availableCopies > 0 ? `${book.availableCopies} disponíveis` : 'Indisponível'}
                       </span>
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-muted text-muted-foreground">
                         {book.category}
                       </span>
                     </div>
@@ -356,9 +355,7 @@ export function BooksPage() {
                   <div className="flex gap-2 relative z-10">
                     {book.availableCopies > 0 ? (
                       <Button
-                        className={`flex-grow py-6 rounded-xl font-bold transition-all ${
-                          'bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-200'
-                        }`}
+                        className="flex-grow py-6 rounded-xl font-bold"
                         disabled={pendingBookIds.has(book.id)}
                         onClick={(e) => {
                           e.preventDefault();
@@ -369,9 +366,7 @@ export function BooksPage() {
                       </Button>
                     ) : (
                       <Button
-                        className={`flex-grow py-6 rounded-xl font-bold transition-all ${
-                          'bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-200'
-                        }`}
+                        className="flex-grow py-6 rounded-xl font-bold bg-emerald-600 hover:bg-emerald-700"
                         disabled={pendingBookIds.has(book.id)}
                         onClick={(e) => {
                           e.preventDefault();
@@ -383,22 +378,22 @@ export function BooksPage() {
                     )}
                     <Button
                       variant="outline"
-                      className="py-6 px-4 rounded-xl border-slate-200"
+                      className="py-6 px-4 rounded-xl"
                       asChild
                     >
                       <Link to={`/catalogo/${book.id}`}><ChevronRight className="h-5 w-5" /></Link>
                     </Button>
                   </div>
-                </div>
+                </Card>
               ))}
             </div>
 
             {filteredBooks.length === 0 && (
-              <div className="text-center py-20 bg-slate-50 rounded-3xl border border-dashed border-slate-200">
-                <Search className="h-12 w-12 text-slate-300 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-slate-900">Nenhum livro encontrado</h3>
-                <p className="text-slate-500">Tente ajustar seus termos de busca ou filtros.</p>
-                <Button variant="link" className="mt-4 text-indigo-600" onClick={clearSearch}>
+              <div className="text-center py-20 mesh-card rounded-3xl border border-dashed border-border">
+                <Search className="h-12 w-12 text-muted-foreground/50 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold">Nenhum livro encontrado</h3>
+                <p className="text-muted-foreground">Tente ajustar seus termos de busca ou filtros.</p>
+                <Button variant="link" className="mt-4 text-primary" onClick={clearSearch}>
                   Limpar todos os filtros
                 </Button>
               </div>

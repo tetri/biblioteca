@@ -1,11 +1,14 @@
 import { useMemo, useState, type ComponentType } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { RotateCcw } from 'lucide-react';
 import api, { getApiErrorMessage } from '../lib/api';
 import { ErrorMessage } from '../components/error-message';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Clock3, Handshake, RotateCcw, TriangleAlert } from 'lucide-react';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 type Loan = {
   id: string;
@@ -13,13 +16,28 @@ type Loan = {
   bookId: string;
   loanDate: string;
   dueDate: string;
-  status: 'Reserved' | 'Active' | 'Returned' | 'Overdue' | string;
+  status: string;
 };
 
-type StatusFilter = 'all' | 'Reserved' | 'Active' | 'Returned' | 'Overdue';
+type StatusMap = Record<string, { label: string; variant: 'default' | 'secondary' | 'destructive' | 'outline' }>;
+
+const STATUS_CONFIG: StatusMap = {
+  Active: { label: 'Ativo', variant: 'default' },
+  Reserved: { label: 'Reservado', variant: 'secondary' },
+  Returned: { label: 'Devolvido', variant: 'outline' },
+  Overdue: { label: 'Atrasado', variant: 'destructive' },
+};
+
+const statusTabs = [
+  { value: 'all', label: 'Todos' },
+  { value: 'Active', label: 'Ativos' },
+  { value: 'Reserved', label: 'Reservas' },
+  { value: 'Overdue', label: 'Atrasados' },
+  { value: 'Returned', label: 'Devolvidos' },
+];
 
 export default function AdminLoansPage() {
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+  const [statusTab, setStatusTab] = useState('all');
 
   const { data: loans = [], isLoading, error, refetch, isFetching } = useQuery<Loan[]>({
     queryKey: ['admin-loans'],
@@ -27,85 +45,111 @@ export default function AdminLoansPage() {
   });
 
   const filteredLoans = useMemo(() => {
-    if (statusFilter === 'all') return loans;
-    return loans.filter((l) => l.status === statusFilter);
-  }, [loans, statusFilter]);
+    if (statusTab === 'all') return loans;
+    return loans.filter((l) => l.status === statusTab);
+  }, [loans, statusTab]);
 
-  const metrics = useMemo(() => {
-    return {
-      total: loans.length,
-      active: loans.filter(l => l.status === 'Active').length,
-      reserved: loans.filter(l => l.status === 'Reserved').length,
-      overdue: loans.filter(l => l.status === 'Overdue').length,
-    };
-  }, [loans]);
+  const metrics = useMemo(() => ({
+    total: loans.length,
+    active: loans.filter(l => l.status === 'Active').length,
+    reserved: loans.filter(l => l.status === 'Reserved').length,
+    overdue: loans.filter(l => l.status === 'Overdue').length,
+  }), [loans]);
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+      <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900">Gerenciamento de Emprestimos</h1>
-          <p className="mt-1 text-slate-600">Monitore reservas, emprestimos ativos e situacoes de atraso.</p>
+          <h1 className="text-2xl font-bold tracking-tight lg:text-3xl">Empréstimos</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Monitore reservas, empréstimos ativos e situações de atraso.
+          </p>
         </div>
-        <Button variant="outline" onClick={() => refetch()} disabled={isFetching}>
-          <RotateCcw className={`mr-2 h-4 w-4 ${isFetching ? 'animate-spin' : ''}`} /> Atualizar
+        <Button variant="outline" size="sm" onClick={() => refetch()} disabled={isFetching}>
+          <RotateCcw className={`mr-2 size-3 ${isFetching ? 'animate-spin' : ''}`} />
+          Atualizar
         </Button>
       </div>
 
       {error && (
         <ErrorMessage
           title="Erro"
-          message={getApiErrorMessage(error, 'Nao foi possivel carregar os emprestimos administrativos.')}
+          message={getApiErrorMessage(error, 'Não foi possível carregar os empréstimos.')}
         />
       )}
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
-        <LoanStatCard icon={Handshake} title="Total" value={metrics.total} />
-        <LoanStatCard icon={Clock3} title="Ativos" value={metrics.active} />
-        <LoanStatCard icon={RotateCcw} title="Reservas" value={metrics.reserved} />
-        <LoanStatCard icon={TriangleAlert} title="Atrasados" value={metrics.overdue} danger />
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+        <LoanStatCard title="Total" value={metrics.total} />
+        <LoanStatCard title="Ativos" value={metrics.active} />
+        <LoanStatCard title="Reservas" value={metrics.reserved} />
+        <LoanStatCard title="Atrasados" value={metrics.overdue} danger />
       </div>
 
-      <Card className="border-slate-200 bg-white">
-        <CardContent className="flex flex-wrap gap-2 pt-6">
-          {(['all', 'Reserved', 'Active', 'Returned', 'Overdue'] as const).map((status) => (
-            <Button
-              key={status}
-              variant={statusFilter === status ? 'default' : 'outline'}
-              onClick={() => setStatusFilter(status)}
-            >
-              {status === 'all' ? 'Todos' : status}
-            </Button>
-          ))}
-        </CardContent>
-      </Card>
-
-      <Card className="border-slate-200 bg-white">
-        <CardHeader>
-          <CardTitle>Registros de emprestimos</CardTitle>
-          <CardDescription>{filteredLoans.length} item(ns) para o filtro selecionado.</CardDescription>
+      <Card>
+        <CardHeader className="pb-0">
+          <Tabs value={statusTab} onValueChange={setStatusTab}>
+            <TabsList>
+              {statusTabs.map((tab) => (
+                <TabsTrigger key={tab.value} value={tab.value}>
+                  {tab.label}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
         </CardHeader>
-        <CardContent className="space-y-3">
+        <CardContent className="pt-4">
           {isLoading ? (
-            <>
-              <Skeleton className="h-16 w-full" />
-              <Skeleton className="h-16 w-full" />
-            </>
+            <div className="space-y-3">
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-10 w-full" />
+            </div>
           ) : filteredLoans.length === 0 ? (
-            <div className="rounded-xl border border-dashed border-slate-300 p-8 text-center text-slate-500">Nenhum emprestimo encontrado.</div>
+            <div className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground">
+              Nenhum empréstimo encontrado.
+            </div>
           ) : (
-            filteredLoans.map((loan) => (
-              <div key={loan.id} className="flex flex-col gap-2 rounded-xl border border-slate-200 bg-slate-50/40 p-4 md:flex-row md:items-center md:justify-between">
-                <div>
-                  <p className="font-semibold text-slate-900">Emprestimo {loan.id.slice(0, 8)}</p>
-                  <p className="text-sm text-slate-600">Usuario: {loan.userId.slice(0, 8)} • Livro: {loan.bookId.slice(0, 8)}</p>
-                  <p className="text-xs text-slate-500">Emprestimo: {new Date(loan.loanDate).toLocaleDateString()} • Vencimento: {new Date(loan.dueDate).toLocaleDateString()}</p>
-                </div>
-                <span className={`inline-flex w-fit rounded-full px-2.5 py-1 text-xs font-semibold ${loan.status === 'Overdue' ? 'bg-red-100 text-red-700' : loan.status === 'Active' ? 'bg-indigo-100 text-indigo-700' : loan.status === 'Reserved' ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700'}`}>
-                  {loan.status}
-                </span>
-              </div>
-            ))
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>ID</TableHead>
+                    <TableHead>Usuário</TableHead>
+                    <TableHead>Livro</TableHead>
+                    <TableHead>Data empréstimo</TableHead>
+                    <TableHead>Vencimento</TableHead>
+                    <TableHead>Status</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredLoans.map((loan) => {
+                    const config = STATUS_CONFIG[loan.status] ?? { label: loan.status, variant: 'outline' as const };
+                    return (
+                      <TableRow key={loan.id}>
+                        <TableCell className="font-mono text-xs font-medium">
+                          {loan.id.slice(0, 8)}
+                        </TableCell>
+                        <TableCell className="font-mono text-xs text-muted-foreground">
+                          {loan.userId.slice(0, 8)}
+                        </TableCell>
+                        <TableCell className="font-mono text-xs text-muted-foreground">
+                          {loan.bookId.slice(0, 8)}
+                        </TableCell>
+                        <TableCell className="text-sm">
+                          {new Date(loan.loanDate).toLocaleDateString()}
+                        </TableCell>
+                        <TableCell className="text-sm">
+                          {new Date(loan.dueDate).toLocaleDateString()}
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant={config.variant}>{config.label}</Badge>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </div>
           )}
         </CardContent>
       </Card>
@@ -119,17 +163,19 @@ function LoanStatCard({
   value,
   danger,
 }: {
-  icon: ComponentType<{ className?: string }>;
+  icon?: ComponentType<{ className?: string }>;
   title: string;
   value: number;
   danger?: boolean;
 }) {
   return (
-    <Card className="border-slate-200 bg-white">
-      <CardHeader>
-        <CardDescription>{title}</CardDescription>
-        <CardTitle className="flex items-center gap-2 text-3xl font-bold text-slate-900">
-          <Icon className={danger ? 'h-5 w-5 text-red-600' : 'h-5 w-5 text-indigo-600'} />
+    <Card>
+      <CardHeader className="pb-3">
+        <CardDescription className="text-xs font-medium uppercase tracking-wider">
+          {title}
+        </CardDescription>
+        <CardTitle className={`text-2xl font-bold ${danger ? 'text-destructive' : ''}`}>
+          {Icon && <Icon className={`mr-2 inline size-5 ${danger ? 'text-destructive' : 'text-primary'}`} />}
           {value}
         </CardTitle>
       </CardHeader>

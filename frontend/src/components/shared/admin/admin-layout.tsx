@@ -1,17 +1,20 @@
-import { LayoutDashboard, Users, BookOpen, Handshake, LogOut, Library } from 'lucide-react';
+import { LayoutDashboard, Users, BookOpen, Handshake, LogOut, Library, Menu, X } from 'lucide-react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 
 const links = [
   { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true },
-  { to: '/admin/usuarios', label: 'Gerenciar Usuarios', icon: Users },
-  { to: '/admin/livros', label: 'Gerenciar Livros', icon: BookOpen },
-  { to: '/admin/emprestimos', label: 'Gerenciar Emprestimos', icon: Handshake },
+  { to: '/admin/usuarios', label: 'Usuários', icon: Users },
+  { to: '/admin/livros', label: 'Livros', icon: BookOpen },
+  { to: '/admin/emprestimos', label: 'Empréstimos', icon: Handshake },
 ];
 
 export function AdminLayout() {
   const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -19,20 +22,72 @@ export function AdminLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <div className="mx-auto flex max-w-7xl gap-6 px-4 py-6 md:px-6">
-        <aside className="sticky top-6 hidden h-[calc(100vh-3rem)] w-72 shrink-0 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm lg:block">
-          <div className="mb-6 flex items-center gap-3 border-b border-slate-100 pb-4">
-            <div className="rounded-xl bg-indigo-600 p-2 text-white">
-              <Library className="h-5 w-5" />
-            </div>
-            <div>
-              <p className="text-xs uppercase tracking-wide text-slate-500">Area Administrativa</p>
-              <p className="font-semibold text-slate-900">Biblioteca</p>
-            </div>
-          </div>
+    <div className="flex min-h-screen mesh-light">
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
 
-          <nav className="space-y-2">
+      <aside
+        className={cn(
+          'fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r mesh-sidebar transition-transform duration-200 lg:static lg:translate-x-0',
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full',
+        )}
+      >
+        <div className="flex h-14 items-center gap-3 border-b px-5">
+          <div className="flex size-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+            <Library className="size-5" />
+          </div>
+          <div className="leading-tight">
+            <p className="text-[11px] font-medium uppercase tracking-widest text-muted-foreground">Admin</p>
+            <p className="font-semibold">Biblioteca</p>
+          </div>
+          <Button variant="ghost" size="icon" className="ml-auto lg:hidden" onClick={() => setSidebarOpen(false)}>
+            <X className="size-4" />
+          </Button>
+        </div>
+
+        <nav className="flex-1 space-y-1 overflow-y-auto p-3">
+          {links.map((link) => (
+            <NavLink
+              key={link.to}
+              to={link.to}
+              end={link.end}
+              onClick={() => setSidebarOpen(false)}
+              className={({ isActive }) =>
+                cn(
+                  'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
+                  isActive
+                    ? 'bg-primary text-primary-foreground'
+                    : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground',
+                )
+              }
+            >
+              <link.icon className="size-4" />
+              {link.label}
+            </NavLink>
+          ))}
+        </nav>
+
+        <Separator />
+
+        <div className="p-3">
+          <Button variant="outline" className="w-full" onClick={handleLogout}>
+            <LogOut className="mr-2 size-4" />
+            Sair
+          </Button>
+        </div>
+      </aside>
+
+      <div className="flex min-w-0 flex-1 flex-col">
+        <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b mesh-card backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 lg:px-6">
+          <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setSidebarOpen(true)}>
+            <Menu className="size-5" />
+          </Button>
+
+          <nav className="hidden lg:flex lg:items-center lg:gap-1">
             {links.map((link) => (
               <NavLink
                 key={link.to}
@@ -40,49 +95,27 @@ export function AdminLayout() {
                 end={link.end}
                 className={({ isActive }) =>
                   cn(
-                    'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors',
+                    'rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
                     isActive
-                      ? 'bg-indigo-600 text-white shadow-sm'
-                      : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                      ? 'bg-accent text-accent-foreground'
+                      : 'text-muted-foreground hover:text-foreground',
                   )
                 }
               >
-                <link.icon className="h-4 w-4" />
                 {link.label}
               </NavLink>
             ))}
           </nav>
 
-          <Button variant="outline" className="mt-8 w-full" onClick={handleLogout}>
-            <LogOut className="mr-2 h-4 w-4" />
-            Sair do Painel
-          </Button>
-        </aside>
-
-        <main className="w-full">
-          <div className="mb-4 flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3 lg:hidden">
-            <p className="text-sm font-semibold text-slate-900">Painel Administrativo</p>
-            <Button variant="outline" size="sm" onClick={handleLogout}>Sair</Button>
+          <div className="ml-auto flex items-center gap-2">
+            <span className="text-xs text-muted-foreground hidden sm:block">Admin</span>
+            <Button variant="ghost" size="icon" onClick={handleLogout} title="Sair">
+              <LogOut className="size-4" />
+            </Button>
           </div>
+        </header>
 
-          <div className="mb-4 flex gap-2 overflow-x-auto rounded-2xl border border-slate-200 bg-white p-2 lg:hidden">
-            {links.map((link) => (
-              <NavLink
-                key={link.to}
-                to={link.to}
-                end={link.end}
-                className={({ isActive }) =>
-                  cn(
-                    'whitespace-nowrap rounded-lg px-3 py-2 text-xs font-medium transition-colors',
-                    isActive ? 'bg-indigo-600 text-white' : 'text-slate-600 hover:bg-slate-100'
-                  )
-                }
-              >
-                {link.label}
-              </NavLink>
-            ))}
-          </div>
-
+        <main className="flex-1 p-4 lg:p-6">
           <Outlet />
         </main>
       </div>
