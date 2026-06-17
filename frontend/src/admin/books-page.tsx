@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { BookOpen, Plus, Trash2 } from 'lucide-react';
 import api, { getApiErrorMessage } from '../lib/api';
@@ -25,6 +26,7 @@ type Book = {
 const QUERY_KEY = ['admin-books'];
 
 export default function AdminBooksPage() {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -49,14 +51,14 @@ export default function AdminBooksPage() {
     },
     onSuccess: async () => {
       setError(null);
-      setSuccess('Livro criado com sucesso.');
+      setSuccess(t('admin.books.success.created'));
       setForm({ title: '', author: '', isbn: '', category: '', availableCopies: 1, totalCopies: 1 });
       setDialogOpen(false);
       await queryClient.invalidateQueries({ queryKey: QUERY_KEY });
     },
     onError: (createError: unknown) => {
       setSuccess(null);
-      setError(getApiErrorMessage(createError, 'Não foi possível criar o livro.'));
+      setError(getApiErrorMessage(createError, t('admin.books.error.create')));
     },
   });
 
@@ -66,12 +68,12 @@ export default function AdminBooksPage() {
     },
     onSuccess: async () => {
       setError(null);
-      setSuccess('Livro removido com sucesso.');
+      setSuccess(t('admin.books.success.deleted'));
       await queryClient.invalidateQueries({ queryKey: QUERY_KEY });
     },
     onError: (deleteError: unknown) => {
       setSuccess(null);
-      setError(getApiErrorMessage(deleteError, 'Não foi possível remover o livro.'));
+      setError(getApiErrorMessage(deleteError, t('admin.books.error.delete')));
     },
   });
 
@@ -87,66 +89,66 @@ export default function AdminBooksPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight lg:text-3xl">Livros</h1>
+          <h1 className="text-2xl font-bold tracking-tight lg:text-3xl">{t('admin.books.title')}</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Cadastre e mantenha o acervo atualizado.
+            {t('admin.books.subtitle')}
           </p>
         </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
             <Button>
               <Plus className="mr-2 size-4" />
-              Novo livro
+              {t('admin.books.addButton')}
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Novo livro</DialogTitle>
+              <DialogTitle>{t('admin.books.dialog.title')}</DialogTitle>
               <DialogDescription>
-                Preencha os campos para adicionar um novo título ao catálogo.
+                {t('admin.books.dialog.description')}
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-2">
               <div className="grid gap-2">
-                <Label htmlFor="title">Título</Label>
-                <Input id="title" placeholder="Título" value={form.title} onChange={(e) => setForm(p => ({ ...p, title: e.target.value }))} />
+                <Label htmlFor="title">{t('admin.books.dialog.titleField')}</Label>
+                <Input id="title" placeholder={t('admin.books.dialog.titlePlaceholder')} value={form.title} onChange={(e) => setForm(p => ({ ...p, title: e.target.value }))} />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="author">Autor</Label>
-                <Input id="author" placeholder="Autor" value={form.author} onChange={(e) => setForm(p => ({ ...p, author: e.target.value }))} />
+                <Label htmlFor="author">{t('admin.books.dialog.authorField')}</Label>
+                <Input id="author" placeholder={t('admin.books.dialog.authorPlaceholder')} value={form.author} onChange={(e) => setForm(p => ({ ...p, author: e.target.value }))} />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-2">
-                  <Label htmlFor="isbn">ISBN</Label>
-                  <Input id="isbn" placeholder="ISBN" value={form.isbn} onChange={(e) => setForm(p => ({ ...p, isbn: e.target.value }))} />
+                  <Label htmlFor="isbn">{t('admin.books.dialog.isbnField')}</Label>
+                  <Input id="isbn" placeholder={t('admin.books.dialog.isbnPlaceholder')} value={form.isbn} onChange={(e) => setForm(p => ({ ...p, isbn: e.target.value }))} />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="category">Categoria</Label>
-                  <Input id="category" placeholder="Categoria" value={form.category} onChange={(e) => setForm(p => ({ ...p, category: e.target.value }))} />
+                  <Label htmlFor="category">{t('admin.books.dialog.categoryField')}</Label>
+                  <Input id="category" placeholder={t('admin.books.dialog.categoryPlaceholder')} value={form.category} onChange={(e) => setForm(p => ({ ...p, category: e.target.value }))} />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-2">
-                  <Label htmlFor="available">Cópias disponíveis</Label>
+                  <Label htmlFor="available">{t('admin.books.dialog.availableCopiesField')}</Label>
                   <Input id="available" type="number" min={0} value={form.availableCopies} onChange={(e) => setForm(p => ({ ...p, availableCopies: Number(e.target.value) }))} />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="total">Total de cópias</Label>
+                  <Label htmlFor="total">{t('admin.books.dialog.totalCopiesField')}</Label>
                   <Input id="total" type="number" min={0} value={form.totalCopies} onChange={(e) => setForm(p => ({ ...p, totalCopies: Number(e.target.value) }))} />
                 </div>
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancelar</Button>
+              <Button variant="outline" onClick={() => setDialogOpen(false)}>{t('admin.books.dialog.cancel')}</Button>
               <Button onClick={() => createMutation.mutate()} disabled={createMutation.isPending || !isFormValid}>
-                {createMutation.isPending ? 'Criando...' : 'Adicionar livro'}
+                {createMutation.isPending ? t('admin.books.dialog.creating') : t('admin.books.dialog.submit')}
               </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
       </div>
 
-      {error && <ErrorMessage title="Erro" message={error} />}
+      {error && <ErrorMessage title={t('admin.books.error.title')} message={error} />}
       {success && (
         <div className="rounded-lg border border-border bg-accent px-4 py-3 text-sm font-medium text-accent-foreground">
           {success}
@@ -156,7 +158,7 @@ export default function AdminBooksPage() {
       <div className="grid grid-cols-3 gap-4">
         <Card>
           <CardHeader className="pb-3">
-            <CardDescription className="text-xs font-medium uppercase tracking-wider">Títulos</CardDescription>
+            <CardDescription className="text-xs font-medium uppercase tracking-wider">{t('admin.books.stats.titles')}</CardDescription>
             <CardTitle className="flex items-center gap-2 text-xl font-bold">
               <BookOpen className="size-5 text-primary" />
               {metrics.total}
@@ -165,7 +167,7 @@ export default function AdminBooksPage() {
         </Card>
         <Card>
           <CardHeader className="pb-3">
-            <CardDescription className="text-xs font-medium uppercase tracking-wider">Disponíveis</CardDescription>
+            <CardDescription className="text-xs font-medium uppercase tracking-wider">{t('admin.books.stats.available')}</CardDescription>
             <CardTitle className="flex items-center gap-2 text-xl font-bold">
               {metrics.available}
             </CardTitle>
@@ -173,7 +175,7 @@ export default function AdminBooksPage() {
         </Card>
         <Card>
           <CardHeader className="pb-3">
-            <CardDescription className="text-xs font-medium uppercase tracking-wider">Exemplares</CardDescription>
+            <CardDescription className="text-xs font-medium uppercase tracking-wider">{t('admin.books.stats.copies')}</CardDescription>
             <CardTitle className="flex items-center gap-2 text-xl font-bold">
               {metrics.copies}
             </CardTitle>
@@ -183,8 +185,8 @@ export default function AdminBooksPage() {
 
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-base font-semibold">Acervo atual</CardTitle>
-          <CardDescription>Visualize e remova registros quando necessário.</CardDescription>
+          <CardTitle className="text-base font-semibold">{t('admin.books.table.title')}</CardTitle>
+          <CardDescription>{t('admin.books.table.description')}</CardDescription>
         </CardHeader>
         <CardContent>
           {isLoading ? (
@@ -195,19 +197,19 @@ export default function AdminBooksPage() {
             </div>
           ) : books.length === 0 ? (
             <div className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground">
-              Nenhum livro cadastrado.
+              {t('admin.books.table.empty')}
             </div>
           ) : (
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Título</TableHead>
-                    <TableHead>Autor</TableHead>
-                    <TableHead>Categoria</TableHead>
-                    <TableHead className="text-center">Cópias</TableHead>
-                    <TableHead className="text-center">Disponível</TableHead>
-                    <TableHead className="text-right">Ação</TableHead>
+                    <TableHead>{t('admin.books.table.header.title')}</TableHead>
+                    <TableHead>{t('admin.books.table.header.author')}</TableHead>
+                    <TableHead>{t('admin.books.table.header.category')}</TableHead>
+                    <TableHead className="text-center">{t('admin.books.table.header.copies')}</TableHead>
+                    <TableHead className="text-center">{t('admin.books.table.header.available')}</TableHead>
+                    <TableHead className="text-right">{t('admin.books.table.header.action')}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Search, RefreshCw, CheckCircle, Shield, ShieldOff } from 'lucide-react';
@@ -30,6 +31,7 @@ export default function AdminUsersPage() {
   const [roleFilter, setRoleFilter] = useState<string>('all');
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const { t } = useTranslation();
 
   const queryString = useMemo(() => {
     const params = new URLSearchParams();
@@ -55,12 +57,12 @@ export default function AdminUsersPage() {
     },
     onSuccess: async () => {
       setError(null);
-      setSuccess('Usuário aprovado com sucesso.');
+      setSuccess(t('admin.users.success.approved'));
       await queryClient.invalidateQueries({ queryKey: QUERY_KEY });
     },
     onError: (mutationError: unknown) => {
       setSuccess(null);
-      setError(getApiErrorMessage(mutationError, 'Não foi possível aprovar o usuário.'));
+      setError(getApiErrorMessage(mutationError, t('admin.users.errorMessages.approve')));
     },
   });
 
@@ -70,12 +72,12 @@ export default function AdminUsersPage() {
     },
     onSuccess: async () => {
       setError(null);
-      setSuccess('Perfil de acesso atualizado com sucesso.');
+      setSuccess(t('admin.users.success.roleUpdated'));
       await queryClient.invalidateQueries({ queryKey: QUERY_KEY });
     },
     onError: (mutationError: unknown) => {
       setSuccess(null);
-      setError(getApiErrorMessage(mutationError, 'Não foi possível atualizar o perfil.'));
+      setError(getApiErrorMessage(mutationError, t('admin.users.errorMessages.updateRole')));
     },
   });
 
@@ -86,13 +88,13 @@ export default function AdminUsersPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight lg:text-3xl">Usuários</h1>
+        <h1 className="text-2xl font-bold tracking-tight lg:text-3xl">{t('admin.users.title')}</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Aprove cadastros e controle papéis administrativos.
+          {t('admin.users.subtitle')}
         </p>
       </div>
 
-      {error && <ErrorMessage title="Erro" message={error} />}
+      {error && <ErrorMessage title={t('admin.users.error.title')} message={error} />}
       {success && (
         <div className="rounded-lg border border-border bg-accent px-4 py-3 text-sm font-medium text-accent-foreground">
           {success}
@@ -102,7 +104,7 @@ export default function AdminUsersPage() {
       <div className="grid grid-cols-3 gap-4">
         <Card>
           <CardHeader className="pb-3">
-            <CardDescription className="text-xs font-medium uppercase tracking-wider">Total</CardDescription>
+            <CardDescription className="text-xs font-medium uppercase tracking-wider">{t('admin.users.stats.total')}</CardDescription>
             <CardTitle className="flex items-center gap-2 text-xl font-bold">
               {totalUsers}
             </CardTitle>
@@ -110,7 +112,7 @@ export default function AdminUsersPage() {
         </Card>
         <Card>
           <CardHeader className="pb-3">
-            <CardDescription className="text-xs font-medium uppercase tracking-wider">Aprovados</CardDescription>
+            <CardDescription className="text-xs font-medium uppercase tracking-wider">{t('admin.users.stats.approved')}</CardDescription>
             <CardTitle className="flex items-center gap-2 text-xl font-bold">
               {approvedUsers}
             </CardTitle>
@@ -118,7 +120,7 @@ export default function AdminUsersPage() {
         </Card>
         <Card>
           <CardHeader className="pb-3">
-            <CardDescription className="text-xs font-medium uppercase tracking-wider">Pendentes</CardDescription>
+            <CardDescription className="text-xs font-medium uppercase tracking-wider">{t('admin.users.stats.pending')}</CardDescription>
             <CardTitle className="flex items-center gap-2 text-xl font-bold">
               {pendingUsers}
             </CardTitle>
@@ -131,7 +133,7 @@ export default function AdminUsersPage() {
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
             <Input
-              placeholder="Buscar por nome ou e-mail"
+              placeholder={t('admin.users.searchPlaceholder')}
               className="pl-9"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -140,22 +142,22 @@ export default function AdminUsersPage() {
           <div className="flex items-center gap-2">
             <Select value={approvalFilter} onValueChange={setApprovalFilter}>
               <SelectTrigger className="w-[130px]">
-                <SelectValue placeholder="Aprovação" />
+                <SelectValue placeholder={t('admin.users.filter.approval')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Todos</SelectItem>
-                <SelectItem value="approved">Aprovados</SelectItem>
-                <SelectItem value="pending">Pendentes</SelectItem>
+                <SelectItem value="all">{t('admin.users.filter.all')}</SelectItem>
+                <SelectItem value="approved">{t('admin.users.filter.approved')}</SelectItem>
+                <SelectItem value="pending">{t('admin.users.filter.pending')}</SelectItem>
               </SelectContent>
             </Select>
             <Select value={roleFilter} onValueChange={setRoleFilter}>
               <SelectTrigger className="w-[130px]">
-                <SelectValue placeholder="Perfil" />
+                <SelectValue placeholder={t('admin.users.filter.role')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Todos</SelectItem>
-                <SelectItem value="Member">Membros</SelectItem>
-                <SelectItem value="Admin">Admins</SelectItem>
+                <SelectItem value="all">{t('admin.users.filter.all')}</SelectItem>
+                <SelectItem value="Member">{t('admin.users.filter.members')}</SelectItem>
+                <SelectItem value="Admin">{t('admin.users.filter.admins')}</SelectItem>
               </SelectContent>
             </Select>
             <Button variant="outline" size="icon" onClick={() => refetch()} disabled={isFetching}>
@@ -167,8 +169,8 @@ export default function AdminUsersPage() {
 
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-base font-semibold">Usuários cadastrados</CardTitle>
-          <CardDescription>Gerencie aprovação e perfil de acesso.</CardDescription>
+          <CardTitle className="text-base font-semibold">{t('admin.users.table.title')}</CardTitle>
+          <CardDescription>{t('admin.users.table.description')}</CardDescription>
         </CardHeader>
         <CardContent>
           {isLoading ? (
@@ -179,18 +181,18 @@ export default function AdminUsersPage() {
             </div>
           ) : users.length === 0 ? (
             <div className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground">
-              Nenhum usuário encontrado para os filtros aplicados.
+              {t('admin.users.table.empty')}
             </div>
           ) : (
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Usuário</TableHead>
-                    <TableHead>Email</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Perfil</TableHead>
-                    <TableHead className="text-right">Ações</TableHead>
+                    <TableHead>{t('admin.users.table.header.user')}</TableHead>
+                    <TableHead>{t('admin.users.table.header.email')}</TableHead>
+                    <TableHead>{t('admin.users.table.header.status')}</TableHead>
+                    <TableHead>{t('admin.users.table.header.role')}</TableHead>
+                    <TableHead className="text-right">{t('admin.users.table.header.actions')}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -217,7 +219,7 @@ export default function AdminUsersPage() {
                         <TableCell className="text-muted-foreground">{user.email}</TableCell>
                         <TableCell>
                           <Badge variant={user.isApproved ? 'secondary' : 'outline'}>
-                            {user.isApproved ? 'Aprovado' : 'Pendente'}
+                            {user.isApproved ? t('admin.users.table.status.approved') : t('admin.users.table.status.pending')}
                           </Badge>
                         </TableCell>
                         <TableCell>
@@ -242,7 +244,7 @@ export default function AdminUsersPage() {
                                 disabled={isBusy}
                               >
                                 <CheckCircle className="mr-1 size-3" />
-                                Aprovar
+                                {t('admin.users.table.action.approve')}
                               </Button>
                             )}
                             <Button
@@ -254,7 +256,7 @@ export default function AdminUsersPage() {
                               }}
                               disabled={isBusy}
                             >
-                              Tornar {changingRoleTo}
+                              {t('admin.users.table.action.make', { role: changingRoleTo })}
                             </Button>
                           </div>
                         </TableCell>

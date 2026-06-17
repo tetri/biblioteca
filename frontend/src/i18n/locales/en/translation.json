@@ -1,0 +1,545 @@
+{
+  "language": {
+    "label": "Language",
+    "pt-BR": "Português (Brasil)",
+    "en": "English"
+  },
+  "header": {
+    "brand": "Library",
+    "nav": {
+      "catalog": "Catalog",
+      "login": "Sign In",
+      "signup": "Get Started",
+      "myAccount": "My Account",
+      "viewProfile": "View Profile",
+      "catalogMobile": "Catalog",
+      "signOut": "Sign Out",
+      "ariaLabel": "Main Navigation",
+      "homeLinkAriaLabel": "Go to home page"
+    }
+  },
+  "footer": {
+    "brand": "Library",
+    "copyright": "© {{year}} Library System.",
+    "links": {
+      "termsOfUse": "Terms of Use",
+      "privacy": "Privacy",
+      "catalog": "Catalog"
+    },
+    "navAriaLabel": "Institutional Links"
+  },
+  "home": {
+    "hero": {
+      "title": "Your personal library,",
+      "titleHighlight": "reimagined.",
+      "subtitle": "Explore thousands of titles, manage your loans and discover your next read on a minimalist and intuitive platform.",
+      "searchPlaceholder": "Title, author or ISBN...",
+      "searchAriaLabel": "Search books in the catalog",
+      "searchButton": "Search"
+    },
+    "features": {
+      "fast": {
+        "title": "Fast and Fluid",
+        "description": "Reserve your books in seconds with our performance-optimized interface."
+      },
+      "secure": {
+        "title": "Secure and Reliable",
+        "description": "Your data and reading history protected with cutting-edge technology."
+      },
+      "premium": {
+        "title": "Premium Experience",
+        "description": "Minimalist design focused on what matters: your reading experience."
+      }
+    },
+    "cta": {
+      "title": "Ready to dive into knowledge?",
+      "subtitle": "Join thousands of readers and access a vast catalog of literary and technical works.",
+      "button": "Explore Catalog"
+    },
+    "stats": {
+      "booksLabel": "Books",
+      "ratingLabel": "Rating"
+    }
+  },
+  "login": {
+    "title": "Welcome back",
+    "subtitle": "Enter your credentials to access your account.",
+    "email": "Email",
+    "emailPlaceholder": "name@example.com",
+    "password": "Password",
+    "submitText": "Sign In",
+    "submittingText": "Signing in...",
+    "error": {
+      "title": "Login Error",
+      "defaultMessage": "Unable to log in. Check your credentials and try again.",
+      "expiredToken": "The received authentication token is already expired.",
+      "roleNotFound": "User role was not found in the token."
+    },
+    "signupPrompt": "Don't have an account?",
+    "signupLink": "Sign up for free",
+    "backToHome": "Back to home"
+  },
+  "loginForm": {
+    "title": "Welcome back",
+    "subtitle": "Log in to your Library account",
+    "email": "Email",
+    "emailPlaceholder": "your@email.com",
+    "password": "Password",
+    "forgotPassword": "Forgot your password?",
+    "submitText": "Sign In",
+    "signupPrompt": "Don't have an account?",
+    "signupLink": "Sign Up",
+    "footer": "By proceeding, you agree to our <a href=\"/termos-de-uso\">Terms of Use</a> and <a href=\"/politica-de-privacidade\">Privacy Policy</a>.",
+    "termsLink": "Terms of Use",
+    "privacyLink": "Privacy Policy"
+  },
+  "register": {
+    "success": {
+      "title": "Registration Complete!",
+      "message": "Your account has been created successfully. Wait for admin approval to start using the system.",
+      "redirecting": "Redirecting to login shortly..."
+    },
+    "form": {
+      "title": "Create your account",
+      "subtitle": "Join our community of readers today.",
+      "fullName": "Full name",
+      "fullNamePlaceholder": "Ex: John Doe",
+      "email": "Corporate or personal email",
+      "emailPlaceholder": "name@example.com",
+      "password": "Password",
+      "passwordPlaceholder": "Minimum 8 characters",
+      "submit": "Create Account"
+    },
+    "error": {
+      "title": "Registration Error",
+      "defaultMessage": "Unable to complete registration. Try again."
+    },
+    "loginPrompt": "Already have an account?",
+    "loginLink": "Sign In",
+    "termsAgreement": "By registering, you agree to our",
+    "termsLink": "Terms of Use",
+    "privacyLink": "Privacy Policy",
+    "backToHome": "Back to home"
+  },
+  "catalog": {
+    "title": "Book Catalog",
+    "subtitle": "Explore our collection and reserve your next reads.",
+    "searchPlaceholder": "Search by title, author, ISBN or category...",
+    "filters": {
+      "button": "Filters",
+      "title": "Detailed Filters",
+      "categoryLabel": "Category",
+      "categoryAll": "All categories",
+      "authorLabel": "Author",
+      "authorAll": "All authors",
+      "clear": "Clear filters"
+    },
+    "empty": {
+      "title": "No books found",
+      "message": "Try adjusting your search terms or filters.",
+      "clearAll": "Clear all filters"
+    },
+    "book": {
+      "viewDetailsAriaLabel": "View details of {{title}}",
+      "available": "{{count}} available",
+      "available_plural": "{{count}} available",
+      "unavailable": "Unavailable",
+      "borrowButton": "Borrow",
+      "reserveButton": "Reserve",
+      "processing": "Processing..."
+    },
+    "success": {
+      "reserve": "Book reserved successfully!",
+      "borrow": "Book borrowed successfully!"
+    },
+    "error": {
+      "reserveTitle": "Reservation Error",
+      "reserveDefault": "Error reserving book.",
+      "borrowDefault": "Error borrowing book.",
+      "loadTitle": "Error loading catalog",
+      "loadMessage": "Unable to fetch books. Our engineers have been notified."
+    },
+    "mutation": {
+      "needLogin": "You need to be logged in to reserve a book.",
+      "needLoginBorrow": "You need to be logged in to borrow a book.",
+      "invalidToken": "Invalid token: SID not found."
+    }
+  },
+  "bookDetails": {
+    "back": "Back",
+    "backToCatalog": "Back to catalog",
+    "noCover": "No cover available",
+    "statusCard": {
+      "title": "Availability Status",
+      "available": "Available",
+      "total": "Total of {{count}} copies in the collection"
+    },
+    "metadata": {
+      "isbn": "ISBN",
+      "category": "Category"
+    },
+    "about": {
+      "title": "About this book",
+      "description": "This copy is part of the permanent collection of our library. Currently classified under the category {{category}}, it is one of the most sought-after titles by our readers. To democratize access, the standard loan period is 14 days after pickup."
+    },
+    "reserveButton": "Reserve now",
+    "reserveProcessing": "Processing reservation...",
+    "reserveHint": "The reservation guarantees your priority in the queue for up to 24 hours.",
+    "success": {
+      "reserve": "Book reserved successfully!"
+    },
+    "error": {
+      "title": "Reservation Error",
+      "default": "Error reserving book.",
+      "loadTitle": "Error loading details",
+      "loadMessage": "Unable to fetch book information. Check if the ID is correct."
+    },
+    "mutation": {
+      "needLogin": "You need to be logged in to reserve a book.",
+      "invalidToken": "Invalid token: SID not found."
+    }
+  },
+  "myLoans": {
+    "title": "My Loans",
+    "subtitle": "Track your active loans and reservations.",
+    "empty": {
+      "title": "You have no active loans",
+      "message": "Start by reserving or borrowing books!",
+      "exploreButton": "Explore Catalog"
+    },
+    "error": {
+      "title": "Error",
+      "loadTitle": "Error loading loans",
+      "loadMessage": "Unable to fetch your loans. Our engineers have been notified.",
+      "retry": "Try again",
+      "returnDefault": "Error returning book."
+    },
+    "success": {
+      "returned": "Book returned successfully!"
+    },
+    "status": {
+      "active": "Active",
+      "overdue": "Overdue",
+      "reserved": "Reserved",
+      "returned": "Returned"
+    },
+    "loan": {
+      "overdueWarning": "Overdue loan",
+      "borrowedOn": "Borrowed on: {{date}}",
+      "dueDate": "Due: {{date}}",
+      "returnedOn": "Returned on: {{date}}"
+    },
+    "book": {
+      "notFound": "Book not found",
+      "authorUnknown": "Unknown author",
+      "categoryUnknown": "Unknown category"
+    },
+    "button": {
+      "return": "Return",
+      "convertToLoan": "Convert to Loan",
+      "processing": "Processing..."
+    },
+    "mutation": {
+      "needLogin": "You need to be logged in.",
+      "invalidToken": "Invalid token: SID not found."
+    }
+  },
+  "profile": {
+    "title": "My Profile",
+    "subtitle": "Manage your account and track your loans.",
+    "logoutButton": "Sign out of account",
+    "success": {
+      "update": "Profile updated successfully!"
+    },
+    "error": {
+      "title": "Error",
+      "defaultUpdate": "Error updating profile."
+    },
+    "personalData": {
+      "title": "Personal Data",
+      "fullName": "Full Name",
+      "email": "Email",
+      "newPassword": "New Password",
+      "passwordPlaceholder": "Leave blank to keep",
+      "updateButton": "Update Profile",
+      "saving": "Saving..."
+    },
+    "loans": {
+      "title": "My Loans and Reservations",
+      "loanId": "Book ID: {{id}}...",
+      "pickupDate": "Pickup: {{date}}",
+      "returnDate": "Return: {{date}}",
+      "empty": {
+        "title": "No records found",
+        "message": "You haven't made any loans or reservations yet.",
+        "exploreButton": "Explore Catalog"
+      }
+    }
+  },
+  "errorBoundary": {
+    "title": "Something went wrong",
+    "message": "An unexpected error occurred in the interface. We are working to fix it!"
+  },
+  "notFound": {
+    "title": "404",
+    "message": "Page not found.",
+    "backButton": "Back to Home"
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "lastUpdated": "Last updated: February 2024",
+    "section1": {
+      "title": "1. Information Collection",
+      "quote": "\"Your privacy is our highest priority. We collect only what is essential to deliver the best experience.\"",
+      "body": "We collect information you provide directly when creating an account, such as your name, email address and password. Additionally, we record data about your interactions with the catalog, such as reserved books, return deadlines and reading history."
+    },
+    "section2": {
+      "title": "2. Use and Storage",
+      "intro": "The collected data is used exclusively for:",
+      "item1": "Guarantee the integrity of the book lending process;",
+      "item2": "Notify you about return deadlines and title availability;",
+      "item3": "Improve reading recommendations and the system interface;",
+      "item4": "Comply with legal and administrative obligations of the institution.",
+      "closing": "We use state-of-the-art encryption and rigorous security protocols to ensure your data remains protected against unauthorized access."
+    },
+    "section3": {
+      "title": "3. Sharing",
+      "body": "We do not sell or rent your personal data to third parties. Information sharing only occurs with essential service providers for the platform's operation (e.g., transactional email services) and under strict confidentiality."
+    },
+    "section4": {
+      "title": "4. Your Rights",
+      "body": "You have the right to access, correct or delete your personal data at any time through your account settings. For complete data deletion, contact the library administrator."
+    },
+    "footer": {
+      "question": "Questions about our policy?",
+      "contactLink": "Contact our DPO",
+      "email": "privacidade@biblioteca.com"
+    }
+  },
+  "terms": {
+    "title": "Terms of Use",
+    "subtitle": "Guidelines for a harmonious coexistence on our platform.",
+    "section1": {
+      "title": "1. Acceptance of Terms",
+      "body": "By accessing and using the Library System, you agree to comply with and be bound by the following terms and conditions. This system is intended exclusively for educational and collection management purposes."
+    },
+    "section2": {
+      "title": "2. User Responsibilities",
+      "intro": "As a library user, you commit to:",
+      "item1": "Take care of the physical integrity of borrowed physical books.",
+      "item2": "Strictly respect established return deadlines.",
+      "item3": "Do not share your access credentials with third parties."
+    },
+    "section3": {
+      "title": "3. Penalties",
+      "intro": "Failure to comply with the terms may result in:",
+      "penalty1": {
+        "title": "Temporary Suspension",
+        "description": "Prevention from making new reservations for a determined period."
+      },
+      "penalty2": {
+        "title": "Administrative Fines",
+        "description": "As per the institution's internal regulations."
+      }
+    },
+    "section4": {
+      "title": "4. Modifications",
+      "body": "We reserve the right to change these terms at any time. We will notify users of significant changes via registered email or in-system alerts."
+    },
+    "footer": "By continuing to use the system, you declare that you are aware of and agree to all guidelines above."
+  },
+  "admin": {
+    "layout": {
+      "brandLabel": "Admin",
+      "brand": "Library",
+      "sidebarNav": {
+        "dashboard": "Dashboard",
+        "users": "Users",
+        "books": "Books",
+        "loans": "Loans"
+      },
+      "signOut": "Sign Out",
+      "headerBadge": "Admin",
+      "signOutTitle": "Sign Out"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "subtitle": "Consolidated view of key operational indicators.",
+      "error": {
+        "title": "Error loading indicators",
+        "message": "Unable to load dashboard."
+      },
+      "metric": {
+        "users": "Users",
+        "usersBadge": "{{count}} pending",
+        "books": "Books",
+        "booksBadge": "{{count}} available",
+        "loans": "Loans",
+        "loansBadge": "{{count}} active",
+        "overdue": "Overdue",
+        "overdueBadge": "overdue loans"
+      },
+      "card": {
+        "users": {
+          "title": "Users",
+          "description": "Registration control and administrative profiles.",
+          "totalAdmins": "Total admins",
+          "pending": "Pending",
+          "action": "Manage users"
+        },
+        "catalog": {
+          "title": "Catalog",
+          "description": "Collection health and copy availability.",
+          "totalCopies": "Total copies",
+          "availableTitles": "Available titles",
+          "action": "Manage books"
+        },
+        "loans": {
+          "title": "Loans",
+          "description": "Operation monitoring and overdue risk.",
+          "reservations": "Reservations",
+          "overdue": "Overdue",
+          "action": "Manage loans"
+        }
+      }
+    },
+    "users": {
+      "title": "Users",
+      "subtitle": "Approve registrations and manage administrative roles.",
+      "error": {
+        "title": "Error"
+      },
+      "success": {
+        "approved": "User approved successfully.",
+        "roleUpdated": "Access profile updated successfully."
+      },
+      "errorMessages": {
+        "approve": "Unable to approve user.",
+        "updateRole": "Unable to update profile."
+      },
+      "stats": {
+        "total": "Total",
+        "approved": "Approved",
+        "pending": "Pending"
+      },
+      "searchPlaceholder": "Search by name or email",
+      "filter": {
+        "approval": "Approval",
+        "all": "All",
+        "approved": "Approved",
+        "pending": "Pending",
+        "role": "Profile",
+        "members": "Members",
+        "admins": "Admins"
+      },
+      "table": {
+        "title": "Registered users",
+        "description": "Manage approval and access profile.",
+        "empty": "No users found for the applied filters.",
+        "header": {
+          "user": "User",
+          "email": "Email",
+          "status": "Status",
+          "role": "Profile",
+          "actions": "Actions"
+        },
+        "status": {
+          "approved": "Approved",
+          "pending": "Pending"
+        },
+        "action": {
+          "approve": "Approve",
+          "make": "Make {{role}}"
+        }
+      }
+    },
+    "books": {
+      "title": "Books",
+      "subtitle": "Register and keep the collection up to date.",
+      "addButton": "New book",
+      "success": {
+        "created": "Book created successfully.",
+        "deleted": "Book removed successfully."
+      },
+      "error": {
+        "create": "Unable to create book.",
+        "delete": "Unable to remove book.",
+        "title": "Error"
+      },
+      "dialog": {
+        "title": "New book",
+        "description": "Fill in the fields to add a new title to the catalog.",
+        "titleField": "Title",
+        "titlePlaceholder": "Title",
+        "authorField": "Author",
+        "authorPlaceholder": "Author",
+        "isbnField": "ISBN",
+        "isbnPlaceholder": "ISBN",
+        "categoryField": "Category",
+        "categoryPlaceholder": "Category",
+        "availableCopiesField": "Available copies",
+        "totalCopiesField": "Total copies",
+        "cancel": "Cancel",
+        "submit": "Add book",
+        "creating": "Creating..."
+      },
+      "stats": {
+        "titles": "Titles",
+        "available": "Available",
+        "copies": "Copies"
+      },
+      "table": {
+        "title": "Current collection",
+        "description": "View and remove records when needed.",
+        "empty": "No books registered.",
+        "header": {
+          "title": "Title",
+          "author": "Author",
+          "category": "Category",
+          "copies": "Copies",
+          "available": "Available",
+          "action": "Action"
+        }
+      }
+    },
+    "loans": {
+      "title": "Loans",
+      "subtitle": "Monitor reservations, active loans and overdue situations.",
+      "refreshButton": "Refresh",
+      "error": {
+        "title": "Error",
+        "message": "Unable to load loans."
+      },
+      "stats": {
+        "total": "Total",
+        "active": "Active",
+        "reservations": "Reservations",
+        "overdue": "Overdue"
+      },
+      "tabs": {
+        "all": "All",
+        "active": "Active",
+        "reserved": "Reservations",
+        "overdue": "Overdue",
+        "returned": "Returned"
+      },
+      "table": {
+        "empty": "No loans found.",
+        "header": {
+          "id": "ID",
+          "user": "User",
+          "book": "Book",
+          "loanDate": "Loan date",
+          "dueDate": "Due date",
+          "status": "Status"
+        }
+      },
+      "status": {
+        "active": "Active",
+        "reserved": "Reserved",
+        "returned": "Returned",
+        "overdue": "Overdue"
+      }
+    }
+  }
+}

@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSearchParams, Link } from 'react-router-dom';
 import api from '../lib/api';
@@ -39,6 +40,7 @@ export function BooksPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const queryParam = searchParams.get('query') || '';
 
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [searchTerm, setSearchTerm] = useState(queryParam);
   const [showFilters, setShowFilters] = useState(false);
@@ -84,11 +86,11 @@ export function BooksPage() {
   const reserveMutation = useMutation({
     mutationFn: async (bookId: string) => {
         const token = localStorage.getItem('token');
-        if (!token) throw new Error("Você precisa estar logado para reservar um livro.");
+        if (!token) throw new Error(t('catalog.mutation.needLogin'));
 
         const payload = decodeJwtPayload(token);
         const userId = payload.sid || payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid"];
-        if (!userId) throw new Error("Token inválido: SID não encontrado.");
+        if (!userId) throw new Error(t('catalog.mutation.invalidToken'));
 
         return api.post('/loan/api/loans/reserve', {
             bookId,
@@ -106,7 +108,7 @@ export function BooksPage() {
             next.delete(bookId);
             return next;
         });
-        scheduleClearMessage(setSuccessMessage, "Livro reservado com sucesso!");
+        scheduleClearMessage(setSuccessMessage, t('catalog.success.reserve'));
     },
     onError: (err: Error, bookId) => {
         const e = err as { response?: { data?: { message?: string } | string }; message?: string };
@@ -118,7 +120,7 @@ export function BooksPage() {
         const errorData = e.response?.data;
         const message = typeof errorData === 'string'
             ? errorData
-            : (errorData?.message || e.message || "Erro ao reservar livro.");
+            : (errorData?.message || e.message || t('catalog.error.reserveDefault'));
 
         scheduleClearMessage(setErrorMessage, message);
     }
@@ -127,11 +129,11 @@ export function BooksPage() {
   const createLoanMutation = useMutation({
     mutationFn: async (bookId: string) => {
         const token = localStorage.getItem('token');
-        if (!token) throw new Error("Você precisa estar logado para pegar um livro emprestado.");
+        if (!token) throw new Error(t('catalog.mutation.needLoginBorrow'));
 
         const payload = decodeJwtPayload(token);
         const userId = payload.sid || payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid"];
-        if (!userId) throw new Error("Token inválido: SID não encontrado.");
+        if (!userId) throw new Error(t('catalog.mutation.invalidToken'));
 
         return api.post('/loan/api/loans', {
             bookId,
@@ -148,7 +150,7 @@ export function BooksPage() {
             next.delete(bookId);
             return next;
         });
-        scheduleClearMessage(setSuccessMessage, "Livro emprestado com sucesso!");
+        scheduleClearMessage(setSuccessMessage, t('catalog.success.borrow'));
     },
     onError: (err: Error, bookId) => {
         const e = err as { response?: { data?: { message?: string } | string }; message?: string };
@@ -160,7 +162,7 @@ export function BooksPage() {
         const errorData = e.response?.data;
         const message = typeof errorData === 'string'
             ? errorData
-            : (errorData?.message || e.message || "Erro ao emprestar livro.");
+            : (errorData?.message || e.message || t('catalog.error.borrowDefault'));
 
         scheduleClearMessage(setErrorMessage, message);
     }
@@ -210,15 +212,15 @@ export function BooksPage() {
     <PublicLayout>
       <div className="max-w-7xl mx-auto px-6 py-12 flex flex-col gap-8">
         <div>
-          <h1 className="text-4xl font-bold tracking-tight">Catálogo de Livros</h1>
-          <p className="text-muted-foreground mt-2 text-lg">Explore nossa coleção e reserve suas próximas leituras.</p>
+          <h1 className="text-4xl font-bold tracking-tight">{t('catalog.title')}</h1>
+          <p className="text-muted-foreground mt-2 text-lg">{t('catalog.subtitle')}</p>
         </div>
 
         <div className="flex flex-col md:flex-row gap-4">
           <form onSubmit={handleSearch} className="relative flex-grow group">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
             <Input
-              placeholder="Pesquisar por título, autor, ISBN ou categoria..."
+              placeholder={t('catalog.searchPlaceholder')}
               className="pl-12 py-6 rounded-2xl transition-all shadow-sm"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -239,7 +241,7 @@ export function BooksPage() {
             onClick={() => setShowFilters(!showFilters)}
           >
             <SlidersHorizontal className="h-5 w-5" />
-            Filtros
+            {t('catalog.filters.button')}
           </Button>
         </div>
 
@@ -247,32 +249,32 @@ export function BooksPage() {
           <div className="mesh-card p-6 rounded-2xl border-border animate-in fade-in slide-in-from-top-4">
             <div className="flex items-center gap-2 mb-4 font-bold">
               <Filter className="h-4 w-4" />
-              <span>Filtros Detalhados</span>
+              <span>{t('catalog.filters.title')}</span>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <div className="space-y-2">
-                <label htmlFor="filter-category" className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Categoria</label>
+                <label htmlFor="filter-category" className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{t('catalog.filters.categoryLabel')}</label>
                 <select
                   id="filter-category"
                   className="w-full bg-card border-border rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-primary/20 outline-none"
                   value={filterCategory}
                   onChange={(e) => setFilterCategory(e.target.value)}
                 >
-                  <option value="">Todas as categorias</option>
+                  <option value="">{t('catalog.filters.categoryAll')}</option>
                   {categories.map(cat => (
                     <option key={cat} value={cat}>{cat}</option>
                   ))}
                 </select>
               </div>
               <div className="space-y-2">
-                <label htmlFor="filter-author" className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Autor</label>
+                <label htmlFor="filter-author" className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{t('catalog.filters.authorLabel')}</label>
                 <select
                   id="filter-author"
                   className="w-full bg-card border-border rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-primary/20 outline-none"
                   value={filterAuthor}
                   onChange={(e) => setFilterAuthor(e.target.value)}
                 >
-                  <option value="">Todos os autores</option>
+                  <option value="">{t('catalog.filters.authorAll')}</option>
                   {authors.map(author => (
                     <option key={author} value={author}>{author}</option>
                   ))}
@@ -286,7 +288,7 @@ export function BooksPage() {
                 className="mt-6 text-primary hover:text-primary/80 hover:bg-primary/10"
                 onClick={() => { setFilterCategory(''); setFilterAuthor(''); }}
               >
-                Limpar filtros
+                {t('catalog.filters.clear')}
               </Button>
             )}
           </div>
@@ -300,7 +302,7 @@ export function BooksPage() {
         )}
 
         {errorMessage && (
-          <ErrorMessage title="Erro de Reserva" message={errorMessage} />
+          <ErrorMessage title={t('catalog.error.reserveTitle')} message={errorMessage} />
         )}
 
         {isLoading ? (
@@ -317,8 +319,8 @@ export function BooksPage() {
         ) : error ? (
           <div className="py-12">
             <ErrorMessage
-              title="Erro ao carregar catálogo"
-              message="Não foi possível obter os livros. Nossos engenheiros já foram notificados."
+              title={t('catalog.error.loadTitle')}
+              message={t('catalog.error.loadMessage')}
             />
           </div>
         ) : (
@@ -326,7 +328,7 @@ export function BooksPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredBooks.map((book: Book) => (
                 <Card key={book.id} className="group rounded-2xl p-6 border-border shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col h-full relative overflow-hidden mesh-card">
-                  <Link to={`/catalogo/${book.id}`} className="absolute inset-0 z-0" aria-label={`Ver detalhes de ${book.title}`} />
+                  <Link to={`/catalogo/${book.id}`} className="absolute inset-0 z-0" aria-label={t('catalog.book.viewDetailsAriaLabel', { title: book.title })} />
 
                   <div className="bg-accent/50 rounded-xl p-6 mb-6 flex items-center justify-center group-hover:bg-primary/10 transition-colors relative z-10">
                     <BookOpen className="h-12 w-12 text-muted-foreground/50 group-hover:text-primary transition-colors" />
@@ -342,7 +344,7 @@ export function BooksPage() {
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${
                         book.availableCopies > 0 ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'
                       }`}>
-                        {book.availableCopies > 0 ? `${book.availableCopies} disponíveis` : 'Indisponível'}
+                        {book.availableCopies > 0 ? t('catalog.book.available', { count: book.availableCopies }) : t('catalog.book.unavailable')}
                       </span>
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-muted text-muted-foreground">
                         {book.category}
@@ -360,7 +362,7 @@ export function BooksPage() {
                           createLoanMutation.mutate(book.id);
                         }}
                       >
-                        {pendingBookIds.has(book.id) ? 'Processando...' : 'Pegar Emprestado'}
+                        {pendingBookIds.has(book.id) ? t('catalog.book.processing') : t('catalog.book.borrowButton')}
                       </Button>
                     ) : (
                       <Button
@@ -371,7 +373,7 @@ export function BooksPage() {
                           reserveMutation.mutate(book.id);
                         }}
                       >
-                        {pendingBookIds.has(book.id) ? 'Processando...' : 'Reservar'}
+                        {pendingBookIds.has(book.id) ? t('catalog.book.processing') : t('catalog.book.reserveButton')}
                       </Button>
                     )}
                     <Button
@@ -389,10 +391,10 @@ export function BooksPage() {
             {filteredBooks.length === 0 && (
               <div className="text-center py-20 mesh-card rounded-3xl border border-dashed border-border">
                 <Search className="h-12 w-12 text-muted-foreground/50 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold">Nenhum livro encontrado</h3>
-                <p className="text-muted-foreground">Tente ajustar seus termos de busca ou filtros.</p>
+                <h3 className="text-xl font-semibold">{t('catalog.empty.title')}</h3>
+                <p className="text-muted-foreground">{t('catalog.empty.message')}</p>
                 <Button variant="link" className="mt-4 text-primary" onClick={clearSearch}>
-                  Limpar todos os filtros
+                  {t('catalog.empty.clearAll')}
                 </Button>
               </div>
             )}

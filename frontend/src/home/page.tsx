@@ -5,10 +5,12 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Search, BookOpen, ArrowRight, Star, Shield, Zap } from "lucide-react";
 import { PublicLayout } from '../components/shared/public-layout';
+import { useTranslation } from 'react-i18next';
 
 export default function HomePage() {
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,23 +26,23 @@ export default function HomePage() {
       <section className="relative overflow-hidden py-20 px-6 sm:py-32 lg:px-8 text-center mesh-hero">
         <div className="mx-auto max-w-2xl">
           <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
-            Sua biblioteca pessoal, <span className="text-primary">reimaginada.</span>
+            {t('home.hero.title')} <span className="text-primary">{t('home.hero.titleHighlight')}</span>
           </h1>
           <p className="mt-6 text-lg leading-8 text-muted-foreground">
-            Explore milhares de títulos, gerencie seus empréstimos e descubra sua próxima leitura em uma plataforma minimalista e intuitiva.
+            {t('home.hero.subtitle')}
           </p>
           <div className="mt-10 flex items-center justify-center gap-x-6">
             <form onSubmit={handleSearch} className="flex w-full max-w-lg items-center space-x-2 bg-card p-2 rounded-full border-border border shadow-sm focus-within:ring-2 focus-within:ring-primary/20 transition-all">
               <Search className="ml-3 h-5 w-5 text-muted-foreground" />
               <Input
                 type="text"
-                placeholder="Título, autor ou ISBN..."
+                placeholder={t('home.hero.searchPlaceholder')}
                 className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                aria-label="Buscar livros no catálogo"
+                aria-label={t('home.hero.searchAriaLabel')}
               />
-              <Button type="submit" className="rounded-full">Buscar</Button>
+              <Button type="submit" className="rounded-full">{t('home.hero.searchButton')}</Button>
             </form>
           </div>
         </div>
@@ -53,22 +55,22 @@ export default function HomePage() {
               <div className="p-4 bg-primary/10 rounded-2xl text-primary">
                 <Zap className="h-8 w-8" />
               </div>
-              <h3 className="text-xl font-semibold">Rápido e Fluido</h3>
-              <p className="text-muted-foreground">Reserve seus livros em segundos com nossa interface otimizada para performance.</p>
+              <h3 className="text-xl font-semibold">{t('home.features.fast.title')}</h3>
+              <p className="text-muted-foreground">{t('home.features.fast.description')}</p>
             </div>
             <div className="flex flex-col items-center text-center space-y-4">
               <div className="p-4 bg-primary/10 rounded-2xl text-primary">
                 <Shield className="h-8 w-8" />
               </div>
-              <h3 className="text-xl font-semibold">Seguro e Confiável</h3>
-              <p className="text-muted-foreground">Seus dados e histórico de leitura protegidos com tecnologia de ponta.</p>
+              <h3 className="text-xl font-semibold">{t('home.features.secure.title')}</h3>
+              <p className="text-muted-foreground">{t('home.features.secure.description')}</p>
             </div>
             <div className="flex flex-col items-center text-center space-y-4">
               <div className="p-4 bg-primary/10 rounded-2xl text-primary">
                 <Star className="h-8 w-8" />
               </div>
-              <h3 className="text-xl font-semibold">Experiência Premium</h3>
-              <p className="text-muted-foreground">Design minimalista focado no que importa: sua experiência de leitura.</p>
+              <h3 className="text-xl font-semibold">{t('home.features.premium.title')}</h3>
+              <p className="text-muted-foreground">{t('home.features.premium.description')}</p>
             </div>
           </div>
         </div>
@@ -79,13 +81,13 @@ export default function HomePage() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-12">
             <div className="max-w-md">
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-6">
-                Pronto para mergulhar no conhecimento?
+                {t('home.cta.title')}
               </h2>
               <p className="text-lg text-muted-foreground mb-8">
-                Junte-se a milhares de leitores e tenha acesso a um catálogo vasto de obras literárias e técnicas.
+                {t('home.cta.subtitle')}
               </p>
               <Button size="lg" className="rounded-full px-8" asChild>
-                <Link to="/catalogo">Explorar Catálogo <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                <Link to="/catalogo">{t('home.cta.button')} <ArrowRight className="ml-2 h-4 w-4" /></Link>
               </Button>
             </div>
             <div className="grid grid-cols-2 gap-4 w-full max-w-md">
@@ -93,14 +95,14 @@ export default function HomePage() {
                 <CardContent className="p-6 flex flex-col items-center text-center">
                   <BookOpen className="h-10 w-10 text-primary mb-4" />
                   <span className="font-bold text-2xl">5k+</span>
-                  <span className="text-sm text-muted-foreground">Livros</span>
+                  <span className="text-sm text-muted-foreground">{t('home.stats.booksLabel')}</span>
                 </CardContent>
               </Card>
               <Card className="rounded-2xl border-border shadow-sm -rotate-3 mt-8 mesh-card">
                 <CardContent className="p-6 flex flex-col items-center text-center">
                   <Star className="h-10 w-10 text-warm-500 mb-4" />
                   <span className="font-bold text-2xl">4.9</span>
-                  <span className="text-sm text-muted-foreground">Avaliação</span>
+                  <span className="text-sm text-muted-foreground">{t('home.stats.ratingLabel')}</span>
                 </CardContent>
               </Card>
             </div>

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, Link } from 'react-router-dom';
 import api, { getApiErrorMessage } from '../lib/api';
 import { decodeJwtPayload } from '../lib/utils';
@@ -16,6 +17,7 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,13 +30,13 @@ export default function LoginPage() {
       const exp = payload.exp as number | undefined;
 
       if (exp && exp < Math.floor(Date.now() / 1000)) {
-        throw new Error("O token de autenticação recebido já está expirado.");
+        throw new Error(t('login.error.expiredToken'));
       }
 
       const role = payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] as string | undefined;
 
       if (!role) {
-        throw new Error("A role do usuário não foi encontrada no token.");
+        throw new Error(t('login.error.roleNotFound'));
       }
 
       localStorage.setItem('token', data.token);
@@ -45,7 +47,7 @@ export default function LoginPage() {
         navigate('/');
       }
     } catch (err) {
-      setError(getApiErrorMessage(err, 'Não foi possível realizar login. Verifique suas credenciais e tente novamente.'));
+      setError(getApiErrorMessage(err, t('login.error.defaultMessage')));
     } finally {
       setIsLoading(false);
     }
@@ -59,9 +61,9 @@ export default function LoginPage() {
             <div className="size-12 flex items-center justify-center rounded-xl bg-primary text-primary-foreground mb-4">
               <Library className="size-6" />
             </div>
-            <h1 className="text-2xl font-bold tracking-tight">Bem-vindo de volta</h1>
+            <h1 className="text-2xl font-bold tracking-tight">{t('login.title')}</h1>
             <p className="text-sm text-muted-foreground mt-1">
-              Entre com suas credenciais para acessar sua conta.
+              {t('login.subtitle')}
             </p>
           </div>
 
@@ -69,18 +71,18 @@ export default function LoginPage() {
             <CardContent className="p-8">
               {error && (
                 <div className="mb-6">
-                  <ErrorMessage title="Erro de Login" message={error} />
+                  <ErrorMessage title={t('login.error.title')} message={error} />
                 </div>
               )}
 
               <form onSubmit={handleLogin} className="space-y-5">
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-sm font-medium">E-mail</Label>
+                  <Label htmlFor="email" className="text-sm font-medium">{t('login.email')}</Label>
                   <Input
                     id="email"
                     type="email"
                     autoComplete="email"
-                    placeholder="nome@exemplo.com"
+                    placeholder={t('login.emailPlaceholder')}
                     className="rounded-lg"
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -88,7 +90,7 @@ export default function LoginPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="password" className="text-sm font-medium">Senha</Label>
+                  <Label htmlFor="password" className="text-sm font-medium">{t('login.password')}</Label>
                   <Input
                     id="password"
                     type="password"
@@ -104,14 +106,14 @@ export default function LoginPage() {
                   className="w-full py-6 rounded-lg text-base font-semibold"
                   disabled={isLoading}
                 >
-                  {isLoading ? 'Entrando...' : 'Entrar'}
+                  {isLoading ? t('login.submittingText') : t('login.submitText')}
                 </Button>
               </form>
 
               <div className="mt-8 text-center text-sm text-muted-foreground">
-                Não possui uma conta?{' '}
+                {t('login.signupPrompt')}{' '}
                 <Link to="/cadastro" className="text-primary hover:text-primary/80 font-semibold underline-offset-4 hover:underline">
-                  Cadastre-se gratuitamente
+                  {t('login.signupLink')}
                 </Link>
               </div>
             </CardContent>
@@ -119,7 +121,7 @@ export default function LoginPage() {
 
           <div className="flex justify-center mt-6">
             <Link to="/" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors">
-              <ArrowLeft className="mr-2 h-4 w-4" /> Voltar para o início
+              <ArrowLeft className="mr-2 h-4 w-4" /> {t('login.backToHome')}
             </Link>
           </div>
         </div>

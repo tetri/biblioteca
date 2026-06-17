@@ -1,4 +1,5 @@
 import { useMemo, useState, type ComponentType } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import { RotateCcw } from 'lucide-react';
 import api, { getApiErrorMessage } from '../lib/api';
@@ -21,23 +22,24 @@ type Loan = {
 
 type StatusMap = Record<string, { label: string; variant: 'default' | 'secondary' | 'destructive' | 'outline' }>;
 
-const STATUS_CONFIG: StatusMap = {
-  Active: { label: 'Ativo', variant: 'default' },
-  Reserved: { label: 'Reservado', variant: 'secondary' },
-  Returned: { label: 'Devolvido', variant: 'outline' },
-  Overdue: { label: 'Atrasado', variant: 'destructive' },
-};
-
-const statusTabs = [
-  { value: 'all', label: 'Todos' },
-  { value: 'Active', label: 'Ativos' },
-  { value: 'Reserved', label: 'Reservas' },
-  { value: 'Overdue', label: 'Atrasados' },
-  { value: 'Returned', label: 'Devolvidos' },
-];
-
 export default function AdminLoansPage() {
+  const { t } = useTranslation();
   const [statusTab, setStatusTab] = useState('all');
+
+  const STATUS_CONFIG: StatusMap = {
+    Active: { label: t('admin.loans.status.active'), variant: 'default' },
+    Reserved: { label: t('admin.loans.status.reserved'), variant: 'secondary' },
+    Returned: { label: t('admin.loans.status.returned'), variant: 'outline' },
+    Overdue: { label: t('admin.loans.status.overdue'), variant: 'destructive' },
+  };
+
+  const statusTabs = [
+    { value: 'all', label: t('admin.loans.tabs.all') },
+    { value: 'Active', label: t('admin.loans.tabs.active') },
+    { value: 'Reserved', label: t('admin.loans.tabs.reserved') },
+    { value: 'Overdue', label: t('admin.loans.tabs.overdue') },
+    { value: 'Returned', label: t('admin.loans.tabs.returned') },
+  ];
 
   const { data: loans = [], isLoading, error, refetch, isFetching } = useQuery<Loan[]>({
     queryKey: ['admin-loans'],
@@ -60,29 +62,29 @@ export default function AdminLoansPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight lg:text-3xl">Empréstimos</h1>
+          <h1 className="text-2xl font-bold tracking-tight lg:text-3xl">{t('admin.loans.title')}</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Monitore reservas, empréstimos ativos e situações de atraso.
+            {t('admin.loans.subtitle')}
           </p>
         </div>
         <Button variant="outline" size="sm" onClick={() => refetch()} disabled={isFetching}>
           <RotateCcw className={`mr-2 size-3 ${isFetching ? 'animate-spin' : ''}`} />
-          Atualizar
+          {t('admin.loans.refreshButton')}
         </Button>
       </div>
 
       {error && (
         <ErrorMessage
-          title="Erro"
-          message={getApiErrorMessage(error, 'Não foi possível carregar os empréstimos.')}
+          title={t('admin.loans.error.title')}
+          message={getApiErrorMessage(error, t('admin.loans.error.message'))}
         />
       )}
 
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-        <LoanStatCard title="Total" value={metrics.total} />
-        <LoanStatCard title="Ativos" value={metrics.active} />
-        <LoanStatCard title="Reservas" value={metrics.reserved} />
-        <LoanStatCard title="Atrasados" value={metrics.overdue} danger />
+        <LoanStatCard title={t('admin.loans.stats.total')} value={metrics.total} />
+        <LoanStatCard title={t('admin.loans.stats.active')} value={metrics.active} />
+        <LoanStatCard title={t('admin.loans.stats.reservations')} value={metrics.reserved} />
+        <LoanStatCard title={t('admin.loans.stats.overdue')} value={metrics.overdue} danger />
       </div>
 
       <Card>
@@ -106,19 +108,19 @@ export default function AdminLoansPage() {
             </div>
           ) : filteredLoans.length === 0 ? (
             <div className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground">
-              Nenhum empréstimo encontrado.
+              {t('admin.loans.table.empty')}
             </div>
           ) : (
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>ID</TableHead>
-                    <TableHead>Usuário</TableHead>
-                    <TableHead>Livro</TableHead>
-                    <TableHead>Data empréstimo</TableHead>
-                    <TableHead>Vencimento</TableHead>
-                    <TableHead>Status</TableHead>
+                    <TableHead>{t('admin.loans.table.header.id')}</TableHead>
+                    <TableHead>{t('admin.loans.table.header.user')}</TableHead>
+                    <TableHead>{t('admin.loans.table.header.book')}</TableHead>
+                    <TableHead>{t('admin.loans.table.header.loanDate')}</TableHead>
+                    <TableHead>{t('admin.loans.table.header.dueDate')}</TableHead>
+                    <TableHead>{t('admin.loans.table.header.status')}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>

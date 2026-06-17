@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, Link } from 'react-router-dom';
 import api, { getApiErrorMessage } from '../lib/api';
 import { ErrorMessage } from '../components/error-message';
@@ -16,6 +17,7 @@ export default function RegisterPage() {
   const [error, setError] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (isSuccess) {
@@ -32,7 +34,7 @@ export default function RegisterPage() {
       await api.post('/user/api/auth/register', { name, email, password });
       setIsSuccess(true);
     } catch (err) {
-      setError(getApiErrorMessage(err, 'Não foi possível concluir o cadastro. Tente novamente.'));
+      setError(getApiErrorMessage(err, t('register.error.defaultMessage')));
     }
   };
 
@@ -44,11 +46,11 @@ export default function RegisterPage() {
             <div className="inline-flex items-center justify-center p-4 bg-emerald-100 text-emerald-600 rounded-full mb-6">
               <CheckCircle2 className="h-12 w-12" />
             </div>
-            <h1 className="text-3xl font-bold mb-4">Cadastro Realizado!</h1>
+            <h1 className="text-3xl font-bold mb-4">{t('register.success.title')}</h1>
             <p className="text-muted-foreground mb-8">
-              Sua conta foi criada com sucesso. Aguarde a aprovação do administrador para começar a usar o sistema.
+              {t('register.success.message')}
             </p>
-            <p className="text-sm text-muted-foreground/70">Redirecionando para o login em instantes...</p>
+            <p className="text-sm text-muted-foreground/70">{t('register.success.redirecting')}</p>
           </div>
         </div>
       </PublicLayout>
@@ -63,71 +65,71 @@ export default function RegisterPage() {
             <div className="size-12 flex items-center justify-center rounded-xl bg-primary text-primary-foreground mb-4">
               <Library className="size-6" />
             </div>
-            <h1 className="text-2xl font-bold tracking-tight">Criar sua conta</h1>
+            <h1 className="text-2xl font-bold tracking-tight">{t('register.form.title')}</h1>
             <p className="text-sm text-muted-foreground mt-1">
-              Junte-se à nossa comunidade de leitores hoje mesmo.
+              {t('register.form.subtitle')}
             </p>
           </div>
 
           <Card className="border-border shadow-xl shadow-brand-500/5 mesh-card rounded-2xl">
             <CardContent className="p-8">
-              {error && <div className="mb-6"><ErrorMessage title="Erro de Cadastro" message={error} /></div>}
+              {error && <div className="mb-6"><ErrorMessage title={t('register.error.title')} message={error} /></div>}
 
               <form onSubmit={handleRegister} className="space-y-5">
                 <div className="space-y-2">
-                  <Label htmlFor="name" className="text-sm font-medium">Nome completo</Label>
+                  <Label htmlFor="name" className="text-sm font-medium">{t('register.form.fullName')}</Label>
                   <Input
                     id="name"
                     type="text"
-                    placeholder="Ex: João Silva"
+                    placeholder={t('register.form.fullNamePlaceholder')}
                     className="rounded-lg"
                     onChange={(e) => setName(e.target.value)}
                     required
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-sm font-medium">E-mail corporativo ou pessoal</Label>
+                  <Label htmlFor="email" className="text-sm font-medium">{t('register.form.email')}</Label>
                   <Input
                     id="email"
                     type="email"
-                    placeholder="nome@exemplo.com"
+                    placeholder={t('register.form.emailPlaceholder')}
                     className="rounded-lg"
                     onChange={(e) => setEmail(e.target.value)}
                     required
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="password" className="text-sm font-medium">Senha</Label>
+                  <Label htmlFor="password" className="text-sm font-medium">{t('register.form.password')}</Label>
                   <Input
                     id="password"
                     type="password"
                     className="rounded-lg"
-                    placeholder="Mínimo 8 caracteres"
+                    placeholder={t('register.form.passwordPlaceholder')}
                     onChange={(e) => setPassword(e.target.value)}
                     required
                   />
                 </div>
                 <Button type="submit" className="w-full py-6 rounded-lg text-base font-semibold">
-                  Criar Conta
+                  {t('register.form.submit')}
                 </Button>
               </form>
 
               <div className="mt-8 text-center text-sm text-muted-foreground">
-                Já possui uma conta?{' '}
+                {t('register.loginPrompt')}{' '}
                 <Link to="/entrar" className="text-primary hover:text-primary/80 font-semibold underline-offset-4 hover:underline">
-                  Fazer login
+                  {t('register.loginLink')}
                 </Link>
               </div>
             </CardContent>
           </Card>
 
           <p className="mt-6 text-center text-xs text-muted-foreground/70 leading-relaxed px-4">
-            Ao se cadastrar, você concorda com nossos <Link to="/termos-de-uso" className="underline hover:text-primary">Termos de Uso</Link> e <Link to="/politica-de-privacidade" className="underline hover:text-primary">Política de Privacidade</Link>.
+            {t('register.termsAgreement')} <Link to="/termos-de-uso" className="underline hover:text-primary">{t('register.termsLink')}</Link> e <Link to="/politica-de-privacidade" className="underline hover:text-primary">{t('register.privacyLink')}</Link>.
           </p>
 
           <div className="flex justify-center mt-6">
             <Link to="/" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors">
-              <ArrowLeft className="mr-2 h-4 w-4" /> Voltar para o início
+              <ArrowLeft className="mr-2 h-4 w-4" /> {t('register.backToHome')}
             </Link>
           </div>
         </div>

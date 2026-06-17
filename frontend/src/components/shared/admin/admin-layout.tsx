@@ -1,18 +1,21 @@
 import { LayoutDashboard, Users, BookOpen, Handshake, LogOut, Library, Menu, X } from 'lucide-react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
+import { LanguageSwitcher } from '@/components/language-switcher';
 
 const links = [
-  { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true },
-  { to: '/admin/usuarios', label: 'Usuários', icon: Users },
-  { to: '/admin/livros', label: 'Livros', icon: BookOpen },
-  { to: '/admin/emprestimos', label: 'Empréstimos', icon: Handshake },
+  { to: '/admin', labelKey: 'admin.layout.sidebarNav.dashboard', icon: LayoutDashboard, end: true },
+  { to: '/admin/usuarios', labelKey: 'admin.layout.sidebarNav.users', icon: Users },
+  { to: '/admin/livros', labelKey: 'admin.layout.sidebarNav.books', icon: BookOpen },
+  { to: '/admin/emprestimos', labelKey: 'admin.layout.sidebarNav.loans', icon: Handshake },
 ];
 
 export function AdminLayout() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -41,8 +44,8 @@ export function AdminLayout() {
             <Library className="size-5" />
           </div>
           <div className="leading-tight">
-            <p className="text-[11px] font-medium uppercase tracking-widest text-muted-foreground">Admin</p>
-            <p className="font-semibold">Biblioteca</p>
+            <p className="text-[11px] font-medium uppercase tracking-widest text-muted-foreground">{t('admin.layout.brandLabel')}</p>
+            <p className="font-semibold">{t('admin.layout.brand')}</p>
           </div>
           <Button variant="ghost" size="icon" className="ml-auto lg:hidden" onClick={() => setSidebarOpen(false)}>
             <X className="size-4" />
@@ -66,7 +69,7 @@ export function AdminLayout() {
               }
             >
               <link.icon className="size-4" />
-              {link.label}
+              {t(link.labelKey)}
             </NavLink>
           ))}
         </nav>
@@ -76,7 +79,7 @@ export function AdminLayout() {
         <div className="p-3">
           <Button variant="outline" className="w-full" onClick={handleLogout}>
             <LogOut className="mr-2 size-4" />
-            Sair
+            {t('admin.layout.signOut')}
           </Button>
         </div>
       </aside>
@@ -102,14 +105,15 @@ export function AdminLayout() {
                   )
                 }
               >
-                {link.label}
+                {t(link.labelKey)}
               </NavLink>
             ))}
           </nav>
 
           <div className="ml-auto flex items-center gap-2">
-            <span className="text-xs text-muted-foreground hidden sm:block">Admin</span>
-            <Button variant="ghost" size="icon" onClick={handleLogout} title="Sair">
+            <LanguageSwitcher />
+            <span className="text-xs text-muted-foreground hidden sm:block">{t('admin.layout.headerBadge')}</span>
+            <Button variant="ghost" size="icon" onClick={handleLogout} title={t('admin.layout.signOutTitle')}>
               <LogOut className="size-4" />
             </Button>
           </div>

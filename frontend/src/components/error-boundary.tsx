@@ -1,5 +1,6 @@
 import React, { type ErrorInfo, type ReactNode } from 'react';
 import { ErrorMessage } from './error-message';
+import i18n from '../i18n/config';
 
 interface Props {
   children: ReactNode;
@@ -29,8 +30,8 @@ export class ErrorBoundary extends React.Component<Props, State> {
         <div className="p-10 flex justify-center items-center min-h-screen">
           <div className="max-w-md w-full">
             <ErrorMessage 
-              title="Algo deu errado" 
-              message="Ocorreu um erro inesperado na interface. Estamos trabalhando para resolver!" 
+              title={i18n.t('errorBoundary.title')} 
+              message={i18n.t('errorBoundary.message')} 
             />
           </div>
         </div>

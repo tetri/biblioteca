@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '../lib/api';
@@ -30,6 +31,7 @@ const fetchBook = async (id: string): Promise<Book> => {
 export default function BookDetailsPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -70,11 +72,11 @@ export default function BookDetailsPage() {
   const reserveMutation = useMutation({
     mutationFn: async (bookId: string) => {
         const token = localStorage.getItem('token');
-        if (!token) throw new Error("Você precisa estar logado para reservar um livro.");
+        if (!token) throw new Error(t('bookDetails.mutation.needLogin'));
 
         const payload = decodeJwtPayload(token);
         const userId = payload.sid || payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid"];
-        if (!userId) throw new Error("Token inválido: SID não encontrado.");
+        if (!userId) throw new Error(t('bookDetails.mutation.invalidToken'));
 
         return api.post('/loan/api/loans/reserve', {
             bookId,
@@ -83,14 +85,14 @@ export default function BookDetailsPage() {
         });
     },
     onSuccess: () => {
-        scheduleClearMessage(setSuccessMessage, "Livro reservado com sucesso!", true);
+        scheduleClearMessage(setSuccessMessage, t('bookDetails.success.reserve'), true);
     },
     onError: (err: Error) => {
         const e = err as { response?: { data?: { message?: string } | string }; message?: string };
         const errorData = e.response?.data;
         const message = typeof errorData === 'string'
             ? errorData
-            : (errorData?.message || e.message || "Erro ao reservar livro.");
+            : (errorData?.message || e.message || t('bookDetails.error.default'));
 
         scheduleClearMessage(setErrorMessage, message);
     }
@@ -117,11 +119,11 @@ export default function BookDetailsPage() {
     <PublicLayout>
       <div className="max-w-4xl mx-auto px-6 py-12">
         <ErrorMessage
-            title="Erro ao carregar detalhes"
-            message="Não foi possível obter as informações do livro. Verifique se o ID está correto."
+            title={t('bookDetails.error.loadTitle')}
+            message={t('bookDetails.error.loadMessage')}
         />
         <Button variant="ghost" className="mt-6" onClick={() => navigate('/catalogo')}>
-          <ArrowLeft className="mr-2 h-4 w-4" /> Voltar ao catálogo
+          <ArrowLeft className="mr-2 h-4 w-4" /> {t('bookDetails.backToCatalog')}
         </Button>
       </div>
     </PublicLayout>
@@ -135,7 +137,7 @@ export default function BookDetailsPage() {
           className="mb-8 text-muted-foreground hover:text-foreground"
           onClick={() => navigate(-1)}
         >
-          <ArrowLeft className="mr-2 h-4 w-4" /> Voltar
+          <ArrowLeft className="mr-2 h-4 w-4" /> {t('bookDetails.back')}
         </Button>
 
         {successMessage && (
@@ -147,7 +149,7 @@ export default function BookDetailsPage() {
 
         {errorMessage && (
           <div className="mb-6 animate-in fade-in slide-in-from-top-4">
-            <ErrorMessage title="Erro de Reserva" message={errorMessage} />
+            <ErrorMessage title={t('bookDetails.error.title')} message={errorMessage} />
           </div>
         )}
 
@@ -155,7 +157,7 @@ export default function BookDetailsPage() {
           <div className="md:col-span-1">
             <div className="aspect-[2/3] bg-accent/50 border-border rounded-2xl flex flex-col items-center justify-center text-muted-foreground/50 shadow-sm overflow-hidden group relative">
               <BookOpen className="h-20 w-20 group-hover:text-primary transition-colors" />
-              <p className="mt-4 font-medium text-sm">Sem capa disponível</p>
+              <p className="mt-4 font-medium text-sm">{t('bookDetails.noCover')}</p>
               <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
 
@@ -163,12 +165,12 @@ export default function BookDetailsPage() {
               <CardHeader className="bg-accent/50 pb-4">
                 <CardTitle className="text-sm font-bold flex items-center gap-2">
                   <Info className="h-4 w-4 text-primary" />
-                  Status de Disponibilidade
+                  {t('bookDetails.statusCard.title')}
                 </CardTitle>
               </CardHeader>
               <CardContent className="pt-6">
                 <div className="flex justify-between items-center mb-4">
-                  <span className="text-sm text-muted-foreground">Disponíveis</span>
+                  <span className="text-sm text-muted-foreground">{t('bookDetails.statusCard.available')}</span>
                   <span className={`text-lg font-bold ${book.availableCopies > 0 ? 'text-emerald-600' : 'text-destructive'}`}>
                     {book.availableCopies}
                   </span>
@@ -180,7 +182,7 @@ export default function BookDetailsPage() {
                   />
                 </div>
                 <p className="text-xs text-muted-foreground/70 mt-2 text-center">
-                  Total de {book.totalCopies} exemplares no acervo
+                  {t('bookDetails.statusCard.total', { count: book.totalCopies })}
                 </p>
               </CardContent>
             </Card>
@@ -196,7 +198,7 @@ export default function BookDetailsPage() {
                   <Hash className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">ISBN</p>
+                  <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{t('bookDetails.metadata.isbn')}</p>
                   <p className="font-medium">{book.isbn}</p>
                 </div>
               </div>
@@ -205,18 +207,16 @@ export default function BookDetailsPage() {
                   <Tag className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Categoria</p>
+                  <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{t('bookDetails.metadata.category')}</p>
                   <p className="font-medium">{book.category}</p>
                 </div>
               </div>
             </div>
 
             <div className="max-w-none mb-12">
-              <h3 className="text-lg font-bold mb-4">Sobre este livro</h3>
+              <h3 className="text-lg font-bold mb-4">{t('bookDetails.about.title')}</h3>
               <p className="text-muted-foreground leading-relaxed">
-                Este exemplar faz parte do acervo permanente da nossa biblioteca. Atualmente classificado sob a categoria <strong>{book.category}</strong>,
-                ele é um dos títulos mais procurados pelos nossos leitores. Para garantir a democratização do acesso,
-                o período padrão de empréstimo é de 14 dias após a retirada.
+                {t('bookDetails.about.description', { category: book.category })}
               </p>
             </div>
 
@@ -229,11 +229,11 @@ export default function BookDetailsPage() {
               disabled={book.availableCopies === 0 || reserveMutation.isPending}
               onClick={() => reserveMutation.mutate(book.id)}
             >
-              {reserveMutation.isPending ? 'Processando reserva...' : 'Reservar agora'}
+              {reserveMutation.isPending ? t('bookDetails.reserveProcessing') : t('bookDetails.reserveButton')}
             </Button>
 
             <p className="text-center text-muted-foreground/70 text-sm mt-4">
-              A reserva garante sua prioridade na fila por até 24 horas.
+              {t('bookDetails.reserveHint')}
             </p>
           </div>
         </div>

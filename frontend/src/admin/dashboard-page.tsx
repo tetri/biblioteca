@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { BookOpen, Clock3, Handshake, LibraryBig, TrendingUp, UserCheck, Users } from 'lucide-react';
@@ -14,6 +15,7 @@ type Book = { id: string; availableCopies: number; totalCopies: number };
 type Loan = { id: string; status: string };
 
 export default function AdminDashboardPage() {
+  const { t } = useTranslation();
   const usersQuery = useQuery<AdminUser[]>({
     queryKey: ['admin-dashboard-users'],
     queryFn: async () => (await api.get('/user/api/users/admin')).data,
@@ -53,18 +55,18 @@ export default function AdminDashboardPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight lg:text-3xl">Dashboard</h1>
+        <h1 className="text-2xl font-bold tracking-tight lg:text-3xl">{t('admin.dashboard.title')}</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Visão consolidada dos principais indicadores operacionais.
+          {t('admin.dashboard.subtitle')}
         </p>
       </div>
 
       {hasError && (
         <ErrorMessage
-          title="Erro ao carregar indicadores"
+          title={t('admin.dashboard.error.title')}
           message={getApiErrorMessage(
             usersQuery.error || booksQuery.error || loansQuery.error,
-            'Não foi possível carregar o dashboard.',
+            t('admin.dashboard.error.message'),
           )}
         />
       )}
@@ -73,30 +75,30 @@ export default function AdminDashboardPage() {
         <MetricCard
           loading={isLoading}
           icon={Users}
-          label="Usuários"
+          label={t('admin.dashboard.metric.users')}
           value={summary.totalUsers}
-          badge={`${summary.pendingUsers} pendentes`}
+          badge={t('admin.dashboard.metric.usersBadge', { count: summary.pendingUsers })}
         />
         <MetricCard
           loading={isLoading}
           icon={BookOpen}
-          label="Livros"
+          label={t('admin.dashboard.metric.books')}
           value={summary.totalBooks}
-          badge={`${summary.availableBooks} disponíveis`}
+          badge={t('admin.dashboard.metric.booksBadge', { count: summary.availableBooks })}
         />
         <MetricCard
           loading={isLoading}
           icon={Handshake}
-          label="Empréstimos"
+          label={t('admin.dashboard.metric.loans')}
           value={summary.totalLoans}
-          badge={`${summary.activeLoans} ativos`}
+          badge={t('admin.dashboard.metric.loansBadge', { count: summary.activeLoans })}
         />
         <MetricCard
           loading={isLoading}
           icon={Clock3}
-          label="Atrasos"
+          label={t('admin.dashboard.metric.overdue')}
           value={summary.overdueLoans}
-          badge="empréstimos em atraso"
+          badge={t('admin.dashboard.metric.overdueBadge')}
           danger
         />
       </div>
@@ -106,23 +108,23 @@ export default function AdminDashboardPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base font-semibold">
               <UserCheck className="size-4 text-primary" />
-              Usuários
+              {t('admin.dashboard.card.users.title')}
             </CardTitle>
             <CardDescription>
-              Controle de cadastro e perfis administrativos.
+              {t('admin.dashboard.card.users.description')}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-2 text-sm">
             <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Total de admins</span>
+              <span className="text-muted-foreground">{t('admin.dashboard.card.users.totalAdmins')}</span>
               <span className="font-semibold">{summary.admins}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Pendentes</span>
+              <span className="text-muted-foreground">{t('admin.dashboard.card.users.pending')}</span>
               <Badge variant="outline" className="font-medium">{summary.pendingUsers}</Badge>
             </div>
             <Button asChild variant="outline" className="mt-3 w-full">
-              <Link to="/admin/usuarios">Gerenciar usuários</Link>
+              <Link to="/admin/usuarios">{t('admin.dashboard.card.users.action')}</Link>
             </Button>
           </CardContent>
         </Card>
@@ -131,23 +133,23 @@ export default function AdminDashboardPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base font-semibold">
               <TrendingUp className="size-4 text-primary" />
-              Catálogo
+              {t('admin.dashboard.card.catalog.title')}
             </CardTitle>
             <CardDescription>
-              Saúde do acervo e disponibilidade de exemplares.
+              {t('admin.dashboard.card.catalog.description')}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-2 text-sm">
             <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Total de exemplares</span>
+              <span className="text-muted-foreground">{t('admin.dashboard.card.catalog.totalCopies')}</span>
               <span className="font-semibold">{summary.totalCopies}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Títulos disponíveis</span>
+              <span className="text-muted-foreground">{t('admin.dashboard.card.catalog.availableTitles')}</span>
               <Badge variant="secondary" className="font-medium">{summary.availableBooks}</Badge>
             </div>
             <Button asChild variant="outline" className="mt-3 w-full">
-              <Link to="/admin/livros">Gerenciar livros</Link>
+              <Link to="/admin/livros">{t('admin.dashboard.card.catalog.action')}</Link>
             </Button>
           </CardContent>
         </Card>
@@ -156,23 +158,23 @@ export default function AdminDashboardPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base font-semibold">
               <LibraryBig className="size-4 text-primary" />
-              Empréstimos
+              {t('admin.dashboard.card.loans.title')}
             </CardTitle>
             <CardDescription>
-              Monitoramento de operação e risco de atraso.
+              {t('admin.dashboard.card.loans.description')}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-2 text-sm">
             <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Reservas</span>
+              <span className="text-muted-foreground">{t('admin.dashboard.card.loans.reservations')}</span>
               <span className="font-semibold">{summary.reservedLoans}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Em atraso</span>
+              <span className="text-muted-foreground">{t('admin.dashboard.card.loans.overdue')}</span>
               <Badge variant="destructive" className="font-medium">{summary.overdueLoans}</Badge>
             </div>
             <Button asChild variant="outline" className="mt-3 w-full">
-              <Link to="/admin/emprestimos">Gerenciar empréstimos</Link>
+              <Link to="/admin/emprestimos">{t('admin.dashboard.card.loans.action')}</Link>
             </Button>
           </CardContent>
         </Card>

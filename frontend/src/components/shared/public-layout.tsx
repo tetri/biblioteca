@@ -2,8 +2,11 @@ import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Book, User, LogOut, ChevronDown } from "lucide-react";
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { LanguageSwitcher } from '@/components/language-switcher';
 
 export const PublicLayout = React.memo(({ children }: { children: React.ReactNode }) => {
+  const { t } = useTranslation();
   const token = localStorage.getItem('token');
   const isAuthenticated = !!token;
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -17,25 +20,27 @@ export const PublicLayout = React.memo(({ children }: { children: React.ReactNod
     <div className="min-h-screen flex flex-col selection:bg-brand-500/10">
       <header className="sticky top-0 z-50 w-full border-border mesh-card backdrop-blur-md" role="banner">
         <div className="container mx-auto px-6 max-w-5xl">
-          <nav className="flex h-16 items-center justify-between" aria-label="Navegação Principal">
-            <Link to="/" className="flex items-center space-x-2 transition-opacity hover:opacity-90" aria-label="Ir para a página inicial">
+          <nav className="flex h-16 items-center justify-between" aria-label={t('header.nav.ariaLabel')}>
+            <Link to="/" className="flex items-center space-x-2 transition-opacity hover:opacity-90" aria-label={t('header.nav.homeLinkAriaLabel')}>
               <div className="bg-primary p-1.5 rounded-lg">
                 <Book className="h-5 w-5 text-primary-foreground" />
               </div>
-              <span className="text-xl font-semibold tracking-tight">Biblioteca</span>
+              <span className="text-xl font-semibold tracking-tight">{t('header.brand')}</span>
             </Link>
             <div className="flex items-center gap-4">
               <Link to="/catalogo" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors hidden md:block mr-4">
-                Catálogo
+                {t('header.nav.catalog')}
               </Link>
+
+              <LanguageSwitcher />
 
               {!isAuthenticated ? (
                 <>
                   <Button variant="ghost" className="text-muted-foreground hover:text-foreground" asChild>
-                    <Link to="/entrar">Entrar</Link>
+                    <Link to="/entrar">{t('header.nav.login')}</Link>
                   </Button>
                   <Button className="rounded-full px-6" asChild>
-                    <Link to="/cadastro">Começar agora</Link>
+                    <Link to="/cadastro">{t('header.nav.signup')}</Link>
                   </Button>
                 </>
               ) : (
@@ -48,7 +53,7 @@ export const PublicLayout = React.memo(({ children }: { children: React.ReactNod
                     <div className="bg-primary/10 p-1.5 rounded-full">
                       <User className="h-4 w-4 text-primary" />
                     </div>
-                    <span className="text-sm font-semibold text-foreground hidden sm:inline">Minha Conta</span>
+                    <span className="text-sm font-semibold text-foreground hidden sm:inline">{t('header.nav.myAccount')}</span>
                     <ChevronDown className={`h-3 w-3 text-muted-foreground transition-transform ${showUserMenu ? 'rotate-180' : ''}`} />
                   </Button>
 
@@ -62,7 +67,7 @@ export const PublicLayout = React.memo(({ children }: { children: React.ReactNod
                           onClick={() => setShowUserMenu(false)}
                         >
                           <User className="h-4 w-4" />
-                          Ver Perfil
+                          {t('header.nav.viewProfile')}
                         </Link>
                         <Link
                           to="/catalogo"
@@ -70,7 +75,7 @@ export const PublicLayout = React.memo(({ children }: { children: React.ReactNod
                           onClick={() => setShowUserMenu(false)}
                         >
                           <Book className="h-4 w-4" />
-                          Catálogo
+                          {t('header.nav.catalogMobile')}
                         </Link>
                         <div className="my-1 border-t border-border" />
                         <button
@@ -78,7 +83,7 @@ export const PublicLayout = React.memo(({ children }: { children: React.ReactNod
                           onClick={handleLogout}
                         >
                           <LogOut className="h-4 w-4" />
-                          Sair
+                          {t('header.nav.signOut')}
                         </button>
                       </div>
                     </>
@@ -100,14 +105,14 @@ export const PublicLayout = React.memo(({ children }: { children: React.ReactNod
             <div className="flex flex-col items-center md:items-start gap-2">
               <Link to="/" className="flex items-center space-x-2 opacity-50 hover:opacity-100 transition-opacity">
                 <Book className="h-4 w-4" />
-                <span className="font-semibold">Biblioteca</span>
+                <span className="font-semibold">{t('footer.brand')}</span>
               </Link>
-              <p className="text-sm text-muted-foreground">&copy; {new Date().getFullYear()} Sistema de Biblioteca.</p>
+              <p className="text-sm text-muted-foreground">{t('footer.copyright', { year: new Date().getFullYear() })}</p>
             </div>
-            <nav className="flex flex-wrap justify-center gap-x-8 gap-y-4 text-sm font-medium text-muted-foreground" aria-label="Links Institucionais">
-              <Link to="/termos-de-uso" className="hover:text-primary transition-colors">Termos de Uso</Link>
-              <Link to="/politica-de-privacidade" className="hover:text-primary transition-colors">Privacidade</Link>
-              <Link to="/catalogo" className="hover:text-primary transition-colors">Catálogo</Link>
+            <nav className="flex flex-wrap justify-center gap-x-8 gap-y-4 text-sm font-medium text-muted-foreground" aria-label={t('footer.navAriaLabel')}>
+              <Link to="/termos-de-uso" className="hover:text-primary transition-colors">{t('footer.links.termsOfUse')}</Link>
+              <Link to="/politica-de-privacidade" className="hover:text-primary transition-colors">{t('footer.links.privacy')}</Link>
+              <Link to="/catalogo" className="hover:text-primary transition-colors">{t('footer.links.catalog')}</Link>
             </nav>
           </div>
         </div>

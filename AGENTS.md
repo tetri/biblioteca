@@ -60,7 +60,20 @@ Fonte: `services/loan-service/DOCS.md`.
 - Garantir estados de loading/erro em chamadas de API.
 - Referencia operacional do frontend: `frontend/README.md`.
 
-## 8) Execucao Local
+## 8) Internacionalizacao (i18n)
+- Framework: `i18next` + `react-i18next`.
+- Configuracao: `frontend/src/i18n/config.ts` (pt-BR default, en fallback).
+- Preferencia do usuario persistida em `localStorage('app-language')`.
+- Hook: `useLanguage()` em `frontend/src/hooks/useLanguage.ts`.
+- Componente seletor: `LanguageSwitcher` (`frontend/src/components/language-switcher.tsx`).
+- Arquivos de traducao:
+  - `frontend/src/i18n/locales/pt-BR/translation.json`
+  - `frontend/src/i18n/locales/en/translation.json`
+- Comunidade contribui via PR adicionando novos arquivos em `locales/`.
+- Backend retorna codigos de erro estruturados; frontend mapeia via i18next.
+- Uso: `const { t } = useTranslation()` em function components. Para class components, usar `import i18n from '../i18n/config'` e `i18n.t('key')`.
+
+## 9) Execucao Local
 - Subida completa: `./up.sh`.
 - Alternativa: `docker compose up -d --build`.
 - Endpoints:
@@ -68,7 +81,7 @@ Fonte: `services/loan-service/DOCS.md`.
   - Frontend: `http://localhost:3000`
   - Docs: `http://localhost:80/docs/user|catalog|loan|notification`
 
-## 9) Docker Compose (resumo)
+## 10) Docker Compose (resumo)
 - Mongo UserService: host `27017`.
 - Mongo CatalogService: host `27018`.
 - UserService: `8080`.
@@ -76,7 +89,7 @@ Fonte: `services/loan-service/DOCS.md`.
 - LoanService: `8083` (com variaveis JWT obrigatorias no compose).
 - NotificationService: `8084`.
 
-## 10) Testes e CI
+## 11) Testes e CI
 - Backend local: `dotnet test Biblioteca.sln`.
 - Frontend local: `cd frontend && npm ci && npm test`.
 - Workflow CI: `.github/workflows/dotnet-build-test.yml`, `.github/workflows/commitlint.yml`, `.github/workflows/ci-cd-pipeline.yml`.
@@ -89,14 +102,14 @@ Fonte: `services/loan-service/DOCS.md`.
   - Frontend: Node 24, build e Vitest.
 - CI lint: ESLint 10 flat config (`frontend/eslint.config.js`), `eslint-plugin-react-hooks` v7+ strict rules.
 
-## 11) Seguranca e Acesso
+## 12) Seguranca e Acesso
 - Credenciais de seed (dev):
   - Admin: `admin@biblioteca.com` / `temp123` (troca obrigatoria).
   - Demo: `demo@biblioteca.com` / `demo123`.
 - Politica de seguranca: `SECURITY.md`.
 - Nao expor segredos reais em repositorio.
 
-## 12) Area Administrativa
+## 13) Area Administrativa
 - Endpoints administrativos no UserService (requer role `Admin`):
   - `GET /user/api/users/admin` (filtros: `search`, `isApproved`, `role`)
   - `PATCH /user/api/users/admin/{userId}/approve`
@@ -111,14 +124,14 @@ Fonte: `services/loan-service/DOCS.md`.
 - A area admin usa layout com sidebar (desktop) e navegacao horizontal (mobile).
 - Usuarios novos entram como `Member` e `IsApproved = false`; sem aprovacao, o login retorna erro amigavel `403`.
 
-## 13) Fonte de Verdade
+## 14) Fonte de Verdade
 Em caso de conflito, priorizar:
 1. Codigo atual (`Program.cs`, controllers/handlers, `docker-compose.yml`, workflow CI).
 2. `README.md` (operacao e execucao).
 3. Documentos de diretriz (`GEMINI.md`, `DESIGN.md`, `DEPLOY.md`, `DOCS.md`).
 4. `WIKI.json` como mapa de onboarding.
 
-## 14) Versionamento Semantico (MinVer)
+## 15) Versionamento Semantico (MinVer)
 
 - Todos os projetos .NET herdam `Directory.Build.props` na raiz.
 - A versao e gerada automaticamente pelo **MinVer** a partir de tags git com prefixo `v`.
@@ -127,7 +140,7 @@ Em caso de conflito, priorizar:
 - Frontend (`package.json`) versionado manualmente para espelhar.
 - Politica completa em `VERSIONING.md`.
 
-## 15) Checklist de Inicio Rapido para Agentes
+## 16) Checklist de Inicio Rapido para Agentes
 1. Ler este `AGENTS.md`.
 2. Subir ambiente (`./up.sh`).
 3. Validar docs via gateway em `/docs/*`.
@@ -135,7 +148,7 @@ Em caso de conflito, priorizar:
 5. Em alteracoes de emprestimo, revisar `services/loan-service/DOCS.md`.
 6. Em alteracoes de UI, seguir `DESIGN.md`.
 
-## 15) Fontes utilizadas nesta consolidacao
+## 17) Fontes utilizadas nesta consolidacao
 - `README.md`
 - `frontend/README.md`
 - `services/loan-service/DOCS.md`
