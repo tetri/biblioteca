@@ -8,7 +8,7 @@ Este arquivo consolida a documentacao do projeto para acelerar onboarding e exec
 - Objetivos: escalabilidade, observabilidade e consistencia de design.
 
 ## 2) Stack Tecnica
-- Backend: ASP.NET Core (.NET 9), YARP, OpenAPI/Scalar.
+- Backend: ASP.NET Core (.NET 10), YARP, OpenAPI/Scalar.
 - Persistencia: MongoDB por servico.
 - Frontend: React 19, TypeScript, Vite, Tailwind CSS v4, Radix/shadcn/ui.
 - Estado de servidor: TanStack Query.
@@ -79,8 +79,13 @@ Fonte: `services/loan-service/DOCS.md`.
 ## 10) Testes e CI
 - Backend local: `dotnet test Biblioteca.sln`.
 - Frontend local: `cd frontend && npm ci && npm test`.
-- Workflow CI: `.github/workflows/dotnet-build-test.yml`.
-  - Backend: restore/build/test com .NET 9.
+- Workflow CI: `.github/workflows/dotnet-build-test.yml`, `.github/workflows/commitlint.yml`, `.github/workflows/ci-cd-pipeline.yml`.
+  - Backend: restore/build/test com .NET 10.
+  - Frontend: Node 24, build e Vitest.
+- Commit convention: Conventional Commits via commitlint (`commitlint.config.js`).
+  - Header max 72 caracteres.
+  - Scopes permitidos: `user-service`, `catalog-service`, `loan-service`, `notification-service`, `gateway`, `frontend`, `shared`, `infra`, `deps`, `docs`, `repo`, `auth`, `api`, `ui`, `admin`, `tests`.
+  - Workflow em `.github/workflows/commitlint.yml`.
   - Frontend: Node 24, build e Vitest.
 
 ## 11) Seguranca e Acesso

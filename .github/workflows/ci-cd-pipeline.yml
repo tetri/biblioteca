@@ -8,8 +8,8 @@ on:
   workflow_dispatch:
 
 env:
-  DOTNET_VERSION: '9.0.x'
-  NODE_VERSION: '22'
+  DOTNET_VERSION: '10.0.x'
+  NODE_VERSION: '24'
   DOCKER_COMPOSE_FILE: 'docker-compose.yml'
 
 permissions:
@@ -42,12 +42,12 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         fetch-depth: 0
     
     - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
     
@@ -73,7 +73,7 @@ jobs:
         echo "Code coverage reports generated"
     
     - name: Upload coverage reports
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       if: always()
       with:
         name: backend-coverage-reports
@@ -81,7 +81,7 @@ jobs:
         retention-days: 7
     
     - name: Upload test results
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       if: always()
       with:
         name: backend-test-results
@@ -98,10 +98,10 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
     
     - name: Setup Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v5
       with:
         node-version: ${{ env.NODE_VERSION }}
     
@@ -121,7 +121,7 @@ jobs:
       run: npm run build
     
     - name: Upload test coverage
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       if: always()
       with:
         name: frontend-coverage
@@ -129,7 +129,7 @@ jobs:
         retention-days: 7
     
     - name: Upload test results
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       if: always()
       with:
         name: frontend-test-results
@@ -145,7 +145,7 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
     
     - name: Setup Docker Buildx
       uses: docker/setup-buildx-action@v3
@@ -170,8 +170,7 @@ jobs:
           --platform linux/amd64 \
           ./services/catalog-service/CatalogService.Api
     
-    - name:
-      name: Build and push loan images
+    - name: Build and push loan images
       run: |
         docker buildx build --push \
           --tag yourusername/biblioteca-loan-service:latest \
@@ -192,7 +191,7 @@ jobs:
         skip-dirs: 'node_modules,.git'
     
     - name: Upload security scan results
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       if: always()
       with:
         name: security-scan-results
@@ -208,7 +207,7 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
     
     - name: Deploy to staging environment
       run: |
@@ -226,7 +225,7 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
     
     - name: Deploy to production environment
       run: |
@@ -242,15 +241,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
     
     - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
     
     - name: Setup Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v5
       with:
         node-version: ${{ env.NODE_VERSION }}
     
