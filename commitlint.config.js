@@ -7,7 +7,7 @@ module.exports = {
     "footer-max-line-length": [2, "always", 100],
     "header-max-length": [2, "always", 72],
     "scope-case": [2, "always", "lower-case"],
-    "scope-empty": [2, "never"],
+    "scope-empty": [1, "never"],
     "subject-case": [
       2,
       "never",
