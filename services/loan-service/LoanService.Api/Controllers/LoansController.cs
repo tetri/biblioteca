@@ -3,6 +3,7 @@ using LoanService.Application.Commands;
 using LoanService.Application.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using LoanService.Domain.Entities;
 using LoanService.Domain.Repositories;
 
 namespace LoanService.Api.Controllers;
