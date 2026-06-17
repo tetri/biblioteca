@@ -45,15 +45,15 @@ api.interceptors.response.use(
 export default api;
 
 export function getApiErrorMessage(error: unknown, fallbackMessage: string): string {
-  const err = error as any;
+  const err = error as { response?: { data?: { message?: string } | string }; message?: string };
   const payload = err?.response?.data;
 
   if (typeof payload === 'string' && payload.trim().length > 0) {
     return payload;
   }
 
-  if (payload?.message && typeof payload.message === 'string') {
-    return payload.message;
+  if (payload && typeof payload === 'object' && 'message' in payload && typeof (payload as Record<string, unknown>).message === 'string') {
+    return (payload as { message: string }).message;
   }
 
   if (err?.message && typeof err.message === 'string') {

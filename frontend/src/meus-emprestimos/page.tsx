@@ -45,8 +45,8 @@ const fetchUserLoans = async (): Promise<Loan[]> => {
   const booksResponse = await fetch(`/catalog/api/catalog/books`);
   const books = await booksResponse.json();
 
-  return loans.map((loan: any) => {
-    const book = books.find((b: any) => b.id === loan.bookId);
+  return loans.map((loan: Record<string, unknown>) => {
+    const book = books.find((b: Record<string, unknown>) => b.id === loan.bookId);
     return {
       ...loan,
       bookTitle: book?.title || 'Livro não encontrado',
@@ -124,11 +124,12 @@ export function MyLoansPage() {
       await queryClient.invalidateQueries({ queryKey: ['userLoans'] });
       scheduleClearMessage(setSuccessMessage, "Livro devolvido com sucesso!");
     },
-    onError: (err: any) => {
-      const errorData = err.response?.data;
+    onError: (err: Error) => {
+      const e = err as { response?: { data?: { message?: string } | string }; message?: string };
+      const errorData = e.response?.data;
       const message = typeof errorData === 'string'
           ? errorData
-          : (errorData?.message || err.message || "Erro ao devolver livro.");
+          : (errorData?.message || e.message || "Erro ao devolver livro.");
       scheduleClearMessage(setErrorMessage, message);
     }
   });

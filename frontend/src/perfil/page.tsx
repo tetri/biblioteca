@@ -74,11 +74,7 @@ export default function ProfilePage() {
     }
   });
 
-  useEffect(() => {
-    if (profile && !isNameDirty) {
-      setName(profile.name);
-    }
-  }, [profile, isNameDirty]);
+  const displayName = isNameDirty ? name : (profile?.name ?? '');
 
   const { data: loans, isLoading: isLoansLoading } = useQuery({
     queryKey: ['my-loans'],
@@ -90,7 +86,7 @@ export default function ProfilePage() {
 
   const updateMutation = useMutation({
     mutationFn: async () => {
-      return api.put('/user/api/users/me', { name, password: password || undefined });
+      return api.put('/user/api/users/me', { name: isNameDirty ? name : profile?.name, password: password || undefined });
     },
     onSuccess: async () => {
       scheduleClearMessage(setSuccessMessage, "Perfil atualizado com sucesso!");
@@ -98,7 +94,7 @@ export default function ProfilePage() {
       await queryClient.invalidateQueries({ queryKey: ['profile'] });
       setIsNameDirty(false);
     },
-    onError: (err: any) => {
+    onError: (err: Error) => {
       scheduleClearMessage(setErrorMessage, getApiErrorMessage(err, "Erro ao atualizar perfil."));
     }
   });
@@ -163,7 +159,7 @@ export default function ProfilePage() {
                       <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <Input
                         id="name-input"
-                        value={name}
+                        value={displayName}
                         onChange={(e) => {
                           setName(e.target.value);
                           setIsNameDirty(true);

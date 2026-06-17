@@ -25,12 +25,13 @@ export default function LoginPage() {
       const { data } = await api.post('/user/api/auth/login', { email, password });
 
       const payload = decodeJwtPayload(data.token);
+      const exp = payload.exp as number | undefined;
 
-      if (payload.exp && payload.exp < Math.floor(Date.now() / 1000)) {
+      if (exp && exp < Math.floor(Date.now() / 1000)) {
         throw new Error("O token de autenticação recebido já está expirado.");
       }
 
-      const role = payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+      const role = payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] as string | undefined;
 
       if (!role) {
         throw new Error("A role do usuário não foi encontrada no token.");
@@ -43,7 +44,7 @@ export default function LoginPage() {
       } else {
         navigate('/');
       }
-    } catch (err: any) {
+    } catch (err) {
       setError(getApiErrorMessage(err, 'Não foi possível realizar login. Verifique suas credenciais e tente novamente.'));
     } finally {
       setIsLoading(false);

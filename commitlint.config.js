@@ -38,6 +38,7 @@ module.exports = {
       2,
       "always",
       [
+        "ci",
         "user-service",
         "catalog-service",
         "loan-service",

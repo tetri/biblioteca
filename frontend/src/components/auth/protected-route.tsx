@@ -14,24 +14,35 @@ export const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) 
     return <Navigate to="/entrar" state={{ from: location }} replace />;
   }
 
+  let redirectTo: string | null = null;
+  let redirectState: object | null = null;
+
   try {
     const payload = decodeJwtPayload(token);
+    // eslint-disable-next-line react-hooks/purity
+    const now = Math.floor(Date.now() / 1000);
+    const exp = payload.exp as number | undefined;
 
-    // Verificar expiração
-    if (payload.exp && payload.exp < Math.floor(Date.now() / 1000)) {
+    if (exp && exp < now) {
       localStorage.removeItem('token');
-      return <Navigate to="/entrar" state={{ from: location }} replace />;
+      redirectTo = '/entrar';
+      redirectState = { from: location };
+    } else {
+      const userRole = payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] as string | undefined;
+
+      if (allowedRoles && (!userRole || !allowedRoles.includes(userRole))) {
+        redirectTo = '/';
+      }
     }
-
-    const userRole = payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
-
-    if (allowedRoles && !allowedRoles.includes(userRole)) {
-      return <Navigate to="/" replace />;
-    }
-
-    return <>{children}</>;
-  } catch (error) {
+  } catch {
     localStorage.removeItem('token');
-    return <Navigate to="/entrar" state={{ from: location }} replace />;
+    redirectTo = '/entrar';
+    redirectState = { from: location };
   }
+
+  if (redirectTo) {
+    return <Navigate to={redirectTo} state={redirectState} replace />;
+  }
+
+  return <>{children}</>;
 };

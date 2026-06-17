@@ -51,10 +51,6 @@ export function BooksPage() {
   const messageTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    setSearchTerm(queryParam);
-  }, [queryParam]);
-
-  useEffect(() => {
     return () => {
       if (messageTimeoutRef.current) clearTimeout(messageTimeoutRef.current);
     };
@@ -112,16 +108,17 @@ export function BooksPage() {
         });
         scheduleClearMessage(setSuccessMessage, "Livro reservado com sucesso!");
     },
-    onError: (err: any, bookId) => {
+    onError: (err: Error, bookId) => {
+        const e = err as { response?: { data?: { message?: string } | string }; message?: string };
         setPendingBookIds(prev => {
             const next = new Set(prev);
             next.delete(bookId);
             return next;
         });
-        const errorData = err.response?.data;
+        const errorData = e.response?.data;
         const message = typeof errorData === 'string'
             ? errorData
-            : (errorData?.message || err.message || "Erro ao reservar livro.");
+            : (errorData?.message || e.message || "Erro ao reservar livro.");
 
         scheduleClearMessage(setErrorMessage, message);
     }
@@ -153,16 +150,17 @@ export function BooksPage() {
         });
         scheduleClearMessage(setSuccessMessage, "Livro emprestado com sucesso!");
     },
-    onError: (err: any, bookId) => {
+    onError: (err: Error, bookId) => {
+        const e = err as { response?: { data?: { message?: string } | string }; message?: string };
         setPendingBookIds(prev => {
             const next = new Set(prev);
             next.delete(bookId);
             return next;
         });
-        const errorData = err.response?.data;
+        const errorData = e.response?.data;
         const message = typeof errorData === 'string'
             ? errorData
-            : (errorData?.message || err.message || "Erro ao emprestar livro.");
+            : (errorData?.message || e.message || "Erro ao emprestar livro.");
 
         scheduleClearMessage(setErrorMessage, message);
     }

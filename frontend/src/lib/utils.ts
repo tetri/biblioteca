@@ -8,7 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 /**
  * Decodifica o payload de um token JWT (Base64Url).
  */
-export function decodeJwtPayload(token: string): any {
+export function decodeJwtPayload(token: string): Record<string, unknown> {
   try {
     const base64Url = token.split('.')[1];
     if (!base64Url) {
@@ -33,6 +33,6 @@ export function decodeJwtPayload(token: string): any {
 
     return JSON.parse(jsonPayload);
   } catch (error) {
-    throw new Error("Falha ao decodificar o token de autenticação.");
+    throw new Error("Falha ao decodificar o token de autenticação.", { cause: error });
   }
 }

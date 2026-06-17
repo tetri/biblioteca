@@ -31,7 +31,7 @@ export default function RegisterPage() {
     try {
       await api.post('/user/api/auth/register', { name, email, password });
       setIsSuccess(true);
-    } catch (err: any) {
+    } catch (err) {
       setError(getApiErrorMessage(err, 'Não foi possível concluir o cadastro. Tente novamente.'));
     }
   };

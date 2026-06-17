@@ -85,11 +85,12 @@ export default function BookDetailsPage() {
     onSuccess: () => {
         scheduleClearMessage(setSuccessMessage, "Livro reservado com sucesso!", true);
     },
-    onError: (err: any) => {
-        const errorData = err.response?.data;
+    onError: (err: Error) => {
+        const e = err as { response?: { data?: { message?: string } | string }; message?: string };
+        const errorData = e.response?.data;
         const message = typeof errorData === 'string'
             ? errorData
-            : (errorData?.message || err.message || "Erro ao reservar livro.");
+            : (errorData?.message || e.message || "Erro ao reservar livro.");
 
         scheduleClearMessage(setErrorMessage, message);
     }

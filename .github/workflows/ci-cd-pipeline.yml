@@ -63,7 +63,7 @@ jobs:
     - name: Run linting
       run: |
         dotnet tool install --global dotnet-format
-        dotnet format --check --verify-no-changes
+        dotnet format style Biblioteca.sln --verify-no-changes
     
     - name: Run code analysis
       run: |

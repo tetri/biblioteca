@@ -84,9 +84,10 @@ Fonte: `services/loan-service/DOCS.md`.
   - Frontend: Node 24, build e Vitest.
 - Commit convention: Conventional Commits via commitlint (`commitlint.config.js`).
   - Header max 72 caracteres.
-  - Scopes permitidos: `user-service`, `catalog-service`, `loan-service`, `notification-service`, `gateway`, `frontend`, `shared`, `infra`, `deps`, `docs`, `repo`, `auth`, `api`, `ui`, `admin`, `tests`.
-  - Workflow em `.github/workflows/commitlint.yml`.
+  - Scopes permitidos: `ci`, `user-service`, `catalog-service`, `loan-service`, `notification-service`, `gateway`, `frontend`, `shared`, `infra`, `deps`, `docs`, `repo`, `auth`, `api`, `ui`, `admin`, `tests`.
+  - Workflow em `.github/workflows/commitlint.yml` (Node 24).
   - Frontend: Node 24, build e Vitest.
+- CI lint: ESLint 10 flat config (`frontend/eslint.config.js`), `eslint-plugin-react-hooks` v7+ strict rules.
 
 ## 11) Seguranca e Acesso
 - Credenciais de seed (dev):
