@@ -63,7 +63,7 @@ jobs:
     - name: Run linting
       run: |
         dotnet tool install --global dotnet-format
-        dotnet format --check --verify-no-formatting-changes
+        dotnet format --check --verify-no-changes
     
     - name: Run code analysis
       run: |
@@ -73,7 +73,7 @@ jobs:
         echo "Code coverage reports generated"
     
     - name: Upload coverage reports
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       if: always()
       with:
         name: backend-coverage-reports
@@ -81,7 +81,7 @@ jobs:
         retention-days: 7
     
     - name: Upload test results
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       if: always()
       with:
         name: backend-test-results
@@ -121,7 +121,7 @@ jobs:
       run: npm run build
     
     - name: Upload test coverage
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       if: always()
       with:
         name: frontend-coverage
@@ -129,7 +129,7 @@ jobs:
         retention-days: 7
     
     - name: Upload test results
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       if: always()
       with:
         name: frontend-test-results
@@ -191,7 +191,7 @@ jobs:
         skip-dirs: 'node_modules,.git'
     
     - name: Upload security scan results
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       if: always()
       with:
         name: security-scan-results
