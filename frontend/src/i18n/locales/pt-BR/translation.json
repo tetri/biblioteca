@@ -2,7 +2,9 @@
   "language": {
     "label": "Idioma",
     "pt-BR": "Português (Brasil)",
-    "en": "English"
+    "en": "English",
+    "es": "Espanhol",
+    "fr": "Francês"
   },
   "header": {
     "brand": "Biblioteca",
