@@ -6,9 +6,9 @@ public sealed class User
     public string Name { get; private set; } = string.Empty;
     public string Email { get; private set; } = string.Empty;
     public string PasswordHash { get; private set; } = string.Empty;
-    public bool IsApproved { get; private set; } = false;
+    public bool IsApproved { get; private set; }
     public string Role { get; private set; } = "Member";
-    public bool IsSetupRequired { get; private set; } = false;
+    public bool IsSetupRequired { get; private set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 

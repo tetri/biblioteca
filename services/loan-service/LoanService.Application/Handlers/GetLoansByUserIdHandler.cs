@@ -20,7 +20,8 @@ public class GetLoansByUserIdHandler : IQueryHandler<GetLoansByUserIdQuery, IEnu
 
     public async Task<IEnumerable<LoanResponseDto>> Handle(GetLoansByUserIdQuery query, CancellationToken cancellationToken = default)
     {
-        _logger.LogInformation("Fetching loans for user {UserId}", query.UserId);
+        if (_logger.IsEnabled(LogLevel.Information))
+            _logger.LogInformation("Fetching loans for user {UserId}", query.UserId);
         var loans = await _loanRepository.GetByUserIdAsync(query.UserId, cancellationToken);
         loans = Loan.UpdateOverdueStatus(loans);
 

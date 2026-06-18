@@ -1,7 +1,9 @@
 <Project>
   <PropertyGroup>
-    <!-- Treat all warnings as errors -->
+    <!-- Strict analysis: treat all warnings as errors -->
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AnalysisLevel>latest-Recommended</AnalysisLevel>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
 
     <!-- Versioning with MinVer (automatic from git tags) -->
     <MinVerDefaultPreReleaseIdentifiers>alpha.0</MinVerDefaultPreReleaseIdentifiers>

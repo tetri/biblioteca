@@ -90,10 +90,10 @@ namespace UserService.Application.Services
 
             if (!string.IsNullOrWhiteSpace(search))
             {
-                var normalizedSearch = search.Trim().ToLowerInvariant();
+                var normalizedSearch = search.Trim();
                 query = query.Where(u =>
-                    (u.Name ?? string.Empty).ToLowerInvariant().Contains(normalizedSearch) ||
-                    (u.Email ?? string.Empty).ToLowerInvariant().Contains(normalizedSearch));
+                    u.Name?.Contains(normalizedSearch, StringComparison.OrdinalIgnoreCase) == true ||
+                    u.Email?.Contains(normalizedSearch, StringComparison.OrdinalIgnoreCase) == true);
             }
 
             if (isApproved.HasValue)

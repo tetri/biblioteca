@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.Globalization;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -36,7 +37,7 @@ public class JwtProvider : IJwtProvider
             issuer: _config["Jwt:Issuer"] ?? throw new InvalidOperationException("Jwt:Issuer missing"),
             audience: _config["Jwt:Audience"] ?? throw new InvalidOperationException("Jwt:Audience missing"),
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(Convert.ToDouble(_config["Jwt:ExpirationMinutes"] ?? throw new InvalidOperationException("Jwt:ExpirationMinutes missing"))),
+            expires: DateTime.UtcNow.AddMinutes(Convert.ToDouble(_config["Jwt:ExpirationMinutes"] ?? throw new InvalidOperationException("Jwt:ExpirationMinutes missing"), CultureInfo.InvariantCulture)),
             signingCredentials: creds
         );
 

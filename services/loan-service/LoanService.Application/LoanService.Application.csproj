@@ -4,6 +4,8 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <!-- CA1848: structured logging with IsEnabled guard is sufficient; LoggerMessage delegates add complexity -->
+    <NoWarn>$(NoWarn);CA1848</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

@@ -6,6 +6,11 @@ namespace Shared.Tests.Contracts;
 
 public class LoanToCatalogContractTests
 {
+    private static readonly JsonSerializerOptions _jsonOptions = new()
+    {
+        PropertyNameCaseInsensitive = true
+    };
+
     [Fact]
     public void LoanResponseDto_ShouldBeCompatibleWith_CatalogResponseSchema()
     {
@@ -23,10 +28,7 @@ public class LoanToCatalogContractTests
         var json = JsonSerializer.Serialize(bookSchema);
 
         // Simula deserialização no LoanService
-        var deserialized = JsonSerializer.Deserialize<BookResponseDto>(json, new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true
-        });
+        var deserialized = JsonSerializer.Deserialize<BookResponseDto>(json, _jsonOptions);
 
         deserialized.Should().NotBeNull();
         deserialized!.Id.Should().Be(bookSchema.Id);
