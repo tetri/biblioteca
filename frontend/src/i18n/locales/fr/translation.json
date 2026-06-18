@@ -1,0 +1,547 @@
+{
+  "language": {
+    "label": "Langue",
+    "pt-BR": "Portugais (Brésil)",
+    "en": "English",
+    "es": "Español",
+    "fr": "Français"
+  },
+  "header": {
+    "brand": "Bibliothèque",
+    "nav": {
+      "catalog": "Catalogue",
+      "login": "Connexion",
+      "signup": "Commencer",
+      "myAccount": "Mon Compte",
+      "viewProfile": "Voir le Profil",
+      "catalogMobile": "Catalogue",
+      "signOut": "Déconnexion",
+      "ariaLabel": "Navigation Principale",
+      "homeLinkAriaLabel": "Aller à la page d'accueil"
+    }
+  },
+  "footer": {
+    "brand": "Bibliothèque",
+    "copyright": "© {{year}} Système de Bibliothèque.",
+    "links": {
+      "termsOfUse": "Conditions d'Utilisation",
+      "privacy": "Confidentialité",
+      "catalog": "Catalogue"
+    },
+    "navAriaLabel": "Liens Institutionnels"
+  },
+  "home": {
+    "hero": {
+      "title": "Votre bibliothèque personnelle,",
+      "titleHighlight": "réimaginée.",
+      "subtitle": "Explorez des milliers de titres, gérez vos emprunts et découvrez votre prochaine lecture sur une plateforme minimaliste et intuitive.",
+      "searchPlaceholder": "Titre, auteur ou ISBN...",
+      "searchAriaLabel": "Rechercher des livres dans le catalogue",
+      "searchButton": "Rechercher"
+    },
+    "features": {
+      "fast": {
+        "title": "Rapide et Fluide",
+        "description": "Réservez vos livres en quelques secondes avec notre interface optimisée pour la performance."
+      },
+      "secure": {
+        "title": "Sécurisé et Fiable",
+        "description": "Vos données et votre historique de lecture protégés par une technologie de pointe."
+      },
+      "premium": {
+        "title": "Expérience Premium",
+        "description": "Un design minimaliste axé sur l'essentiel : votre expérience de lecture."
+      }
+    },
+    "cta": {
+      "title": "Prêt à plonger dans la connaissance ?",
+      "subtitle": "Rejoignez des milliers de lecteurs et accédez à un vaste catalogue d'œuvres littéraires et techniques.",
+      "button": "Explorer le Catalogue"
+    },
+    "stats": {
+      "booksLabel": "Livres",
+      "ratingLabel": "Évaluation"
+    }
+  },
+  "login": {
+    "title": "Bon retour",
+    "subtitle": "Connectez-vous avec vos identifiants pour accéder à votre compte.",
+    "email": "E-mail",
+    "emailPlaceholder": "nom@exemple.com",
+    "password": "Mot de passe",
+    "submitText": "Se connecter",
+    "submittingText": "Connexion en cours...",
+    "error": {
+      "title": "Erreur de Connexion",
+      "defaultMessage": "Impossible de se connecter. Vérifiez vos identifiants et réessayez.",
+      "expiredToken": "Le jeton d'authentification reçu a expiré.",
+      "roleNotFound": "Le rôle de l'utilisateur n'a pas été trouvé dans le jeton."
+    },
+    "signupPrompt": "Vous n'avez pas de compte ?",
+    "signupLink": "Inscrivez-vous gratuitement",
+    "backToHome": "Retour à l'accueil"
+  },
+  "loginForm": {
+    "title": "Bon retour",
+    "subtitle": "Connectez-vous à votre compte Bibliothèque",
+    "email": "E-mail",
+    "emailPlaceholder": "votre@email.com",
+    "password": "Mot de passe",
+    "forgotPassword": "Mot de passe oublié ?",
+    "submitText": "Se connecter",
+    "signupPrompt": "Vous n'avez pas de compte ?",
+    "signupLink": "Inscrivez-vous",
+    "footer": "En continuant, vous acceptez nos <a href=\"/termos-de-uso\">Conditions d'Utilisation</a> et notre <a href=\"/politica-de-privacidade\">Politique de Confidentialité</a>.",
+    "termsLink": "Conditions d'Utilisation",
+    "privacyLink": "Politique de Confidentialité"
+  },
+  "register": {
+    "success": {
+      "title": "Inscription Réussie !",
+      "message": "Votre compte a été créé avec succès. Attendez l'approbation de l'administrateur pour commencer à utiliser le système.",
+      "redirecting": "Redirection vers la connexion dans un instant..."
+    },
+    "form": {
+      "title": "Créer votre compte",
+      "subtitle": "Rejoignez notre communauté de lecteurs dès aujourd'hui.",
+      "fullName": "Nom complet",
+      "fullNamePlaceholder": "Ex: Jean Dupont",
+      "email": "E-mail professionnel ou personnel",
+      "emailPlaceholder": "nom@exemple.com",
+      "password": "Mot de passe",
+      "passwordPlaceholder": "Minimum 8 caractères",
+      "submit": "Créer un Compte"
+    },
+    "error": {
+      "title": "Erreur d'Inscription",
+      "defaultMessage": "Impossible de finaliser l'inscription. Réessayez."
+    },
+    "loginPrompt": "Vous avez déjà un compte ?",
+    "loginLink": "Se connecter",
+    "termsAgreement": "En vous inscrivant, vous acceptez nos",
+    "termsLink": "Conditions d'Utilisation",
+    "privacyLink": "Politique de Confidentialité",
+    "backToHome": "Retour à l'accueil"
+  },
+  "catalog": {
+    "title": "Catalogue de Livres",
+    "subtitle": "Explorez notre collection et réservez vos prochaines lectures.",
+    "searchPlaceholder": "Rechercher par titre, auteur, ISBN ou catégorie...",
+    "filters": {
+      "button": "Filtres",
+      "title": "Filtres Détaillés",
+      "categoryLabel": "Catégorie",
+      "categoryAll": "Toutes les catégories",
+      "authorLabel": "Auteur",
+      "authorAll": "Tous les auteurs",
+      "clear": "Effacer les filtres"
+    },
+    "empty": {
+      "title": "Aucun livre trouvé",
+      "message": "Essayez d'ajuster vos termes de recherche ou vos filtres.",
+      "clearAll": "Effacer tous les filtres"
+    },
+    "book": {
+      "viewDetailsAriaLabel": "Voir les détails de {{title}}",
+      "available": "{{count}} disponibles",
+      "available_plural": "{{count}} disponible",
+      "unavailable": "Indisponible",
+      "borrowButton": "Emprunter",
+      "reserveButton": "Réserver",
+      "processing": "Traitement en cours..."
+    },
+    "success": {
+      "reserve": "Livre réservé avec succès !",
+      "borrow": "Livre emprunté avec succès !"
+    },
+    "error": {
+      "reserveTitle": "Erreur de Réservation",
+      "reserveDefault": "Erreur lors de la réservation du livre.",
+      "borrowDefault": "Erreur lors de l'emprunt du livre.",
+      "loadTitle": "Erreur lors du chargement du catalogue",
+      "loadMessage": "Impossible d'obtenir les livres. Nos ingénieurs ont déjà été notifiés."
+    },
+    "mutation": {
+      "needLogin": "Vous devez être connecté pour réserver un livre.",
+      "needLoginBorrow": "Vous devez être connecté pour emprunter un livre.",
+      "invalidToken": "Jeton invalide : SID introuvable."
+    }
+  },
+  "bookDetails": {
+    "back": "Retour",
+    "backToCatalog": "Retour au catalogue",
+    "noCover": "Aucune couverture disponible",
+    "statusCard": {
+      "title": "Statut de Disponibilité",
+      "available": "Disponibles",
+      "total": "Total de {{count}} exemplaires dans la collection"
+    },
+    "metadata": {
+      "isbn": "ISBN",
+      "category": "Catégorie"
+    },
+    "about": {
+      "title": "À propos de ce livre",
+      "description": "Cet exemplaire fait partie de la collection permanente de notre bibliothèque. Actuellement classé sous la catégorie {{category}}, c'est l'un des titres les plus recherchés par nos lecteurs. Pour garantir la démocratisation de l'accès, la période standard de prêt est de 14 jours après le retrait."
+    },
+    "reserveButton": "Réserver maintenant",
+    "reserveProcessing": "Traitement de la réservation...",
+    "reserveHint": "La réservation garantit votre priorité dans la file d'attente pendant 24 heures.",
+    "success": {
+      "reserve": "Livre réservé avec succès !"
+    },
+    "error": {
+      "title": "Erreur de Réservation",
+      "default": "Erreur lors de la réservation du livre.",
+      "loadTitle": "Erreur lors du chargement des détails",
+      "loadMessage": "Impossible d'obtenir les informations du livre. Vérifiez que l'ID est correct."
+    },
+    "mutation": {
+      "needLogin": "Vous devez être connecté pour réserver un livre.",
+      "invalidToken": "Jeton invalide : SID introuvable."
+    }
+  },
+  "myLoans": {
+    "title": "Mes Emprunts",
+    "subtitle": "Suivez vos emprunts actifs et réservations.",
+    "empty": {
+      "title": "Vous n'avez pas d'emprunts actifs",
+      "message": "Commencez par réserver ou emprunter des livres !",
+      "exploreButton": "Explorer le Catalogue"
+    },
+    "error": {
+      "title": "Erreur",
+      "loadTitle": "Erreur lors du chargement des emprunts",
+      "loadMessage": "Impossible d'obtenir vos emprunts. Nos ingénieurs ont déjà été notifiés.",
+      "retry": "Réessayer",
+      "returnDefault": "Erreur lors du retour du livre."
+    },
+    "success": {
+      "returned": "Livre retourné avec succès !"
+    },
+    "status": {
+      "active": "Actif",
+      "overdue": "En retard",
+      "reserved": "Réservé",
+      "returned": "Retourné"
+    },
+    "loan": {
+      "overdueWarning": "Emprunt en retard",
+      "borrowedOn": "Emprunté le : {{date}}",
+      "dueDate": "Échéance : {{date}}",
+      "returnedOn": "Retourné le : {{date}}"
+    },
+    "book": {
+      "notFound": "Livre introuvable",
+      "authorUnknown": "Auteur inconnu",
+      "categoryUnknown": "Catégorie inconnue"
+    },
+    "button": {
+      "return": "Retourner",
+      "convertToLoan": "Convertir en Prêt",
+      "processing": "Traitement..."
+    },
+    "mutation": {
+      "needLogin": "Vous devez être connecté.",
+      "invalidToken": "Jeton invalide : SID introuvable."
+    }
+  },
+  "profile": {
+    "title": "Mon Profil",
+    "subtitle": "Gérez votre compte et suivez vos emprunts.",
+    "logoutButton": "Déconnexion",
+    "success": {
+      "update": "Profil mis à jour avec succès !"
+    },
+    "error": {
+      "title": "Erreur",
+      "defaultUpdate": "Erreur lors de la mise à jour du profil."
+    },
+    "personalData": {
+      "title": "Données Personnelles",
+      "fullName": "Nom Complet",
+      "email": "E-mail",
+      "newPassword": "Nouveau Mot de Passe",
+      "passwordPlaceholder": "Laissez vide pour conserver",
+      "updateButton": "Mettre à jour le Profil",
+      "saving": "Enregistrement..."
+    },
+    "loans": {
+      "title": "Mes Emprunts et Réservations",
+      "loanId": "Livre ID : {{id}}...",
+      "pickupDate": "Retrait le : {{date}}",
+      "returnDate": "Retour le : {{date}}",
+      "empty": {
+        "title": "Aucun enregistrement trouvé",
+        "message": "Vous n'avez encore effectué aucun emprunt ou réservation.",
+        "exploreButton": "Explorer le Catalogue"
+      }
+    }
+  },
+  "errorBoundary": {
+    "title": "Quelque chose s'est mal passé",
+    "message": "Une erreur inattendue s'est produite dans l'interface. Nous travaillons à la résoudre !"
+  },
+  "notFound": {
+    "title": "404",
+    "message": "Page non trouvée.",
+    "backButton": "Retour à l'Accueil"
+  },
+  "privacy": {
+    "title": "Politique de Confidentialité",
+    "lastUpdated": "Dernière mise à jour : Février 2024",
+    "section1": {
+      "title": "1. Collecte d'Informations",
+      "quote": "\"Votre vie privée est notre priorité absolue. Nous ne collectons que l'essentiel pour offrir la meilleure expérience.\"",
+      "body": "Nous collectons les informations que vous nous fournissez directement lors de la création d'un compte, comme votre nom, votre adresse e-mail et votre mot de passe. De plus, nous enregistrons des données sur vos interactions avec le catalogue, comme les livres réservés, les dates d'échéance et l'historique de lecture."
+    },
+    "section2": {
+      "title": "2. Utilisation et Stockage",
+      "intro": "Les données collectées sont utilisées exclusivement pour :",
+      "item1": "Garantir l'intégrité du processus de prêt de livres ;",
+      "item2": "Vous notifier des dates d'échéance et de la disponibilité des titres ;",
+      "item3": "Améliorer les recommandations de lecture et l'interface du système ;",
+      "item4": "Respecter les obligations légales et administratives de l'institution.",
+      "closing": "Nous utilisons un chiffrement de pointe et des protocoles de sécurité rigoureux pour garantir que vos données restent protégées contre les accès non autorisés."
+    },
+    "section3": {
+      "title": "3. Partage",
+      "body": "Nous ne vendons ni ne louons vos données personnelles à des tiers. Le partage d'informations se fait uniquement avec des prestataires de services essentiels au fonctionnement de la plateforme (ex : services de messagerie transactionnelle) et sous stricte confidentialité."
+    },
+    "section4": {
+      "title": "4. Vos Droits",
+      "body": "Vous avez le droit d'accéder, de corriger ou de supprimer vos données personnelles à tout moment via les paramètres de votre compte. Pour une suppression complète des données, contactez l'administrateur de la bibliothèque."
+    },
+    "footer": {
+      "question": "Des questions sur notre politique ?",
+      "contactLink": "Contactez notre DPO",
+      "email": "privacidad@biblioteca.com"
+    }
+  },
+  "terms": {
+    "title": "Conditions d'Utilisation",
+    "subtitle": "Directives pour une coexistence harmonieuse sur notre plateforme.",
+    "section1": {
+      "title": "1. Acceptation des Conditions",
+      "body": "En accédant et en utilisant le Système de Bibliothèque, vous acceptez de vous conformer aux présentes conditions générales. Ce système est destiné exclusivement à des fins éducatives et de gestion de collection."
+    },
+    "section2": {
+      "title": "2. Responsabilités de l'Utilisateur",
+      "intro": "En tant qu'utilisateur de la bibliothèque, vous vous engagez à :",
+      "item1": "Veiller à l'intégrité physique des livres empruntés.",
+      "item2": "Respecter rigoureusement les délais de retour établis.",
+      "item3": "Ne pas partager vos identifiants de connexion avec des tiers."
+    },
+    "section3": {
+      "title": "3. Sanctions",
+      "intro": "Le non-respect des conditions peut entraîner :",
+      "penalty1": {
+        "title": "Suspension Temporaire",
+        "description": "Impossibilité d'effectuer de nouvelles réservations pour une période déterminée."
+      },
+      "penalty2": {
+        "title": "Amendes Administratives",
+        "description": "Conformément au règlement intérieur de l'institution."
+      }
+    },
+    "section4": {
+      "title": "4. Modifications",
+      "body": "Nous nous réservons le droit de modifier ces conditions à tout moment. Nous informerons les utilisateurs des changements importants par e-mail ou par des alertes dans le système."
+    },
+    "footer": "En continuant à utiliser le système, vous déclarez avoir pris connaissance et accepter toutes les directives ci-dessus."
+  },
+  "admin": {
+    "layout": {
+      "brandLabel": "Admin",
+      "brand": "Bibliothèque",
+      "sidebarNav": {
+        "dashboard": "Tableau de bord",
+        "users": "Utilisateurs",
+        "books": "Livres",
+        "loans": "Emprunts"
+      },
+      "signOut": "Déconnexion",
+      "headerBadge": "Admin",
+      "signOutTitle": "Quitter"
+    },
+    "dashboard": {
+      "title": "Tableau de bord",
+      "subtitle": "Vue consolidée des principaux indicateurs opérationnels.",
+      "error": {
+        "title": "Erreur lors du chargement des indicateurs",
+        "message": "Impossible de charger le tableau de bord."
+      },
+      "metric": {
+        "users": "Utilisateurs",
+        "usersBadge": "{{count}} en attente",
+        "books": "Livres",
+        "booksBadge": "{{count}} disponibles",
+        "loans": "Emprunts",
+        "loansBadge": "{{count}} actifs",
+        "overdue": "Retards",
+        "overdueBadge": "emprunts en retard"
+      },
+      "card": {
+        "users": {
+          "title": "Utilisateurs",
+          "description": "Gestion des inscriptions et des profils administratifs.",
+          "totalAdmins": "Total d'admins",
+          "pending": "En attente",
+          "action": "Gérer les utilisateurs"
+        },
+        "catalog": {
+          "title": "Catalogue",
+          "description": "Santé de la collection et disponibilité des exemplaires.",
+          "totalCopies": "Total d'exemplaires",
+          "availableTitles": "Titres disponibles",
+          "action": "Gérer les livres"
+        },
+        "loans": {
+          "title": "Emprunts",
+          "description": "Suivi des opérations et risque de retard.",
+          "reservations": "Réservations",
+          "overdue": "En retard",
+          "action": "Gérer les emprunts"
+        }
+      }
+    },
+    "users": {
+      "title": "Utilisateurs",
+      "subtitle": "Approuvez les inscriptions et contrôlez les rôles administratifs.",
+      "error": {
+        "title": "Erreur"
+      },
+      "success": {
+        "approved": "Utilisateur approuvé avec succès.",
+        "roleUpdated": "Profil d'accès mis à jour avec succès."
+      },
+      "errorMessages": {
+        "approve": "Impossible d'approuver l'utilisateur.",
+        "updateRole": "Impossible de mettre à jour le profil."
+      },
+      "stats": {
+        "total": "Total",
+        "approved": "Approuvés",
+        "pending": "En attente"
+      },
+      "searchPlaceholder": "Rechercher par nom ou e-mail",
+      "filter": {
+        "approval": "Approbation",
+        "all": "Tous",
+        "approved": "Approuvés",
+        "pending": "En attente",
+        "role": "Rôle",
+        "members": "Membres",
+        "admins": "Admins"
+      },
+      "table": {
+        "title": "Utilisateurs inscrits",
+        "description": "Gérez l'approbation et le profil d'accès.",
+        "empty": "Aucun utilisateur trouvé pour les filtres appliqués.",
+        "header": {
+          "user": "Utilisateur",
+          "email": "E-mail",
+          "status": "Statut",
+          "role": "Rôle",
+          "actions": "Actions"
+        },
+        "status": {
+          "approved": "Approuvé",
+          "pending": "En attente"
+        },
+        "action": {
+          "approve": "Approuver",
+          "make": "Rendre {{role}}"
+        }
+      }
+    },
+    "books": {
+      "title": "Livres",
+      "subtitle": "Enregistrez et maintenez la collection à jour.",
+      "addButton": "Nouveau livre",
+      "success": {
+        "created": "Livre créé avec succès.",
+        "deleted": "Livre supprimé avec succès."
+      },
+      "error": {
+        "create": "Impossible de créer le livre.",
+        "delete": "Impossible de supprimer le livre.",
+        "title": "Erreur"
+      },
+      "dialog": {
+        "title": "Nouveau livre",
+        "description": "Remplissez les champs pour ajouter un nouveau titre au catalogue.",
+        "titleField": "Titre",
+        "titlePlaceholder": "Titre",
+        "authorField": "Auteur",
+        "authorPlaceholder": "Auteur",
+        "isbnField": "ISBN",
+        "isbnPlaceholder": "ISBN",
+        "categoryField": "Catégorie",
+        "categoryPlaceholder": "Catégorie",
+        "availableCopiesField": "Exemplaires disponibles",
+        "totalCopiesField": "Total d'exemplaires",
+        "cancel": "Annuler",
+        "submit": "Ajouter le livre",
+        "creating": "Création..."
+      },
+      "stats": {
+        "titles": "Titres",
+        "available": "Disponibles",
+        "copies": "Exemplaires"
+      },
+      "table": {
+        "title": "Collection actuelle",
+        "description": "Visualisez et supprimez des enregistrements si nécessaire.",
+        "empty": "Aucun livre enregistré.",
+        "header": {
+          "title": "Titre",
+          "author": "Auteur",
+          "category": "Catégorie",
+          "copies": "Exemplaires",
+          "available": "Disponible",
+          "action": "Action"
+        }
+      }
+    },
+    "loans": {
+      "title": "Emprunts",
+      "subtitle": "Suivez les réservations, les emprunts actifs et les situations de retard.",
+      "refreshButton": "Actualiser",
+      "error": {
+        "title": "Erreur",
+        "message": "Impossible de charger les emprunts."
+      },
+      "stats": {
+        "total": "Total",
+        "active": "Actifs",
+        "reservations": "Réservations",
+        "overdue": "En retard"
+      },
+      "tabs": {
+        "all": "Tous",
+        "active": "Actifs",
+        "reserved": "Réservations",
+        "overdue": "En retard",
+        "returned": "Retournés"
+      },
+      "table": {
+        "empty": "Aucun emprunt trouvé.",
+        "header": {
+          "id": "ID",
+          "user": "Utilisateur",
+          "book": "Livre",
+          "loanDate": "Date d'emprunt",
+          "dueDate": "Échéance",
+          "status": "Statut"
+        }
+      },
+      "status": {
+        "active": "Actif",
+        "reserved": "Réservé",
+        "returned": "Retourné",
+        "overdue": "En retard"
+      }
+    }
+  }
+}
