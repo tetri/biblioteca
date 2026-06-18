@@ -54,7 +54,8 @@ module.exports = {
         "api",
         "ui",
         "admin",
-        "tests"
+        "tests",
+        "i18n"
       ]
     ]
   },
