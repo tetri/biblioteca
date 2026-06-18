@@ -1,5 +1,8 @@
 <Project>
   <PropertyGroup>
+    <!-- Treat all warnings as errors -->
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+
     <!-- Versioning with MinVer (automatic from git tags) -->
     <MinVerDefaultPreReleaseIdentifiers>alpha.0</MinVerDefaultPreReleaseIdentifiers>
     <MinVerTagPrefix>v</MinVerTagPrefix>
