@@ -16,8 +16,10 @@
       "viewProfile": "Ver Perfil",
       "catalogMobile": "Catálogo",
       "signOut": "Sair",
+      "skipToContent": "Pular para o conteúdo",
       "ariaLabel": "Navegação Principal",
-      "homeLinkAriaLabel": "Ir para a página inicial"
+      "homeLinkAriaLabel": "Ir para a página inicial",
+      "skipToContent": "Pular para o conteúdo"
     }
   },
   "footer": {
@@ -81,20 +83,7 @@
     "signupLink": "Cadastre-se gratuitamente",
     "backToHome": "Voltar para o início"
   },
-  "loginForm": {
-    "title": "Bem-vindo de volta",
-    "subtitle": "Faça login na sua conta da Biblioteca",
-    "email": "E-mail",
-    "emailPlaceholder": "seu@email.com",
-    "password": "Senha",
-    "forgotPassword": "Esqueceu sua senha?",
-    "submitText": "Entrar",
-    "signupPrompt": "Não possui uma conta?",
-    "signupLink": "Cadastre-se",
-    "footer": "Ao prosseguir, você concorda com nossos <a href=\"/termos-de-uso\">Termos de Uso</a> e <a href=\"/politica-de-privacidade\">Política de Privacidade</a>.",
-    "termsLink": "Termos de Uso",
-    "privacyLink": "Política de Privacidade"
-  },
+
   "register": {
     "success": {
       "title": "Cadastro Realizado!",
@@ -110,7 +99,8 @@
       "emailPlaceholder": "nome@exemplo.com",
       "password": "Senha",
       "passwordPlaceholder": "Mínimo 8 caracteres",
-      "submit": "Criar Conta"
+      "submit": "Criar Conta",
+      "submitting": "Criando..."
     },
     "error": {
       "title": "Erro de Cadastro",
@@ -127,6 +117,7 @@
     "title": "Catálogo de Livros",
     "subtitle": "Explore nossa coleção e reserve suas próximas leituras.",
     "searchPlaceholder": "Pesquisar por título, autor, ISBN ou categoria...",
+    "searchClearAriaLabel": "Limpar busca",
     "filters": {
       "button": "Filtros",
       "title": "Filtros Detalhados",
@@ -280,7 +271,9 @@
   },
   "errorBoundary": {
     "title": "Algo deu errado",
-    "message": "Ocorreu um erro inesperado na interface. Estamos trabalhando para resolver!"
+    "message": "Ocorreu um erro inesperado na interface. Estamos trabalhando para resolver!",
+    "reload": "Recarregar página",
+    "goHome": "Voltar ao início"
   },
   "notFound": {
     "title": "404",
@@ -362,7 +355,11 @@
       },
       "signOut": "Sair",
       "headerBadge": "Admin",
-      "signOutTitle": "Sair"
+      "signOutTitle": "Sair",
+      "closeSidebar": "Fechar menu",
+      "openSidebar": "Abrir menu",
+      "closeSidebar": "Fechar menu",
+      "openSidebar": "Abrir menu"
     },
     "dashboard": {
       "title": "Dashboard",
@@ -415,6 +412,7 @@
         "approved": "Usuário aprovado com sucesso.",
         "roleUpdated": "Perfil de acesso atualizado com sucesso."
       },
+      "confirmRoleChange": "Tem certeza que deseja alterar o papel deste usuário?",
       "errorMessages": {
         "approve": "Não foi possível aprovar o usuário.",
         "updateRole": "Não foi possível atualizar o perfil."
@@ -500,7 +498,8 @@
           "category": "Categoria",
           "copies": "Cópias",
           "available": "Disponível",
-          "action": "Ação"
+          "action": "Ação",
+          "deleteAriaLabel": "Remover livro"
         }
       }
     },
@@ -523,7 +522,8 @@
         "active": "Ativos",
         "reserved": "Reservas",
         "overdue": "Atrasados",
-        "returned": "Devolvidos"
+        "returned": "Devolvidos",
+        "ariaLabel": "Filtrar por status"
       },
       "table": {
         "empty": "Nenhum empréstimo encontrado.",

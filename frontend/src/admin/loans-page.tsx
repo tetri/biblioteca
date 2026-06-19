@@ -90,7 +90,7 @@ export default function AdminLoansPage() {
       <Card>
         <CardHeader className="pb-0">
           <Tabs value={statusTab} onValueChange={setStatusTab}>
-            <TabsList>
+            <TabsList aria-label={t('admin.loans.tabs.ariaLabel')}>
               {statusTabs.map((tab) => (
                 <TabsTrigger key={tab.value} value={tab.value}>
                   {tab.label}
@@ -112,7 +112,7 @@ export default function AdminLoansPage() {
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <Table>
+              <Table aria-label={t('admin.loans.title')}>
                 <TableHeader>
                   <TableRow>
                     <TableHead>{t('admin.loans.table.header.id')}</TableHead>

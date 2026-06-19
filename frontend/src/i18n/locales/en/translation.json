@@ -16,8 +16,10 @@
       "viewProfile": "View Profile",
       "catalogMobile": "Catalog",
       "signOut": "Sign Out",
+      "skipToContent": "Skip to content",
       "ariaLabel": "Main Navigation",
-      "homeLinkAriaLabel": "Go to home page"
+      "homeLinkAriaLabel": "Go to home page",
+      "skipToContent": "Skip to content"
     }
   },
   "footer": {
@@ -81,20 +83,7 @@
     "signupLink": "Sign up for free",
     "backToHome": "Back to home"
   },
-  "loginForm": {
-    "title": "Welcome back",
-    "subtitle": "Log in to your Library account",
-    "email": "Email",
-    "emailPlaceholder": "your@email.com",
-    "password": "Password",
-    "forgotPassword": "Forgot your password?",
-    "submitText": "Sign In",
-    "signupPrompt": "Don't have an account?",
-    "signupLink": "Sign Up",
-    "footer": "By proceeding, you agree to our <a href=\"/termos-de-uso\">Terms of Use</a> and <a href=\"/politica-de-privacidade\">Privacy Policy</a>.",
-    "termsLink": "Terms of Use",
-    "privacyLink": "Privacy Policy"
-  },
+
   "register": {
     "success": {
       "title": "Registration Complete!",
@@ -110,7 +99,8 @@
       "emailPlaceholder": "name@example.com",
       "password": "Password",
       "passwordPlaceholder": "Minimum 8 characters",
-      "submit": "Create Account"
+      "submit": "Create Account",
+      "submitting": "Creating..."
     },
     "error": {
       "title": "Registration Error",
@@ -127,6 +117,7 @@
     "title": "Book Catalog",
     "subtitle": "Explore our collection and reserve your next reads.",
     "searchPlaceholder": "Search by title, author, ISBN or category...",
+    "searchClearAriaLabel": "Clear search",
     "filters": {
       "button": "Filters",
       "title": "Detailed Filters",
@@ -280,7 +271,9 @@
   },
   "errorBoundary": {
     "title": "Something went wrong",
-    "message": "An unexpected error occurred in the interface. We are working to fix it!"
+    "message": "An unexpected error occurred in the interface. We are working to fix it!",
+    "reload": "Reload page",
+    "goHome": "Go to homepage"
   },
   "notFound": {
     "title": "404",
@@ -362,7 +355,11 @@
       },
       "signOut": "Sign Out",
       "headerBadge": "Admin",
-      "signOutTitle": "Sign Out"
+      "signOutTitle": "Sign Out",
+      "closeSidebar": "Close menu",
+      "openSidebar": "Open menu",
+      "closeSidebar": "Close menu",
+      "openSidebar": "Open menu"
     },
     "dashboard": {
       "title": "Dashboard",
@@ -415,6 +412,7 @@
         "approved": "User approved successfully.",
         "roleUpdated": "Access profile updated successfully."
       },
+      "confirmRoleChange": "Are you sure you want to change this user's role?",
       "errorMessages": {
         "approve": "Unable to approve user.",
         "updateRole": "Unable to update profile."
@@ -500,7 +498,8 @@
           "category": "Category",
           "copies": "Copies",
           "available": "Available",
-          "action": "Action"
+          "action": "Action",
+          "deleteAriaLabel": "Remove book"
         }
       }
     },
@@ -523,7 +522,8 @@
         "active": "Active",
         "reserved": "Reservations",
         "overdue": "Overdue",
-        "returned": "Returned"
+        "returned": "Returned",
+        "ariaLabel": "Filter by status"
       },
       "table": {
         "empty": "No loans found.",

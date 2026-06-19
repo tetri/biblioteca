@@ -96,7 +96,7 @@ export default function AdminUsersPage() {
 
       {error && <ErrorMessage title={t('admin.users.error.title')} message={error} />}
       {success && (
-        <div className="rounded-lg border border-border bg-accent px-4 py-3 text-sm font-medium text-accent-foreground">
+        <div role="status" aria-live="polite" className="rounded-lg border border-border bg-accent px-4 py-3 text-sm font-medium text-accent-foreground">
           {success}
         </div>
       )}
@@ -134,6 +134,7 @@ export default function AdminUsersPage() {
             <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               placeholder={t('admin.users.searchPlaceholder')}
+              aria-label={t('admin.users.searchPlaceholder')}
               className="pl-9"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -141,7 +142,7 @@ export default function AdminUsersPage() {
           </div>
           <div className="flex items-center gap-2">
             <Select value={approvalFilter} onValueChange={setApprovalFilter}>
-              <SelectTrigger className="w-[130px]">
+              <SelectTrigger className="w-[130px]" aria-label={t('admin.users.filter.approval')}>
                 <SelectValue placeholder={t('admin.users.filter.approval')} />
               </SelectTrigger>
               <SelectContent>
@@ -151,7 +152,7 @@ export default function AdminUsersPage() {
               </SelectContent>
             </Select>
             <Select value={roleFilter} onValueChange={setRoleFilter}>
-              <SelectTrigger className="w-[130px]">
+              <SelectTrigger className="w-[130px]" aria-label={t('admin.users.filter.role')}>
                 <SelectValue placeholder={t('admin.users.filter.role')} />
               </SelectTrigger>
               <SelectContent>
@@ -160,7 +161,7 @@ export default function AdminUsersPage() {
                 <SelectItem value="Admin">{t('admin.users.filter.admins')}</SelectItem>
               </SelectContent>
             </Select>
-            <Button variant="outline" size="icon" onClick={() => refetch()} disabled={isFetching}>
+            <Button variant="outline" size="icon" aria-label="Refresh" aria-busy={isFetching} onClick={() => refetch()} disabled={isFetching}>
               <RefreshCw className={`size-4 ${isFetching ? 'animate-spin' : ''}`} />
             </Button>
           </div>
@@ -185,7 +186,7 @@ export default function AdminUsersPage() {
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <Table>
+              <Table aria-label={t('admin.users.table.title')}>
                 <TableHeader>
                   <TableRow>
                     <TableHead>{t('admin.users.table.header.user')}</TableHead>
@@ -251,8 +252,10 @@ export default function AdminUsersPage() {
                               size="sm"
                               variant="outline"
                               onClick={() => {
-                                setSuccess(null);
-                                roleMutation.mutate({ userId: user.id, role: changingRoleTo });
+                                if (window.confirm(t('admin.users.confirmRoleChange', 'Tem certeza que deseja alterar o papel deste usuário?'))) {
+                                  setSuccess(null);
+                                  roleMutation.mutate({ userId: user.id, role: changingRoleTo });
+                                }
                               }}
                               disabled={isBusy}
                             >

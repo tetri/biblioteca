@@ -18,6 +18,12 @@ export const PublicLayout = React.memo(({ children }: { children: React.ReactNod
 
   return (
     <div className="min-h-screen flex flex-col selection:bg-brand-500/10">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground focus:outline-none"
+      >
+        {t('header.nav.skipToContent', 'Pular para o conteúdo')}
+      </a>
       <header className="sticky top-0 z-50 w-full border-border mesh-card backdrop-blur-md" role="banner">
         <div className="container mx-auto px-6 max-w-5xl">
           <nav className="flex h-16 items-center justify-between" aria-label={t('header.nav.ariaLabel')}>
@@ -49,6 +55,8 @@ export const PublicLayout = React.memo(({ children }: { children: React.ReactNod
                     variant="ghost"
                     className="flex items-center gap-2 rounded-full pl-2 pr-4 hover:bg-accent"
                     onClick={() => setShowUserMenu(!showUserMenu)}
+                    aria-expanded={showUserMenu}
+                    aria-haspopup="true"
                   >
                     <div className="bg-primary/10 p-1.5 rounded-full">
                       <User className="h-4 w-4 text-primary" />
@@ -81,6 +89,7 @@ export const PublicLayout = React.memo(({ children }: { children: React.ReactNod
                         <button
                           className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-destructive hover:bg-destructive/10 transition-colors"
                           onClick={handleLogout}
+                          aria-label={t('header.nav.signOut')}
                         >
                           <LogOut className="h-4 w-4" />
                           {t('header.nav.signOut')}

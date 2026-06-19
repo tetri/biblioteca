@@ -16,6 +16,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -30,11 +31,14 @@ export default function RegisterPage() {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
     try {
       await api.post('/user/api/auth/register', { name, email, password });
       setIsSuccess(true);
     } catch (err) {
       setError(getApiErrorMessage(err, t('register.error.defaultMessage')));
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -43,7 +47,7 @@ export default function RegisterPage() {
       <PublicLayout>
         <div className="min-h-[calc(100vh-8rem)] flex items-center justify-center px-4">
           <div className="w-full max-w-[420px] text-center">
-            <div className="inline-flex items-center justify-center p-4 bg-emerald-100 text-emerald-600 rounded-full mb-6">
+            <div className="inline-flex items-center justify-center p-4 bg-emerald-100 text-emerald-700 rounded-full mb-6">
               <CheckCircle2 className="h-12 w-12" />
             </div>
             <h1 className="text-3xl font-bold mb-4">{t('register.success.title')}</h1>
@@ -109,8 +113,8 @@ export default function RegisterPage() {
                     required
                   />
                 </div>
-                <Button type="submit" className="w-full py-6 rounded-lg text-base font-semibold">
-                  {t('register.form.submit')}
+                <Button type="submit" className="w-full py-6 rounded-lg text-base font-semibold" disabled={isSubmitting}>
+                  {isSubmitting ? t('register.form.submitting') : t('register.form.submit')}
                 </Button>
               </form>
 

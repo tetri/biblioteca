@@ -55,21 +55,21 @@ export default function HomePage() {
               <div className="p-4 bg-primary/10 rounded-2xl text-primary">
                 <Zap className="h-8 w-8" />
               </div>
-              <h3 className="text-xl font-semibold">{t('home.features.fast.title')}</h3>
+              <h2 className="text-xl font-semibold">{t('home.features.fast.title')}</h2>
               <p className="text-muted-foreground">{t('home.features.fast.description')}</p>
             </div>
             <div className="flex flex-col items-center text-center space-y-4">
               <div className="p-4 bg-primary/10 rounded-2xl text-primary">
                 <Shield className="h-8 w-8" />
               </div>
-              <h3 className="text-xl font-semibold">{t('home.features.secure.title')}</h3>
+              <h2 className="text-xl font-semibold">{t('home.features.secure.title')}</h2>
               <p className="text-muted-foreground">{t('home.features.secure.description')}</p>
             </div>
             <div className="flex flex-col items-center text-center space-y-4">
               <div className="p-4 bg-primary/10 rounded-2xl text-primary">
                 <Star className="h-8 w-8" />
               </div>
-              <h3 className="text-xl font-semibold">{t('home.features.premium.title')}</h3>
+              <h2 className="text-xl font-semibold">{t('home.features.premium.title')}</h2>
               <p className="text-muted-foreground">{t('home.features.premium.description')}</p>
             </div>
           </div>
@@ -91,14 +91,14 @@ export default function HomePage() {
               </Button>
             </div>
             <div className="grid grid-cols-2 gap-4 w-full max-w-md">
-              <Card className="rounded-2xl border-border shadow-sm rotate-3 mesh-card">
+              <Card className="rounded-2xl border-border shadow-sm motion-safe:rotate-3 mesh-card">
                 <CardContent className="p-6 flex flex-col items-center text-center">
                   <BookOpen className="h-10 w-10 text-primary mb-4" />
                   <span className="font-bold text-2xl">5k+</span>
                   <span className="text-sm text-muted-foreground">{t('home.stats.booksLabel')}</span>
                 </CardContent>
               </Card>
-              <Card className="rounded-2xl border-border shadow-sm -rotate-3 mt-8 mesh-card">
+              <Card className="rounded-2xl border-border shadow-sm motion-safe:-rotate-3 mt-8 mesh-card">
                 <CardContent className="p-6 flex flex-col items-center text-center">
                   <Star className="h-10 w-10 text-warm-500 mb-4" />
                   <span className="font-bold text-2xl">4.9</span>

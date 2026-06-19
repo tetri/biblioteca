@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import {
   BookOpen,
   CheckCircle2,
@@ -221,6 +222,7 @@ export function BooksPage() {
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
             <Input
               placeholder={t('catalog.searchPlaceholder')}
+              aria-label={t('catalog.searchPlaceholder')}
               className="pl-12 py-6 rounded-2xl transition-all shadow-sm"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -229,6 +231,7 @@ export function BooksPage() {
               <button
                 type="button"
                 onClick={clearSearch}
+                aria-label={t('catalog.searchClearAriaLabel')}
                 className="absolute right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-accent rounded-full text-muted-foreground transition-colors"
               >
                 <X className="h-4 w-4" />
@@ -254,31 +257,31 @@ export function BooksPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <div className="space-y-2">
                 <label htmlFor="filter-category" className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{t('catalog.filters.categoryLabel')}</label>
-                <select
-                  id="filter-category"
-                  className="w-full bg-card border-border rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-primary/20 outline-none"
-                  value={filterCategory}
-                  onChange={(e) => setFilterCategory(e.target.value)}
-                >
-                  <option value="">{t('catalog.filters.categoryAll')}</option>
-                  {categories.map(cat => (
-                    <option key={cat} value={cat}>{cat}</option>
-                  ))}
-                </select>
+                <Select value={filterCategory || '__all__'} onValueChange={(v) => setFilterCategory(v === '__all__' ? '' : v)}>
+                  <SelectTrigger id="filter-category" className="w-full">
+                    <SelectValue placeholder={t('catalog.filters.categoryAll')} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="__all__">{t('catalog.filters.categoryAll')}</SelectItem>
+                    {categories.map(cat => (
+                      <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
               <div className="space-y-2">
                 <label htmlFor="filter-author" className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{t('catalog.filters.authorLabel')}</label>
-                <select
-                  id="filter-author"
-                  className="w-full bg-card border-border rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-primary/20 outline-none"
-                  value={filterAuthor}
-                  onChange={(e) => setFilterAuthor(e.target.value)}
-                >
-                  <option value="">{t('catalog.filters.authorAll')}</option>
-                  {authors.map(author => (
-                    <option key={author} value={author}>{author}</option>
-                  ))}
-                </select>
+                <Select value={filterAuthor || '__all__'} onValueChange={(v) => setFilterAuthor(v === '__all__' ? '' : v)}>
+                  <SelectTrigger id="filter-author" className="w-full">
+                    <SelectValue placeholder={t('catalog.filters.authorAll')} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="__all__">{t('catalog.filters.authorAll')}</SelectItem>
+                    {authors.map(author => (
+                      <SelectItem key={author} value={author}>{author}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
             {(filterCategory || filterAuthor) && (
@@ -295,7 +298,7 @@ export function BooksPage() {
         )}
 
         {successMessage && (
-          <div className="bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-xl flex items-center gap-3 animate-in fade-in slide-in-from-top-4">
+          <div role="status" aria-live="polite" className="bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-xl flex items-center gap-3 animate-in fade-in slide-in-from-top-4">
             <CheckCircle2 className="h-5 w-5" />
             <p className="font-medium">{successMessage}</p>
           </div>

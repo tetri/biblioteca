@@ -1,8 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import i18n from '../i18n/config';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { decodeJwtPayload } from '../lib/utils';
+import api from '../lib/api';
 import { ErrorMessage } from '../components/error-message';
 import { ProtectedRoute } from '../components/auth/protected-route';
 import { Button } from "@/components/ui/button";
@@ -33,22 +35,8 @@ export function MyLoansPage() {
   const { t } = useTranslation();
 
   const fetchUserLoans = async (): Promise<Loan[]> => {
-    const token = localStorage.getItem('token');
-    if (!token) throw new Error(t('myLoans.mutation.needLogin'));
-
-    const payload = decodeJwtPayload(token);
-    const userId = payload.sid || payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid"];
-    if (!userId) throw new Error(t('myLoans.mutation.invalidToken'));
-
-    const response = await fetch(`/loan/api/loans/my-loans`);
-    if (!response.ok) {
-      throw new Error(t('myLoans.error.loadMessage'));
-    }
-
-    const loans = await response.json();
-
-    const booksResponse = await fetch(`/catalog/api/catalog/books`);
-    const books = await booksResponse.json();
+    const { data: loans } = await api.get('/loan/api/loans/my-loans');
+    const { data: books } = await api.get('/catalog/api/catalog/books');
 
     return loans.map((loan: Record<string, unknown>) => {
       const book = books.find((b: Record<string, unknown>) => b.id === loan.bookId);
@@ -108,21 +96,7 @@ export function MyLoansPage() {
       const userId = payload.sid || payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid"];
       if (!userId) throw new Error(t('myLoans.mutation.invalidToken'));
 
-      const response = await fetch(`/loan/api/loans/${loanId}/return`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ userId })
-      });
-
-      if (!response.ok) {
-        const error = await response.text();
-        throw new Error(error || t('myLoans.error.returnDefault'));
-      }
-
-      return response.json();
+      return api.post(`/loan/api/loans/${loanId}/return`, { userId });
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['userLoans'] });
@@ -198,7 +172,7 @@ export function MyLoansPage() {
         </div>
 
         {successMessage && (
-          <div className="bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-xl flex items-center gap-3 animate-in fade-in slide-in-from-top-4">
+          <div role="status" aria-live="polite" className="bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-xl flex items-center gap-3 animate-in fade-in slide-in-from-top-4">
             <CheckCircle2 className="h-5 w-5" />
             <p className="font-medium">{successMessage}</p>
           </div>
@@ -210,12 +184,13 @@ export function MyLoansPage() {
 
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[1, 2, 3, 4, 5, 6].map(i => (
+            {[1, 2, 3].map(i => (
               <Card key={i} className="rounded-2xl p-6 space-y-4 border-border">
-                <Skeleton className="h-48 w-full rounded-xl" />
+                <Skeleton className="h-32 w-full rounded-xl" />
                 <Skeleton className="h-6 w-3/4" />
                 <Skeleton className="h-4 w-1/2" />
-                <Skeleton className="h-10 w-full mt-4" />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-10 w-full mt-2" />
               </Card>
             ))}
           </div>
@@ -269,7 +244,7 @@ export function MyLoansPage() {
                           </div>
                         )}
                         {loan.returnDate && (
-                          <div className="flex items-center gap-2 text-sm text-emerald-600">
+                          <div className="flex items-center gap-2 text-sm text-emerald-700">
                             <CheckCircle2 className="h-4 w-4" />
                             <span>{t('myLoans.loan.returnedOn', { date: formatDate(loan.returnDate) })}</span>
                           </div>
@@ -311,12 +286,8 @@ export function MyLoansPage() {
                 <BookOpen className="h-12 w-12 text-muted-foreground/50 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold">{t('myLoans.empty.title')}</h3>
                 <p className="text-muted-foreground mt-2">{t('myLoans.empty.message')}</p>
-                <Button 
-                  onClick={() => window.location.href = '/catalogo'} 
-                  className="mt-6"
-                  variant="outline"
-                >
-                  {t('myLoans.empty.exploreButton')}
+                <Button asChild className="mt-6" variant="outline">
+                  <Link to="/catalogo">{t('myLoans.empty.exploreButton')}</Link>
                 </Button>
               </div>
             )}

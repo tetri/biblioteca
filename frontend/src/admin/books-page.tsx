@@ -150,7 +150,7 @@ export default function AdminBooksPage() {
 
       {error && <ErrorMessage title={t('admin.books.error.title')} message={error} />}
       {success && (
-        <div className="rounded-lg border border-border bg-accent px-4 py-3 text-sm font-medium text-accent-foreground">
+        <div role="status" aria-live="polite" className="rounded-lg border border-border bg-accent px-4 py-3 text-sm font-medium text-accent-foreground">
           {success}
         </div>
       )}
@@ -201,7 +201,7 @@ export default function AdminBooksPage() {
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <Table>
+              <Table aria-label={t('admin.books.table.title')}>
                 <TableHeader>
                   <TableRow>
                     <TableHead>{t('admin.books.table.header.title')}</TableHead>
@@ -230,7 +230,12 @@ export default function AdminBooksPage() {
                         <Button
                           size="sm"
                           variant="destructive"
-                          onClick={() => deleteMutation.mutate(book.id)}
+                          aria-label={t('admin.books.table.action.deleteAriaLabel')}
+                          onClick={() => {
+                            if (window.confirm(t('admin.books.deleteConfirm', 'Tem certeza que deseja remover este livro?'))) {
+                              deleteMutation.mutate(book.id);
+                            }
+                          }}
                           disabled={deleteMutation.isPending}
                         >
                           <Trash2 className="size-3" />

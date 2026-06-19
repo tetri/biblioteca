@@ -30,6 +30,9 @@ export function AdminLayout() {
         <div
           className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm lg:hidden"
           onClick={() => setSidebarOpen(false)}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape') setSidebarOpen(false);
+          }}
         />
       )}
 
@@ -47,7 +50,7 @@ export function AdminLayout() {
             <p className="text-[11px] font-medium uppercase tracking-widest text-muted-foreground">{t('admin.layout.brandLabel')}</p>
             <p className="font-semibold">{t('admin.layout.brand')}</p>
           </div>
-          <Button variant="ghost" size="icon" className="ml-auto lg:hidden" onClick={() => setSidebarOpen(false)}>
+          <Button variant="ghost" size="lg" className="ml-auto lg:hidden" onClick={() => setSidebarOpen(false)} aria-label={t('admin.layout.closeSidebar', 'Fechar menu')}>
             <X className="size-4" />
           </Button>
         </div>
@@ -86,7 +89,7 @@ export function AdminLayout() {
 
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b mesh-card backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 lg:px-6">
-          <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setSidebarOpen(true)}>
+          <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setSidebarOpen(true)} aria-label={t('admin.layout.openSidebar', 'Abrir menu')}>
             <Menu className="size-5" />
           </Button>
 
@@ -113,13 +116,19 @@ export function AdminLayout() {
           <div className="ml-auto flex items-center gap-2">
             <LanguageSwitcher />
             <span className="text-xs text-muted-foreground hidden sm:block">{t('admin.layout.headerBadge')}</span>
-            <Button variant="ghost" size="icon" onClick={handleLogout} title={t('admin.layout.signOutTitle')}>
+            <Button variant="ghost" size="icon" onClick={handleLogout} title={t('admin.layout.signOutTitle')} aria-label={t('admin.layout.signOut')}>
               <LogOut className="size-4" />
             </Button>
           </div>
         </header>
 
-        <main className="flex-1 p-4 lg:p-6">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground focus:outline-none"
+        >
+          {t('header.nav.skipToContent', 'Pular para o conteúdo')}
+        </a>
+        <main className="flex-1 p-4 lg:p-6" id="main-content">
           <Outlet />
         </main>
       </div>

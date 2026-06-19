@@ -141,7 +141,7 @@ export default function BookDetailsPage() {
         </Button>
 
         {successMessage && (
-          <div className="mb-6 bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-xl flex items-center gap-3 animate-in fade-in slide-in-from-top-4">
+          <div role="status" aria-live="polite" className="mb-6 bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-xl flex items-center gap-3 animate-in fade-in slide-in-from-top-4">
             <CheckCircle2 className="h-5 w-5" />
             <p className="font-medium">{successMessage}</p>
           </div>
