@@ -124,14 +124,24 @@ Fonte: `services/loan-service/DOCS.md`.
 - A area admin usa layout com sidebar (desktop) e navegacao horizontal (mobile).
 - Usuarios novos entram como `Member` e `IsApproved = false`; sem aprovacao, o login retorna erro amigavel `403`.
 
-## 14) Fonte de Verdade
+## 14) Resiliencia e Tolerancia a Falhas
+- **Timeouts:** HttpClient (LoanService→CatalogService) 10s; YARP 15-30s por rota.
+- **Tratamento de erros:** Try/catch em chamadas HTTP com mensagens distinguiveis ("indisponivel" vs "nao encontrado").
+- **Health checks:** `/health` (todos os servicos), `/ready` (com verificacao de dependencias).
+- **YARP health:** Active (10s interval) + Passive (3 falhas para marcar down).
+- **Rate limiting:** Gateway 100 req/s por IP, retorna 429.
+- **Validacao de input:** Commands validados antes de chamadas HTTP.
+- **Exception handlers:** LoanService e CatalogService retornam JSON com traceId em erros 500.
+- Detalhes em `services/loan-service/DOCS.md`.
+
+## 15) Fonte de Verdade
 Em caso de conflito, priorizar:
 1. Codigo atual (`Program.cs`, controllers/handlers, `docker-compose.yml`, workflow CI).
 2. `README.md` (operacao e execucao).
 3. Documentos de diretriz (`GEMINI.md`, `DESIGN.md`, `DEPLOY.md`, `DOCS.md`).
 4. `WIKI.json` como mapa de onboarding.
 
-## 15) Versionamento Semantico (MinVer)
+## 16) Versionamento Semantico (MinVer)
 
 - Todos os projetos .NET herdam `Directory.Build.props` na raiz.
 - A versao e gerada automaticamente pelo **MinVer** a partir de tags git com prefixo `v`.
@@ -140,7 +150,7 @@ Em caso de conflito, priorizar:
 - Frontend (`package.json`) versionado manualmente para espelhar.
 - Politica completa em `VERSIONING.md`.
 
-## 16) Checklist de Inicio Rapido para Agentes
+## 17) Checklist de Inicio Rapido para Agentes
 1. Ler este `AGENTS.md`.
 2. Subir ambiente (`./up.sh`).
 3. Validar docs via gateway em `/docs/*`.
@@ -148,7 +158,7 @@ Em caso de conflito, priorizar:
 5. Em alteracoes de emprestimo, revisar `services/loan-service/DOCS.md`.
 6. Em alteracoes de UI, seguir `DESIGN.md`.
 
-## 17) Fontes utilizadas nesta consolidacao
+## 18) Fontes utilizadas nesta consolidacao
 - `README.md`
 - `frontend/README.md`
 - `services/loan-service/DOCS.md`
