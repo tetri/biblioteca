@@ -43,6 +43,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
 
+var mongoConnectionString = builder.Configuration["MongoSettings:ConnectionString"] ?? "mongodb://localhost:27017";
+builder.Services.AddHealthChecks()
+    .AddMongoDb(sp => new MongoDB.Driver.MongoClient(mongoConnectionString), name: "mongodb", tags: ["ready"]);
+
 var app = builder.Build();
 
 // Inicializar banco de dados
@@ -60,5 +64,28 @@ app.MapScalarApiReference();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHealthChecks("/health");
+app.MapHealthChecks("/ready", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
+{
+    Predicate = check => check.Tags.Contains("ready")
+});
+
+app.UseExceptionHandler(errorApp =>
+{
+    errorApp.Run(async context =>
+    {
+        var exception = context.Features.Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerFeature>()?.Error;
+        var traceId = context.TraceIdentifier;
+        var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
+        logger.LogError(exception, "Unhandled exception. TraceId: {TraceId}", traceId);
+        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+        await context.Response.WriteAsJsonAsync(new
+        {
+            message = "Erro interno do servidor.",
+            traceId
+        });
+    });
+});
 
 app.Run();
