@@ -17,9 +17,21 @@ Este documento descreve as regras de negócio avançadas implementadas no servi�
 ## Resiliência e Tolerância a Falhas
 
 ### Timeouts
-- **HttpClient (LoanService → CatalogService):** 10s hard timeout no cliente, 5s via resilience pipeline.
+- **HttpClient (LoanService → CatalogService):** 10s hard timeout (HttpClient.Timeout).
+- **Resilience Pipeline:** 5s timeout per attempt via `AddStandardResilienceHandler()`.
 - **YARP Gateway:** 15s para user/catalog/notification, 20s para loan, 30s para frontend.
-- **Efeito:** Previne thread starvation quando um serviço downstream está lento ou travado.
+
+### Retry (Polly)
+- **Método:** `AddStandardResilienceHandler()` via `Microsoft.Extensions.Http.Resilience`.
+- **Tentativas:** 3 com backoff exponencial (500ms base) e jitter.
+- **Critérios de retry:** `HttpRequestException`, `TimeoutRejectedException`, HTTP 502/503/504.
+
+### Circuit Breaker (Polly)
+- **Método:** Incluído no `AddStandardResilienceHandler()`.
+- **Sampling:** 30 segundos.
+- **Failure ratio:** 50% (abre após 50% de falhas no sampling window).
+- **Minimum throughput:** 5 requisições antes de avaliar.
+- **Break duration:** 30 segundos (recovery automático).
 
 ### Tratamento de Erros
 - **CreateLoanHandler:** Try/catch envolve a chamada HTTP ao CatalogService.

@@ -35,7 +35,8 @@ builder.Services.AddHttpClient("CatalogService", client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["CatalogService:BaseUrl"] ?? "http://localhost:8082/");
     client.Timeout = TimeSpan.FromSeconds(10);
-});
+})
+.AddStandardResilienceHandler();
 
 var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? throw new InvalidOperationException("Jwt:Issuer is missing");
 var jwtAudience = builder.Configuration["Jwt:Audience"] ?? throw new InvalidOperationException("Jwt:Audience is missing");
