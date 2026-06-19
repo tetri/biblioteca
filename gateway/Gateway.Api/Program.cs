@@ -1,10 +1,22 @@
 using Scalar.AspNetCore;
 using Microsoft.AspNetCore.OpenApi;
+using Microsoft.AspNetCore.RateLimiting;
 using Shared.Observability;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSharedObservability("Gateway.Api");
+
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.AddFixedWindowLimiter("api-limit", opt =>
+    {
+        opt.PermitLimit = 100;
+        opt.Window = TimeSpan.FromSeconds(1);
+        opt.QueueLimit = 0;
+    });
+});
 
 builder.Services.AddReverseProxy()
     .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
@@ -40,6 +52,9 @@ app.MapScalarApiReference("/docs/notification", options => {
 });
 
 app.UseStaticFiles();
+app.UseRateLimiter();
 app.MapReverseProxy();
+
+app.MapHealthChecks("/health");
 
 app.Run();
