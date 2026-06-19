@@ -34,6 +34,7 @@ builder.Services.AddScoped<IQueryHandler<LoanService.Application.Queries.GetLoan
 builder.Services.AddHttpClient("CatalogService", client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["CatalogService:BaseUrl"] ?? "http://localhost:8082/");
+    client.Timeout = TimeSpan.FromSeconds(10);
 });
 
 var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? throw new InvalidOperationException("Jwt:Issuer is missing");
@@ -61,6 +62,8 @@ builder.Services
         };
     });
 
+builder.Services.AddHealthChecks();
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -78,5 +81,28 @@ app.MapScalarApiReference(options => {
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
+app.MapHealthChecks("/health");
+app.MapHealthChecks("/ready", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
+{
+    Predicate = check => check.Tags.Contains("ready")
+});
+
+app.UseExceptionHandler(errorApp =>
+{
+    errorApp.Run(async context =>
+    {
+        var exception = context.Features.Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerFeature>()?.Error;
+        var traceId = context.TraceIdentifier;
+        var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
+        logger.LogError(exception, "Unhandled exception. TraceId: {TraceId}", traceId);
+        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+        await context.Response.WriteAsJsonAsync(new
+        {
+            message = "Erro interno do servidor.",
+            traceId
+        });
+    });
+});
 
 app.Run();

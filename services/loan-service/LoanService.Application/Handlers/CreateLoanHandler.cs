@@ -21,6 +21,10 @@ public class CreateLoanHandler : ICommandHandler<CreateLoanCommand, Result<LoanR
 
     public async Task<Result<LoanResponseDto>> Handle(CreateLoanCommand command, CancellationToken cancellationToken = default)
     {
+        var validationErrors = command.Validate().ToList();
+        if (validationErrors.Count > 0)
+            return Result<LoanResponseDto>.Failure(string.Join(" ", validationErrors));
+
         var existingLoans = await _loanRepository.GetByUserIdAsync(command.UserId, cancellationToken);
 
         var result = Loan.Create(command.UserId, command.BookId, existingLoans);
@@ -31,11 +35,25 @@ public class CreateLoanHandler : ICommandHandler<CreateLoanCommand, Result<LoanR
         }
 
         var httpClient = _httpClientFactory.CreateClient("CatalogService");
-        var bookResponse = await httpClient.GetAsync($"api/books/{command.BookId}", cancellationToken);
-
-        if (!bookResponse.IsSuccessStatusCode)
+        try
         {
-            return Result<LoanResponseDto>.Failure("Livro não encontrado.");
+            var bookResponse = await httpClient.GetAsync($"api/books/{command.BookId}", cancellationToken);
+
+            if (!bookResponse.IsSuccessStatusCode)
+            {
+                if (bookResponse.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable)
+                    return Result<LoanResponseDto>.Failure("Serviço de catálogo indisponível. Tente novamente em instantes.");
+
+                return Result<LoanResponseDto>.Failure("Livro não encontrado.");
+            }
+        }
+        catch (HttpRequestException)
+        {
+            return Result<LoanResponseDto>.Failure("Serviço de catálogo indisponível. Tente novamente em instantes.");
+        }
+        catch (TaskCanceledException) when (!cancellationToken.IsCancellationRequested)
+        {
+            return Result<LoanResponseDto>.Failure("Timeout ao verificar disponibilidade do livro.");
         }
 
         var loan = result.Value!;
