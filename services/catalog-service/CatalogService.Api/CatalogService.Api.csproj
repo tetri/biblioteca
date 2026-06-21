@@ -8,6 +8,8 @@
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<DockerfileContext>..\..\..</DockerfileContext>
 		<DockerComposeProjectPath>..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
+		<!-- CA1848: structured logging with IsEnabled guard sufficient -->
+		<NoWarn>$(NoWarn);CA1848</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
