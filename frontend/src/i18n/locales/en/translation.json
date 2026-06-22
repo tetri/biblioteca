@@ -34,35 +34,35 @@
   },
   "home": {
     "hero": {
-      "title": "Your personal library,",
-      "titleHighlight": "reimagined.",
-      "subtitle": "Explore thousands of titles, manage your loans and discover your next read on a minimalist and intuitive platform.",
+      "title": "Library management,",
+      "titleHighlight": "simplified.",
+      "subtitle": "Complete system to manage collections, loans and users. Full control of your library in a modern and intuitive platform.",
       "searchPlaceholder": "Title, author or ISBN...",
       "searchAriaLabel": "Search books in the catalog",
       "searchButton": "Search"
     },
     "features": {
       "fast": {
-        "title": "Fast and Fluid",
-        "description": "Reserve your books in seconds with our performance-optimized interface."
+        "title": "Smart Catalog",
+        "description": "Register and organize your collection with advanced search by title, author and ISBN."
       },
       "secure": {
-        "title": "Secure and Reliable",
-        "description": "Your data and reading history protected with cutting-edge technology."
+        "title": "Loan Control",
+        "description": "Manage loans, returns and reservations with automatic availability validation."
       },
       "premium": {
-        "title": "Premium Experience",
-        "description": "Minimalist design focused on what matters: your reading experience."
+        "title": "Admin Dashboard",
+        "description": "Complete dashboard with user approval, reports and collection management."
       }
     },
     "cta": {
-      "title": "Ready to dive into knowledge?",
-      "subtitle": "Join thousands of readers and access a vast catalog of literary and technical works.",
-      "button": "Explore Catalog"
+      "title": "Modernize your library",
+      "subtitle": "Replace spreadsheets and manual processes with a professional and scalable system.",
+      "button": "Get Started"
     },
     "stats": {
-      "booksLabel": "Books",
-      "ratingLabel": "Rating"
+      "booksLabel": "Books Managed",
+      "ratingLabel": "Active Loans"
     }
   },
   "login": {

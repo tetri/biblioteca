@@ -32,35 +32,35 @@
   },
   "home": {
     "hero": {
-      "title": "Votre bibliothèque personnelle,",
-      "titleHighlight": "réimaginée.",
-      "subtitle": "Explorez des milliers de titres, gérez vos emprunts et découvrez votre prochaine lecture sur une plateforme minimaliste et intuitive.",
+      "title": "Gestion de bibliothèques,",
+      "titleHighlight": "simplifiée.",
+      "subtitle": "Système complet pour gérer les collections, les emprunts et les utilisateurs. Contrôle total de votre bibliothèque sur une plateforme moderne et intuitive.",
       "searchPlaceholder": "Titre, auteur ou ISBN...",
       "searchAriaLabel": "Rechercher des livres dans le catalogue",
       "searchButton": "Rechercher"
     },
     "features": {
       "fast": {
-        "title": "Rapide et Fluide",
-        "description": "Réservez vos livres en quelques secondes avec notre interface optimisée pour la performance."
+        "title": "Catalogue Intelligente",
+        "description": "Enregistrez et organisez votre collection avec une recherche avancée par titre, auteur et ISBN."
       },
       "secure": {
-        "title": "Sécurisé et Fiable",
-        "description": "Vos données et votre historique de lecture protégés par une technologie de pointe."
+        "title": "Contrôle des Emprunts",
+        "description": "Gérez les emprunts, retours et réservations avec validation automatique de la disponibilité."
       },
       "premium": {
-        "title": "Expérience Premium",
-        "description": "Un design minimaliste axé sur l'essentiel : votre expérience de lecture."
+        "title": "Tableau de Bord Admin",
+        "description": "Dashboard complet avec approbation des utilisateurs, rapports et gestion du fonds."
       }
     },
     "cta": {
-      "title": "Prêt à plonger dans la connaissance ?",
-      "subtitle": "Rejoignez des milliers de lecteurs et accédez à un vaste catalogue d'œuvres littéraires et techniques.",
-      "button": "Explorer le Catalogue"
+      "title": "Modernisez votre bibliothèque",
+      "subtitle": "Remplacez les feuilles de calcul et les processus manuels par un système professionnel et évolutif.",
+      "button": "Commencer Maintenant"
     },
     "stats": {
-      "booksLabel": "Livres",
-      "ratingLabel": "Évaluation"
+      "booksLabel": "Livres Gérés",
+      "ratingLabel": "Emprunts Actifs"
     }
   },
   "login": {

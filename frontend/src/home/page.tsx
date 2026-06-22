@@ -94,14 +94,14 @@ export default function HomePage() {
               <Card className="rounded-2xl border-border shadow-sm motion-safe:rotate-3 mesh-card">
                 <CardContent className="p-6 flex flex-col items-center text-center">
                   <BookOpen className="h-10 w-10 text-primary mb-4" />
-                  <span className="font-bold text-2xl">5k+</span>
+                  <span className="font-bold text-2xl">∞</span>
                   <span className="text-sm text-muted-foreground">{t('home.stats.booksLabel')}</span>
                 </CardContent>
               </Card>
               <Card className="rounded-2xl border-border shadow-sm motion-safe:-rotate-3 mt-8 mesh-card">
                 <CardContent className="p-6 flex flex-col items-center text-center">
                   <Star className="h-10 w-10 text-warm-500 mb-4" />
-                  <span className="font-bold text-2xl">4.9</span>
+                  <span className="font-bold text-2xl">24/7</span>
                   <span className="text-sm text-muted-foreground">{t('home.stats.ratingLabel')}</span>
                 </CardContent>
               </Card>

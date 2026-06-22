@@ -34,35 +34,35 @@
   },
   "home": {
     "hero": {
-      "title": "Sua biblioteca pessoal,",
-      "titleHighlight": "reimaginada.",
-      "subtitle": "Explore milhares de títulos, gerencie seus empréstimos e descubra sua próxima leitura em uma plataforma minimalista e intuitiva.",
+      "title": "Gestão de bibliotecas,",
+      "titleHighlight": "simplificada.",
+      "subtitle": "Sistema completo para gerenciar acervos, empréstimos e usuários. Controle total da sua biblioteca em uma plataforma moderna e intuitiva.",
       "searchPlaceholder": "Título, autor ou ISBN...",
       "searchAriaLabel": "Buscar livros no catálogo",
       "searchButton": "Buscar"
     },
     "features": {
       "fast": {
-        "title": "Rápido e Fluido",
-        "description": "Reserve seus livros em segundos com nossa interface otimizada para performance."
+        "title": "Catálogo Inteligente",
+        "description": "Cadastre e organize seu acervo com busca avançada por título, autor e ISBN."
       },
       "secure": {
-        "title": "Seguro e Confiável",
-        "description": "Seus dados e histórico de leitura protegidos com tecnologia de ponta."
+        "title": "Controle de Empréstimos",
+        "description": "Gerencie empréstimos, devoluções e reserves com validação automática de disponibilidade."
       },
       "premium": {
-        "title": "Experiência Premium",
-        "description": "Design minimalista focado no que importa: sua experiência de leitura."
+        "title": "Painel Administrativo",
+        "description": "Dashboard completo com aprovação de usuários, relatórios e gestão do acervo."
       }
     },
     "cta": {
-      "title": "Pronto para mergulhar no conhecimento?",
-      "subtitle": "Junte-se a milhares de leitores e tenha acesso a um catálogo vasto de obras literárias e técnicas.",
-      "button": "Explorar Catálogo"
+      "title": "Modernize sua biblioteca",
+      "subtitle": "Substitua planilhas e processos manuais por um sistema profissional e escalável.",
+      "button": "Começar Agora"
     },
     "stats": {
-      "booksLabel": "Livros",
-      "ratingLabel": "Avaliação"
+      "booksLabel": "Livros Gerenciados",
+      "ratingLabel": "Empréstimos Ativos"
     }
   },
   "login": {
