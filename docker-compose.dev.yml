@@ -3,6 +3,7 @@ services:
   mongodb:
     image: mongo:7
     container_name: biblioteca-mongodb
+    restart: unless-stopped
     ports:
       - "27017:27017"
     environment:
@@ -22,6 +23,7 @@ services:
       context: .
       dockerfile: services/user-service/UserService.Api/Dockerfile
     container_name: biblioteca-userservice
+    restart: unless-stopped
     ports:
       - "5146:8080"
     environment:
@@ -43,6 +45,7 @@ services:
       context: .
       dockerfile: services/catalog-service/CatalogService.Api/Dockerfile
     container_name: biblioteca-catalogservice
+    restart: unless-stopped
     ports:
       - "5147:8080"
     environment:
@@ -60,6 +63,7 @@ services:
       context: .
       dockerfile: services/loan-service/LoanService.Api/Dockerfile
     container_name: biblioteca-loanservice
+    restart: unless-stopped
     ports:
       - "5118:8080"
     environment:
@@ -83,6 +87,7 @@ services:
       context: .
       dockerfile: services/notification-service/NotificationService.Api/Dockerfile
     container_name: biblioteca-notificationservice
+    restart: unless-stopped
     ports:
       - "5151:8080"
     environment:
@@ -95,6 +100,7 @@ services:
       context: .
       dockerfile: gateway/Gateway.Api/Dockerfile
     container_name: biblioteca-gateway
+    restart: unless-stopped
     ports:
       - "5158:8080"
     environment:
@@ -112,6 +118,7 @@ services:
       context: .
       dockerfile: frontend/Dockerfile
     container_name: biblioteca-frontend
+    restart: unless-stopped
     ports:
       - "3000:80"
 
